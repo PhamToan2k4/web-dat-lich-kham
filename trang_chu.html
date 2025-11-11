@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediBook - Đặt Lịch Khám Bệnh Online</title>
+    <!-- Tải Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Cấu hình Tailwind và Font Inter --><script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#007BFF', // Màu xanh dương chuyên nghiệp, sạch sẽ
+                        'primary-light': '#E6F3FF', // Màu nền nhẹ của primary
+                        'secondary': '#45C3A5', // Màu xanh lục tươi mới cho điểm nhấn
+                        'text-dark': '#343a40', // Màu chữ đậm
+                        'text-muted': '#6c757d', // Màu chữ phụ
+                        'bg-light': '#f8f9fa',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Tùy chỉnh nhỏ */
+        body { font-family: 'Inter', sans-serif; }
+        .service-card { transition: all 0.3s ease; }
+        .service-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.15); }
+        .hero-banner {
+            background: linear-gradient(180deg, #FFFFFF 0%, #E6F3FF 100%); /* Gradient nền nhẹ */
+        }
+    </style>
+</head>
+<body class="bg-bg-light text-text-dark">
+
+    <!-- Header Nâng Cấp: Thêm shadow và logo rõ nét hơn --><header class="bg-white shadow-lg sticky top-0 z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <!-- LOGO MỚI: Thiết kế logo chữ "MB" --><div class="flex items-center justify-center w-10 h-10 bg-primary rounded-lg shadow-md">
+                    <span class="text-white font-extrabold text-xl">MB</span>
+                </div>
+                <h1 class="text-2xl font-extrabold text-text-dark">Medi<span class="text-primary">Book</span></h1>
+            </div>
+
+            <!-- Menu chính --><nav class="hidden md:flex space-x-8 text-base font-semibold">
+                <a href="#" class="text-text-dark hover:text-primary transition duration-150">Cơ sở y tế</a>
+                <a href="#" class="text-text-dark hover:text-primary transition duration-150">Chuyên khoa</a>
+                <a href="#" class="text-text-dark hover:text-primary transition duration-150">Gói khám</a>
+                <a href="#" class="text-text-dark hover:text-primary transition duration-150">Tin tức</a>
+            </nav>
+
+            <!-- Nút Đăng nhập/Hỗ trợ --><div class="flex items-center space-x-3">
+                <a href="#" class="text-sm font-semibold text-text-muted hover:text-primary transition duration-150 hidden sm:block">
+                    <span class="text-primary font-bold">HOTLINE:</span> 1900 6008
+                </a>
+                <button id="btn-login" class="px-5 py-2 text-sm font-bold bg-primary text-white hover:bg-blue-700 transition duration-150 rounded-full shadow-md shadow-primary/30">
+                    Đăng nhập
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section: Banner + Thanh Tìm kiếm Trung tâm --><main class="hero-banner pt-16 pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-text-dark mb-4 leading-tight">
+                    Đặt lịch Khám bệnh & Chăm sóc <span class="text-primary">tại nhà</span>
+                </h2>
+                <p class="text-lg text-text-muted max-w-3xl mx-auto">
+                    Tìm kiếm bác sĩ, chuyên khoa và bệnh viện uy tín tại các thành phố lớn. Đặt lịch nhanh chóng, không cần xếp hàng.
+                </p>
+            </div>
+
+            <!-- Thanh Tìm kiếm Nổi bật --><div class="bg-white p-6 sm:p-8 rounded-2xl shadow-2xl max-w-5xl mx-auto border border-primary/20">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <!-- Ô 1: Tìm theo bác sĩ/chuyên khoa --><div class="relative md:col-span-2">
+                        <input type="text" id="search-doctor" placeholder="Tìm kiếm bác sĩ, chuyên khoa..." 
+                               class="w-full pl-10 pr-4 py-3.5 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition duration-150 text-text-dark">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                             <!-- Icon Search --><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                    </div>
+
+                    <!-- Ô 2: Vị trí (Các thành phố trọng điểm) --><div class="relative md:col-span-2">
+                        <select id="search-location" class="w-full pl-10 pr-4 py-3.5 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition duration-150 appearance-none text-text-muted">
+                            <option value="">Chọn Tỉnh/Thành phố...</option>
+                            <option value="hcm">TP Hồ Chí Minh</option>
+                            <option value="hn">Hà Nội</option>
+                            <option value="dn">Đà Nẵng</option>
+                            <option value="ct">Cần Thơ</option>
+                            <option value="hp">Hải Phòng</option>
+                        </select>
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                             <!-- Icon Location --><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                    </div>
+
+                    <!-- Nút Tìm kiếm --><button id="btn-search" class="w-full bg-secondary text-white font-bold py-3.5 px-6 rounded-xl hover:bg-green-600 transition duration-300 shadow-lg shadow-secondary/30">
+                        Tìm kiếm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Section 1: 4 Khối chức năng chính (Nổi bật) --><section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 class="text-3xl font-bold text-text-dark mb-10 text-center">
+                Dịch vụ được yêu thích
+            </h3>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
+                <!-- Card 1: Khám Chuyên khoa --><a href="#" class="service-card p-6 rounded-xl bg-primary-light border-2 border-primary/30 text-center shadow-md">
+                    <div class="p-4 inline-block rounded-xl bg-white text-primary mb-3 shadow-lg">
+                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.618a8.995 8.995 0 011.085 2.158 9 9 0 11-14.832 5.094 8.995 8.995 0 011.085-2.158"></path></svg>
+                    </div>
+                    <p class="font-extrabold text-md text-text-dark">Khám Chuyên khoa</p>
+                    <p class="text-sm text-text-muted mt-1 hidden sm:block">Đặt lịch với chuyên gia</p>
+                </a>
+                <!-- Card 2: Khám Bệnh viện --><a href="#" class="service-card p-6 rounded-xl bg-primary-light border-2 border-primary/30 text-center shadow-md">
+                    <div class="p-4 inline-block rounded-xl bg-white text-primary mb-3 shadow-lg">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14-2h-18M5 19h14M8 11h2m-2 4h2m4-4h2m-2 4h2"></path></svg>
+                    </div>
+                    <p class="font-extrabold text-md text-text-dark">Khám Cơ sở Y tế</p>
+                    <p class="text-sm text-text-muted mt-1 hidden sm:block">Hệ thống bệnh viện liên kết</p>
+                </a>
+                <!-- Card 3: Khám Tổng quát --><a href="#" class="service-card p-6 rounded-xl bg-primary-light border-2 border-primary/30 text-center shadow-md">
+                    <div class="p-4 inline-block rounded-xl bg-white text-primary mb-3 shadow-lg">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2h2m-4 2a2 2 0 00-2 2v6a2 2 0 002 2h14a2 2 0 002-2v-6a2 2 0 00-2-2"></path></svg>
+                    </div>
+                    <p class="font-extrabold text-md text-text-dark">Gói khám sức khỏe</p>
+                    <p class="text-sm text-text-muted mt-1 hidden sm:block">Chủ động bảo vệ sức khỏe</p>
+                </a>
+                <!-- Card 4: Tư vấn xa --><a href="#" class="service-card p-6 rounded-xl bg-primary-light border-2 border-primary/30 text-center shadow-md">
+                    <div class="p-4 inline-block rounded-xl bg-white text-primary mb-3 shadow-lg">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2l2 4 2-4h5a2 2 0 002-2V9z"></path></svg>
+                    </div>
+                    <p class="font-extrabold text-md text-text-dark">Tư vấn từ xa</p>
+                    <p class="text-sm text-text-muted mt-1 hidden sm:block">Trao đổi video với bác sĩ</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Lợi ích vượt trội (Why Choose Us) --><section class="py-20 bg-primary-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h3 class="text-3xl font-bold text-text-dark mb-4">Lợi ích vượt trội của MediBook</h3>
+            <p class="text-lg text-text-muted mb-12">Chúng tôi mang lại giải pháp chăm sóc sức khỏe tiện lợi và đáng tin cậy.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Benefit 1 --><div class="p-6 bg-white rounded-xl shadow-lg border-t-4 border-secondary">
+                    <div class="p-3 inline-block rounded-full bg-secondary/10 text-secondary mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h4 class="font-bold text-xl mb-2 text-text-dark">Tiết kiệm thời gian</h4>
+                    <p class="text-text-muted text-sm">Đặt lịch online 24/7, nhận xác nhận tức thời, không cần chờ đợi tại bệnh viện.</p>
+                </div>
+                <!-- Benefit 2 --><div class="p-6 bg-white rounded-xl shadow-lg border-t-4 border-secondary">
+                    <div class="p-3 inline-block rounded-full bg-secondary/10 text-secondary mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3-3v6m-3-3a9 9 0 1118 0 9 9 0 01-18 0z"></path></svg>
+                    </div>
+                    <h4 class="font-bold text-xl mb-2 text-text-dark">Đội ngũ chuyên gia</h4>
+                    <p class="text-text-muted text-sm">Truy cập hồ sơ, bằng cấp, và đánh giá của hơn 1000 bác sĩ chuyên khoa hàng đầu.</p>
+                </div>
+                <!-- Benefit 3 --><div class="p-6 bg-white rounded-xl shadow-lg border-t-4 border-secondary">
+                    <div class="p-3 inline-block rounded-full bg-secondary/10 text-secondary mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    </div>
+                    <h4 class="font-bold text-xl mb-2 text-text-dark">Hồ sơ sức khỏe điện tử</h4>
+                    <p class="text-text-muted text-sm">Lưu trữ lịch sử khám, kết quả xét nghiệm (có upload ảnh) một cách an toàn và bảo mật.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Bác sĩ Nổi bật (Featured Doctors) --><section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-10">
+                <h3 class="text-2xl font-bold text-text-dark">Bác sĩ nổi bật của MediBook</h3>
+                <a href="#" class="text-primary font-medium text-base hover:underline transition duration-150">Xem tất cả bác sĩ</a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Doctor Card 1 --><div class="bg-primary-light p-6 rounded-xl shadow-md border border-primary/20 text-center hover:shadow-xl transition duration-300">
+                    <img src="https://placehold.co/120x120/007BFF/ffffff?text=BS+Toan" alt="Ảnh bác sĩ Phạm Văn Toàn" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-sm">
+                    <h4 class="text-xl font-bold text-text-dark">BS.CKII Phạm Văn Toàn</h4>
+                    <p class="text-sm text-primary mb-2">Chuyên khoa Tim Mạch</p>
+                    <p class="text-xs text-text-muted line-clamp-3">Giáo sư, Tiến sĩ Y học, Trưởng khoa Tim mạch Bệnh viện Chợ Rẫy. Hơn 25 năm kinh nghiệm.</p>
+                    <a href="#" class="mt-4 inline-block text-secondary hover:underline text-sm font-medium">Xem hồ sơ & Đặt lịch</a>
+                </div>
+
+                <!-- Doctor Card 2 --><div class="bg-primary-light p-6 rounded-xl shadow-md border border-primary/20 text-center hover:shadow-xl transition duration-300">
+                    <img src="https://placehold.co/120x120/007BFF/ffffff?text=BS+Mai" alt="Ảnh bác sĩ Lê Thị Mai" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-sm">
+                    <h4 class="text-xl font-bold text-text-dark">BS.CKI Lê Thị Mai</h4>
+                    <p class="text-sm text-primary mb-2">Chuyên khoa Da Liễu</p>
+                    <p class="text-xs text-text-muted line-clamp-3">Chuyên gia hàng đầu về điều trị mụn, nám, tàn nhang bằng laser và công nghệ hiện đại.</p>
+                    <a href="#" class="mt-4 inline-block text-secondary hover:underline text-sm font-medium">Xem hồ sơ & Đặt lịch</a>
+                </div>
+
+                <!-- Doctor Card 3 --><div class="bg-primary-light p-6 rounded-xl shadow-md border border-primary/20 text-center hover:shadow-xl transition duration-300">
+                    <img src="https://placehold.co/120x120/007BFF/ffffff?text=BS+Anh" alt="Ảnh bác sĩ Trần Thị Ánh" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-sm">
+                    <h4 class="text-xl font-bold text-text-dark">BS.CKII Trần Thị Ánh</h4>
+                    <p class="text-sm text-primary mb-2">Chuyên khoa Nhi Khoa</p>
+                    <p class="text-xs text-text-muted line-clamp-3">Bác sĩ tại Bệnh viện Nhi Đồng 1. Rất được phụ huynh tin tưởng với kinh nghiệm 15 năm.</p>
+                    <a href="#" class="mt-4 inline-block text-secondary hover:underline text-sm font-medium">Xem hồ sơ & Đặt lịch</a>
+                </div>
+
+                <!-- Doctor Card 4 --><div class="bg-primary-light p-6 rounded-xl shadow-md border border-primary/20 text-center hover:shadow-xl transition duration-300">
+                    <img src="https://placehold.co/120x120/007BFF/ffffff?text=BS+Long" alt="Ảnh bác sĩ Đỗ Văn Long" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-sm">
+                    <h4 class="text-xl font-bold text-text-dark">PGS.TS Đỗ Văn Long</h4>
+                    <p class="text-sm text-primary mb-2">Chuyên khoa Tiêu Hóa</p>
+                    <p class="text-xs text-text-muted line-clamp-3">Chuyên gia nội soi dạ dày, đại tràng. Giảng viên Đại học Y Dược TP.HCM.</p>
+                    <a href="#" class="mt-4 inline-block text-secondary hover:underline text-sm font-medium">Xem hồ sơ & Đặt lịch</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Tin tức & Bài viết Y khoa --><section class="py-16 bg-bg-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-10">
+                <h3 class="text-2xl font-bold text-text-dark">Tin tức & Bài viết Y khoa</h3>
+                <a href="#" class="text-primary font-medium text-base hover:underline transition duration-150">Xem tất cả bài viết</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Bài viết 1 --><a href="#" class="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300 border border-gray-200">
+                    <img src="https://placehold.co/400x250/C8E6F7/007BFF?text=Sức+Khỏe+Tim+Mạch" alt="Ảnh bài viết" class="w-full h-48 object-cover">
+                    <div class="p-5">
+                        <p class="text-sm text-primary font-semibold mb-2">Tin tức sức khỏe</p>
+                        <h4 class="text-lg font-bold text-text-dark mb-2 line-clamp-2">10 lời khuyên vàng để giữ trái tim khỏe mạnh mỗi ngày</h4>
+                        <p class="text-xs text-text-muted line-clamp-3">Tim mạch là một trong những bệnh lý phổ biến. Bài viết này sẽ cung cấp những lời khuyên hữu ích để bảo vệ trái tim của bạn.</p>
+                        <p class="text-xs text-gray-400 mt-3">Ngày đăng: 20/07/2024</p>
+                    </div>
+                </a>
+                <!-- Bài viết 2 --><a href="#" class="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300 border border-gray-200">
+                    <img src="https://placehold.co/400x250/C8E6F7/007BFF?text=Dinh+Dưỡng+Khoa+Học" alt="Ảnh bài viết" class="w-full h-48 object-cover">
+                    <div class="p-5">
+                        <p class="text-sm text-primary font-semibold mb-2">Dinh dưỡng</p>
+                        <h4 class="text-lg font-bold text-text-dark mb-2 line-clamp-2">Chế độ ăn uống cân bằng giúp tăng cường miễn dịch</h4>
+                        <p class="text-xs text-text-muted line-clamp-3">Một chế độ ăn uống khoa học và cân bằng đóng vai trò thiết yếu trong việc duy trì và tăng cường hệ miễn dịch của cơ thể.</p>
+                        <p class="text-xs text-gray-400 mt-3">Ngày đăng: 18/07/2024</p>
+                    </div>
+                </a>
+                <!-- Bài viết 3 --><a href="#" class="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300 border border-gray-200">
+                    <img src="https://placehold.co/400x250/C8E6F7/007BFF?text=Phòng+Bệnh" alt="Ảnh bài viết" class="w-full h-48 object-cover">
+                    <div class="p-5">
+                        <p class="text-sm text-primary font-semibold mb-2">Phòng bệnh</p>
+                        <h4 class="text-lg font-bold text-text-dark mb-2 line-clamp-2">Những cách hiệu quả để phòng tránh bệnh hô hấp mùa lạnh</h4>
+                        <p class="text-xs text-text-muted line-clamp-3">Thời tiết giao mùa là điều kiện thuận lợi cho các bệnh hô hấp phát triển. Hãy cùng tìm hiểu các biện pháp phòng tránh.</p>
+                        <p class="text-xs text-gray-400 mt-3">Ngày đăng: 15/07/2024</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Nâng Cấp --><footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <!-- Cột 1: Logo và Slogan --><div>
+                <h5 class="font-extrabold text-2xl mb-3 text-primary">MediBook</h5>
+                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
+                <div class="mt-4 flex space-x-3">
+                    <!-- Icon mạng xã hội mô phỏng --><a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+                </div>
+                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
+            </div>
+            <!-- Cột 2: Hỗ trợ Người dùng --><div>
+                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <!-- Cột 3: Hợp tác & Phát triển --><div>
+                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <!-- Cột 4: Liên hệ --><div>
+                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
+                <p class="mb-2">Email: contact@medibook.vn</p>
+                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JS mô phỏng: Tương tác tìm kiếm
+        document.getElementById('btn-search').addEventListener('click', function() {
+            const doctorQuery = document.getElementById('search-doctor').value;
+            const location = document.getElementById('search-location').value;
+
+            console.log(`Bắt đầu tìm kiếm: Doctor/Specialty: ${doctorQuery || 'Tất cả'}, Location: ${location || 'Tất cả'}`);
+            
+            const searchMessage = document.createElement('div');
+            searchMessage.textContent = "Đang tìm kiếm. Vui lòng chờ...";
+            searchMessage.className = "fixed bottom-5 right-5 p-3 bg-secondary text-white rounded-lg shadow-xl z-50 text-sm";
+            document.body.appendChild(searchMessage);
+            setTimeout(() => {
+                searchMessage.remove();
+            }, 3000);
+        });
+
+        // Mô phỏng Đăng nhập
+        document.getElementById('btn-login').addEventListener('click', () => {
+            console.log("Mô phỏng: Chuyển đến trang Đăng nhập.");
+        });
+    </script>
+
+</body>
+</html>
