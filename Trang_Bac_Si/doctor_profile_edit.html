@@ -22,17 +22,20 @@
         .navbar { background-color: white; border-bottom: 1px solid #ddd; padding: 10px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .navbar nav a { padding: 10px 15px; text-decoration: none; color: #343a40; font-weight: 600; }
         .navbar nav a.active { color: #007bff; border-bottom: 2px solid #007bff; }
-        .navbar nav button { padding: 8px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; float: right; }
+        /* Tùy chỉnh Logo */
+        .logo-link { font-size: 1.5em; font-weight: bold; text-decoration: none; color: #007bff; }
     </style>
 </head>
 <body>
 
     <header class="navbar">
-        <div class="container">
-            <nav style="display: flex; justify-content: flex-end; align-items: center; gap: 15px;">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            
+            <a href="/web-dat-lich-kham/index.html" class="logo-link">MediBook</a>
+            <nav style="display: flex; align-items: center; gap: 15px;">
                 <a href="doctor_schedule.html">Lịch Khám</a>
                 <a href="doctor_profile_edit.html" class="active">Cập Nhật Hồ Sơ</a>
-                <button onclick="logout()">Đăng Xuất</button>
+                <button onclick="logout()" style="padding: 8px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Đăng Xuất</button>
             </nav>
         </div>
     </header>
@@ -226,7 +229,7 @@
 
         function logout() {
             console.log('Đăng xuất Bác sĩ');
-            // SỬA: Đường dẫn Đăng Xuất (Trang_Chung_Va_Tiep_Can/login_register.html)
+            // ĐÃ SỬA: Đường dẫn Đăng Xuất (Trang_Chung_Va_Tiep_Can/login_register.html)
             window.location.href = '../Trang_Chung_Va_Tiep_Can/login_register.html';
         }
 
