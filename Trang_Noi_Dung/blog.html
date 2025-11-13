@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediBook - Tin Tức & Cẩm Nang Sức Khỏe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind CSS (Copy từ index.html để đảm bảo màu sắc và font đồng bộ)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45C3A5', // Xanh lục chủ đạo (Teal/Mint)
+                        'primary-dark': '#007BFF', // Xanh dương (Branding, Buttons)
+                        'primary-light': '#E6FFF8', // Màu nền nhẹ của primary
+                        'secondary': '#f7d800', // Màu vàng nổi bật
+                        'text-dark': '#343a40', 
+                        'text-muted': '#6c757d', 
+                        'bg-light': '#f8f9fa',
+                        'sidebar-bg': '#EBF5FF', 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .logo-mb {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 38px;
+             height: 38px;
+             background-color: #007BFF; 
+             border-radius: 6px;
+             font-size: 18px;
+             font-weight: 800;
+             color: white;
+             box-shadow: 0 4px 8px rgba(76, 150, 230, 0.3);
+        }
+        .card-hover-shadow:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-bg-light text-text-dark">
+
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            
+            <div class="flex items-center space-x-2">
+                <button id="open-sidebar-mobile" class="text-gray-600 hover:text-primary-dark mr-2 lg:hidden p-1 rounded-md hover:bg-gray-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+                <a href="../Trang_Chung_Va_Tiep_Can/index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
+                    <div class="logo-mb">MB</div>
+                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
+                </a>
+            </div>
+
+           <nav class="hidden lg:flex space-x-8 text-base font-semibold">
+                <a href="../Trang_Benh_Nhan/hospital_list.html" class="text-text-dark hover:text-primary transition duration-150">Cơ sở y tế</a>
+                <a href="../Trang_Benh_Nhan/specialties.html" class="text-text-dark hover:text-primary transition duration-150">Chuyên khoa</a>
+                <a href="health_packages.html" class="text-text-dark hover:text-primary transition duration-150">Gói khám</a> 
+                <a href="blog.html" class="text-primary font-bold transition duration-150 border-b-2 border-primary">Tin tức</a>
+                <a href="../Trang_Benh_Nhan/my_appointments.html" class="text-text-dark hover:text-primary transition duration-150">Lịch Khám Của Tôi</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="tel:19006008" class="text-sm font-bold text-primary-dark hover:text-primary transition duration-150 hidden sm:block">
+                    HOTLINE: 1900 6008
+                </a>
+                <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" class="px-5 py-2 text-sm font-bold bg-primary-dark text-white hover:bg-blue-700 transition duration-150 rounded-lg shadow-md hover:shadow-lg">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <h1 class="text-4xl font-extrabold text-text-dark mb-4 text-center">📰 Tin Tức & Cẩm Nang Sức Khỏe</h1>
+            <p class="text-center text-lg text-text-muted mb-12">Những kiến thức y học mới nhất và lời khuyên hữu ích từ đội ngũ chuyên gia.</p>
+
+            <div class="flex flex-col md:flex-row gap-8">
+                
+                <aside class="w-full md:w-1/4 bg-white p-6 rounded-xl shadow-lg h-fit">
+                    <h3 class="text-xl font-bold text-primary-dark mb-4 border-b pb-2">Danh mục</h3>
+                    <ul class="space-y-3">
+                        <li><a href="blog.html?cat=all" class="text-text-dark font-semibold hover:text-primary transition duration-150">Tất cả bài viết</a></li>
+                        <li><a href="blog.html?cat=muavu" class="text-text-dark hover:text-primary transition duration-150">Sức Khỏe Mùa Vụ</a></li>
+                        <li><a href="blog.html?cat=congnghe" class="text-text-dark hover:text-primary transition duration-150">Công Nghệ Y Tế</a></li>
+                        <li><a href="blog.html?cat=dinhduong" class="text-text-dark hover:text-primary transition duration-150">Dinh Dưỡng</a></li>
+                        <li><a href="blog.html?cat=phongbenh" class="text-text-dark hover:text-primary transition duration-150">Phòng Bệnh</a></li>
+                    </ul>
+                </aside>
+
+                <section class="w-full md:w-3/4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        
+                        <a href="blog_detail.html?id=1" class="block bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-2xl card-hover-shadow">
+                            <img src="https://placehold.co/600x400/C8E6F7/007BFF?text=Sức+Khỏe+Mùa+Đông" alt="Sức khỏe mùa đông" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <span class="text-xs font-semibold text-white bg-primary py-1 px-3 rounded-full mb-2 inline-block">Mùa Vụ</span>
+                                <h4 class="text-lg font-bold text-text-dark mb-2 line-clamp-2 hover:text-primary transition duration-150">10 lời khuyên vàng giữ ấm cơ thể và phòng bệnh hô hấp mùa lạnh</h4>
+                                <p class="text-sm text-text-muted line-clamp-3">Chuyên gia y tế khuyến cáo các biện pháp đơn giản nhưng hiệu quả để bảo vệ sức khỏe khi nhiệt độ giảm sâu...</p>
+                                <p class="text-xs text-gray-400 mt-3">Ngày 10/11/2025</p>
+                            </div>
+                        </a>
+                        
+                        <a href="blog_detail.html?id=2" class="block bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-2xl card-hover-shadow">
+                            <img src="https://placehold.co/600x400/C8E6F7/007BFF?text=Công+Nghệ+Y+Tế" alt="Công nghệ y tế" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <span class="text-xs font-semibold text-white bg-primary-dark py-1 px-3 rounded-full mb-2 inline-block">Công Nghệ</span>
+                                <h4 class="text-lg font-bold text-text-dark mb-2 line-clamp-2 hover:text-primary transition duration-150">Ứng dụng AI giúp chẩn đoán ung thư sớm: Kỷ nguyên mới của y học</h4>
+                                <p class="text-sm text-text-muted line-clamp-3">Các bệnh viện hàng đầu đang triển khai hệ thống Trí tuệ nhân tạo (AI) để tăng tốc độ và độ chính xác trong chẩn đoán hình ảnh...</p>
+                                <p class="text-xs text-gray-400 mt-3">Ngày 05/11/2025</p>
+                            </div>
+                        </a>
+
+                        <a href="blog_detail.html?id=3" class="block bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-2xl card-hover-shadow">
+                            <img src="https://placehold.co/600x400/C8E6F7/007BFF?text=Dinh+Dưỡng" alt="Dinh dưỡng" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <span class="text-xs font-semibold text-text-dark bg-secondary py-1 px-3 rounded-full mb-2 inline-block">Dinh Dưỡng</span>
+                                <h4 class="text-lg font-bold text-text-dark mb-2 line-clamp-2 hover:text-primary transition duration-150">Chế độ ăn Địa Trung Hải: Bí quyết sống thọ của người Ý và Hy Lạp</h4>
+                                <p class="text-sm text-text-muted line-clamp-3">Phân tích chi tiết về chế độ ăn uống giàu rau xanh, dầu ô liu và cá, những lợi ích tuyệt vời cho tim mạch...</p>
+                                <p class="text-xs text-gray-400 mt-3">Ngày 28/10/2025</p>
+                            </div>
+                        </a>
+                        
+                        <a href="blog_detail.html?id=4" class="block bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-2xl card-hover-shadow">
+                            <img src="https://placehold.co/600x400/E8D2E8/6A0DAD?text=Kiến+Thức" alt="Sức khỏe tinh thần" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <span class="text-xs font-semibold text-white bg-green-500 py-1 px-3 rounded-full mb-2 inline-block">Sức Khỏe Tinh Thần</span>
+                                <h4 class="text-lg font-bold text-text-dark mb-2 line-clamp-2 hover:text-primary transition duration-150">Cân bằng cuộc sống: 5 thói quen giúp giảm stress hiệu quả tại nhà</h4>
+                                <p class="text-sm text-text-muted line-clamp-3">Các chuyên gia tâm lý chia sẻ những phương pháp đơn giản để đối phó với áp lực công việc và cuộc sống...</p>
+                                <p class="text-xs text-gray-400 mt-3">Ngày 20/10/2025</p>
+                            </div>
+                        </a>
+
+                    </div>
+                    
+                    <div class="mt-12 flex justify-center space-x-2">
+                        <button class="px-4 py-2 text-sm font-semibold text-gray-400 border border-gray-300 rounded-lg" disabled>&larr; Trước</button>
+                        <button class="px-4 py-2 text-sm font-bold bg-primary text-white rounded-lg shadow-md">1</button>
+                        <button class="px-4 py-2 text-sm font-semibold text-text-dark hover:bg-gray-200 rounded-lg transition duration-150">2</button>
+                        <button class="px-4 py-2 text-sm font-semibold text-text-dark hover:bg-gray-200 rounded-lg transition duration-150">3</button>
+                        <button class="px-4 py-2 text-sm font-semibold text-primary-dark border border-primary-dark hover:bg-primary-dark hover:text-white rounded-lg transition duration-150">Tiếp &rarr;</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h5 class="font-extrabold text-2xl mb-3 text-primary-dark">Medi<span class="text-primary">Book</span></h5>
+                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
+                <div class="mt-4 flex space-x-3">
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+                </div>
+                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
+                <ul class="space-y-2">
+                    <li><a href="../Trang_Bac_Si/doctor_profile_edit.html" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
+                <p class="mb-2">Email: contact@medibook.vn</p>
+                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

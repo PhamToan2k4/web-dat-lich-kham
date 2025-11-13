@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediBook - Đặt Lịch Khám Bệnh Trực Tuyến</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind và Font Inter
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Màu sắc thương hiệu
+                        'primary': '#45C3A5', // Xanh lục chủ đạo (Teal/Mint)
+                        'primary-dark': '#007BFF', // Xanh dương (Branding, Buttons)
+                        'primary-light': '#E6FFF8', // Màu nền nhẹ của primary
+                        'secondary': '#f7d800', // Màu vàng nổi bật (Search CTA)
+                        
+                        // Màu sắc chung
+                        'text-dark': '#343a40', 
+                        'text-muted': '#6c757d', 
+                        'bg-light': '#f8f9fa',
+                        'sidebar-bg': '#EBF5FF', 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .specialty-slider {
+            /* Tăng tính thẩm mỹ cho thanh cuộn ngang */
+            overflow-x: scroll;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        .specialty-item-wrap {
+            scroll-snap-align: start;
+            min-width: 200px; /* Giảm chiều rộng để hiển thị nhiều hơn trên mobile */
+            margin-right: 16px;
+        }
+        .sidebar { transition: transform 0.3s ease-in-out; }
+        
+        .logo-mb {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 38px;
+             height: 38px;
+             background-color: #007BFF; 
+             border-radius: 6px;
+             font-size: 18px;
+             font-weight: 800;
+             color: white;
+             box-shadow: 0 4px 8px rgba(76, 150, 230, 0.3);
+        }
+        /* Tùy chỉnh Hero banner - SỬA ĐƯỜNG DẪN ẢNH */
+        .hero-banner {
+            /* Đường dẫn ảnh: TỪ index.html -> ra ngoài (../) -> vào images/ */
+            background-image: url('../images/Gemini_Generated_Image_m1bmdrm1bmdrm1bm.png'); 
+            background-size: cover; 
+            background-position: center; 
+            background-blend-mode: multiply; 
+            background-color: rgba(139, 199, 234, 0.8);
+        }
+        .card-hover-shadow:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-bg-light text-text-dark">
+
+    <div id="sidebar-menu" class="sidebar fixed inset-y-0 left-0 w-64 bg-sidebar-bg z-50 transform -translate-x-full shadow-2xl overflow-y-auto lg:hidden">
+        
+        <div class="p-4 border-b border-gray-300 flex justify-between items-center bg-white">
+            <h1 class="text-xl font-extrabold text-primary-dark">Medi<span class="text-primary">Book</span></h1>
+            <button id="close-sidebar" class="text-gray-600 hover:text-red-500 p-1 rounded-full hover:bg-gray-200">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        
+        <div class="p-4 space-y-2">
+            <a href="index.html" class="flex items-center space-x-2 p-3 text-text-dark bg-white rounded-lg font-bold border-l-4 border-primary transition duration-150 shadow-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3"></path></svg>
+                <span>Trang Chủ</span>
+            </a>
+            <a href="../Trang_Benh_Nhan/doctor_list.html" class="flex items-center space-x-2 p-2 text-text-dark hover:bg-white rounded-lg font-semibold border-l-4 border-transparent hover:border-primary transition duration-150">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <span>Tìm Bác sĩ / Chuyên khoa</span>
+            </a>
+            <a href="../Trang_Benh_Nhan/my_appointments.html" class="flex items-center space-x-2 p-2 text-text-dark hover:bg-white rounded-lg font-semibold border-l-4 border-transparent hover:border-primary transition duration-150">
+                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span>Lịch Khám Của Tôi</span>
+            </a>
+            <a href="../Trang_Noi_Dung/blog.html" class="flex items-center space-x-2 p-2 text-text-dark hover:bg-white rounded-lg font-semibold border-l-4 border-transparent hover:border-primary transition duration-150">
+                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.204 5 7.5 5S4.168 5.477 3 6.253M12 6.253C13.168 5.477 14.796 5 16.5 5s3.332.477 4.5 1.253"></path></svg>
+                <span>Tin Tức / Cẩm Nang</span>
+            </a>
+        </div>
+        
+        <div class="p-4 space-y-2 pt-6 border-t border-gray-300">
+            <p class="text-xs text-text-muted uppercase font-bold mb-2">TÀI KHOẢN & HỖ TRỢ</p>
+            <a href="login_register.html" class="block p-2 text-sm text-text-dark hover:bg-white rounded-lg transition duration-150">Đăng Nhập/Đăng Ký</a>
+            <a href="../Trang_Benh_Nhan/profile.html" class="block p-2 text-sm text-text-dark hover:bg-white rounded-lg transition duration-150">Hồ sơ cá nhân</a>
+            <a href="#" class="block p-2 text-sm text-text-dark hover:bg-white rounded-lg transition duration-150">Liên hệ hỗ trợ</a>
+        </div>
+        
+        <div class="p-4 mt-8">
+            <a href="login_register.html?role=doctor" class="w-full inline-block text-center py-2 text-sm font-bold bg-primary text-white hover:bg-primary-dark transition duration-150 rounded-lg shadow-lg">
+                Dành cho Bác sĩ
+            </a>
+        </div>
+    </div>
+    
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            
+            <div class="flex items-center space-x-2">
+                <button id="open-sidebar-mobile" class="text-gray-600 hover:text-primary-dark mr-2 lg:hidden p-1 rounded-md hover:bg-gray-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+                <a href="index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
+                    <div class="logo-mb">MB</div>
+                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
+                </a>
+            </div>
+
+           <nav class="hidden lg:flex space-x-8 text-base font-semibold">
+                <a href="../Trang_Benh_Nhan/hospital_list.html" class="text-text-dark hover:text-primary transition duration-150">Cơ sở y tế</a>
+                <a href="../Trang_Benh_Nhan/specialties.html" class="text-text-dark hover:text-primary transition duration-150">Chuyên khoa</a>
+                <a href="../Trang_Noi_Dung/health_packages.html" class="text-text-dark hover:text-primary transition duration-150">Gói khám</a> 
+                <a href="../Trang_Noi_Dung/blog.html" class="text-text-dark hover:text-primary transition duration-150">Tin tức</a>
+                <a href="../Trang_Benh_Nhan/my_appointments.html" class="text-text-dark hover:text-primary transition duration-150">Lịch Khám Của Tôi</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="tel:19006008" class="text-sm font-bold text-primary-dark hover:text-primary transition duration-150 hidden sm:block">
+                    HOTLINE: 1900 6008
+                </a>
+                <a href="login_register.html" class="px-5 py-2 text-sm font-bold bg-primary-dark text-white hover:bg-blue-700 transition duration-150 rounded-lg shadow-md hover:shadow-lg">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="hero-banner relative pt-20 pb-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-10">
+                <h2 class="text-4xl sm:text-5xl font-bold text-white mb-2 leading-snug drop-shadow-md">
+                    Đặt lịch Khám Bệnh và <span class="text-secondary">Tư vấn từ xa</span>
+                </h2>
+                <p class="text-xl font-medium text-white max-w-4xl mx-auto drop-shadow-sm">
+                    Tìm kiếm bác sĩ, chuyên khoa, hoặc cơ sở y tế hàng đầu Việt Nam
+                </p>
+            </div>
+
+            <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-2xl max-w-4xl mx-auto border border-primary/20 flex items-center space-x-3 transition duration-300 hover:scale-[1.01]">
+                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="search-bar" placeholder="Nhập chuyên khoa, bác sĩ, cơ sở y tế bạn cần tìm..." 
+                                 class="flex-grow py-3 border-none focus:ring-0 text-lg placeholder-text-muted">
+                <a href="../Trang_Benh_Nhan/doctor_list.html" id="search-button" class="bg-secondary text-text-dark font-bold py-3 px-6 rounded-xl hover:bg-yellow-500 transition duration-300 shadow-lg hidden sm:block">
+                    Tìm Kiếm
+                </a>
+            </div>
+            
+            <div class="mt-12 flex justify-center space-x-4 sm:space-x-10 text-center">
+                
+                <a href="../Trang_Benh_Nhan/specialties.html" class="text-white hover:text-secondary font-semibold transition duration-150">
+                    <div class="p-3 bg-white rounded-xl shadow-lg mx-auto mb-2 w-16 h-16 flex items-center justify-center transition duration-150 hover:scale-105">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.618a8.995 8.995 0 011.085 2.158 9 9 0 11-14.832 5.094 8.995 8.995 0 011.085-2.158"></path></svg>
+                    </div>
+                    Chuyên khoa
+                </a>
+                
+                <a href="../Trang_Benh_Nhan/hospital_list.html" class="text-white hover:text-secondary font-semibold transition duration-150">
+                    <div class="p-3 bg-white rounded-xl shadow-lg mx-auto mb-2 w-16 h-16 flex items-center justify-center transition duration-150 hover:scale-105">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14-2h-18M5 19h14M8 11h2m-2 4h2m4-4h2m-2 4h2"></path></svg>
+                    </div>
+                    Cơ sở Y tế
+                </a>
+                
+                <a href="../Trang_Benh_Nhan/teleconsult.html" class="text-white hover:text-secondary font-semibold transition duration-150 hidden sm:block">
+                    <div class="p-3 bg-white rounded-xl shadow-lg mx-auto mb-2 w-16 h-16 flex items-center justify-center transition duration-150 hover:scale-105">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2l2 4 2-4h5a2 2 0 002-2V9z"></path></svg>
+                    </div>
+                    Tư vấn từ xa
+                </a>
+            </div>
+        </div>
+    </main>
+    
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-bold text-text-dark">Chuyên khoa phổ biến</h3>
+                <a href="../Trang_Benh_Nhan/specialties.html" class="text-primary font-medium text-base hover:text-primary-dark transition duration-150 hover:underline">Xem thêm</a>
+            </div>
+
+            <div class="specialty-slider flex overflow-x-auto pb-4 -mx-4 px-4">
+                
+                <div class="specialty-item-wrap flex-shrink-0">
+                    <a href="../Trang_Benh_Nhan/doctor_list.html?specialty=Cơ-Xương-Khớp" class="block bg-primary-light rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-300 card-hover-shadow">
+                        <img src="../images/Gemini_Generated_Image_3wlihf3wlihf3wli.png" alt="Chuyên khoa Cơ Xương Khớp" class="w-full h-40 object-cover rounded-t-xl">
+                        <div class="p-4 text-center">
+                            <p class="font-bold text-md text-text-dark hover:text-primary transition duration-150">Cơ Xương Khớp</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="specialty-item-wrap flex-shrink-0">
+                    <a href="../Trang_Benh_Nhan/doctor_list.html?specialty=Thần-Kinh" class="block bg-primary-light rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-300 card-hover-shadow">
+                        <img src="../images/Gemini_Generated_Image_gledpvgledpvgled.png" alt="Chuyên khoa Thần Kinh" class="w-full h-40 object-cover rounded-t-xl">
+                        <div class="p-4 text-center">
+                            <p class="font-bold text-md text-text-dark hover:text-primary transition duration-150">Thần Kinh</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="specialty-item-wrap flex-shrink-0">
+                    <a href="../Trang_Benh_Nhan/doctor_list.html?specialty=Tiêu-Hóa" class="block bg-primary-light rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-300 card-hover-shadow">
+                        <img src="../images/Gemini_Generated_Image_f9sauif9sauif9sa.png" alt="Chuyên khoa Tiêu Hóa" class="w-full h-40 object-cover rounded-t-xl">
+                        <div class="p-4 text-center">
+                            <p class="font-bold text-md text-text-dark hover:text-primary transition duration-150">Tiêu Hóa</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="specialty-item-wrap flex-shrink-0">
+                    <a href="../Trang_Benh_Nhan/doctor_list.html?specialty=Tim-Mạch" class="block bg-primary-light rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-300 card-hover-shadow">
+                        <img src="../images/Gemini_Generated_Image_7fqi787fqi787fqi.png" alt="Chuyên khoa Tim Mạch" class="w-full h-40 object-cover rounded-t-xl">
+                        <div class="p-4 text-center">
+                            <p class="font-bold text-md text-text-dark hover:text-primary transition duration-150">Tim Mạch</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="specialty-item-wrap flex-shrink-0">
+                    <a href="../Trang_Benh_Nhan/doctor_list.html?specialty=Tai-Mũi-Họng" class="block bg-primary-light rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-300 card-hover-shadow">
+                        <img src="../images/Gemini_Generated_Image_qxu1czqxu1czqxu1.png" alt="Chuyên khoa Tai Mũi Họng" class="w-full h-40 object-cover rounded-t-xl">
+                        <div class="p-4 text-center">
+                            <p class="font-bold text-md text-text-dark hover:text-primary transition duration-150">Tai Mũi Họng</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="specialty-item-wrap flex-shrink-0">
+                    <a href="../Trang_Benh_Nhan/doctor_list.html?specialty=Sản-Phụ-Khoa" class="block bg-primary-light rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-300 card-hover-shadow">
+                        <img src="../images/Gemini_Generated_Image_7hm9my7hm9my7hm9.png" alt="Chuyên khoa Sản Phụ Khoa" class="w-full h-40 object-cover rounded-t-xl">
+                        <div class="p-4 text-center">
+                            <p class="font-bold text-md text-text-dark hover:text-primary transition duration-150">Sản Phụ Khoa</p>
+                        </div>
+                    </a>
+                </div>
+                
+            </div>
+            <p class="text-center text-sm text-text-muted mt-4">*Vuốt sang ngang để xem thêm chuyên khoa*</p>
+        </div>
+    </section>
+
+    <section class="py-16 bg-bg-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-bold text-text-dark">Cơ sở Y tế/Bệnh viện hàng đầu</h3>
+                <a href="../Trang_Benh_Nhan/hospital_list.html" class="text-primary font-medium text-base hover:text-primary-dark transition duration-150 hover:underline">Xem tất cả</a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <a href="../Trang_Benh_Nhan/hospital_detail.html?id=cho-ray" class="block bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 border border-gray-200 hover:shadow-xl card-hover-shadow">
+                    <img src="../images/Benh-vien-Cho-Ray-HCMC-Vietnam.jpg" alt="Bệnh viện Chợ Rẫy" class="w-full h-32 object-cover">
+                    <div class="p-4">
+                        <h4 class="text-lg font-bold text-text-dark mb-1 line-clamp-2 hover:text-primary transition duration-150">Bệnh viện Chợ Rẫy</h4>
+                        <p class="text-sm text-text-muted">Quận 5, TP Hồ Chí Minh</p>
+                    </div>
+                </a>
+
+                <a href="../Trang_Benh_Nhan/hospital_detail.html?id=bach-mai" class="block bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 border border-gray-200 hover:shadow-xl card-hover-shadow">
+                    <img src="../images/22jun2023070309gmtupload00000362.jpg" alt="Bệnh viện Bạch Mai" class="w-full h-32 object-cover">
+                    <div class="p-4">
+                        <h4 class="text-lg font-bold text-text-dark mb-1 line-clamp-2 hover:text-primary transition duration-150">Bệnh viện Bạch Mai</h4>
+                        <p class="text-sm text-text-muted">Quận Đống Đa, Hà Nội</p>
+                    </div>
+                </a>
+                
+                <a href="../Trang_Benh_Nhan/hospital_detail.html?id=vinmec" class="block bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 border border-gray-200 hover:shadow-xl card-hover-shadow">
+                    <img src="../images/Gallery_Vinmec_1_6ec1560ff5.jpg" alt="Bệnh viện Quốc tế Vinmec" class="w-full h-32 object-cover">
+                    <div class="p-4">
+                        <h4 class="text-lg font-bold text-text-dark mb-1 line-clamp-2 hover:text-primary transition duration-150">Bệnh viện Quốc tế Vinmec</h4>
+                        <p class="text-sm text-text-muted">Hệ thống toàn quốc</p>
+                    </div>
+                </a>
+
+                <a href="../Trang_Benh_Nhan/hospital_detail.html?id=dh-y-duoc" class="block bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 border border-gray-200 hover:shadow-xl card-hover-shadow">
+                    <img src="../images/benh-vien-dai-hoc-y-duoc-tphcm-la-mot-trong-nhung-benh-vien-da-khoa-hang-i-hang-dau-phia-nam.png" alt="Bệnh viện Đại học Y Dược" class="w-full h-32 object-cover">
+                    <div class="p-4">
+                        <h4 class="text-lg font-bold text-text-dark mb-1 line-clamp-2 hover:text-primary transition duration-150">Bệnh viện Đại học Y Dược TP.HCM</h4>
+                        <p class="text-sm text-text-muted">Quận 5, TP Hồ Chí Minh</p>
+                    </div>
+                </a>
+                
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-10">
+                <h3 class="text-2xl font-bold text-text-dark">Bác sĩ nổi bật của MediBook</h3>
+                <a href="../Trang_Benh_Nhan/doctor_list.html" class="text-primary font-medium text-base hover:text-primary-dark transition duration-150 hover:underline">Xem tất cả bác sĩ</a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-primary-light p-6 rounded-xl shadow-md border border-primary/20 text-center transition duration-300 hover:scale-[1.02] card-hover-shadow">
+                    <img src="../images/img-20250417-144259.jpg" alt="Ảnh bác sĩ Trần Văn Hùng" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-md">
+                    <h4 class="text-xl font-bold text-text-dark">GS.TS Trần Văn Hùng</h4>
+                    <p class="text-sm text-primary mb-2">Chuyên khoa Cơ Xương Khớp</p>
+                    <p class="text-xs text-text-muted line-clamp-3">Giám đốc Trung tâm Chấn thương chỉnh hình. Chuyên sâu về phẫu thuật khớp gối và cột sống. Hơn 30 năm kinh nghiệm.</p>
+                    <a href="../Trang_Benh_Nhan/doctor_detail.html?id=doctor_hung" class="mt-4 inline-block text-primary-dark hover:underline text-sm font-medium hover:text-primary transition duration-150">Xem hồ sơ & Đặt lịch</a>
+                </div>
+
+                <div class="bg-primary-light p-6 rounded-xl shadow-md border border-primary/20 text-center transition duration-300 hover:scale-[1.02] card-hover-shadow">
+                    <img src="../images/unnamed.jpg" alt="Ảnh bác sĩ Nguyễn Thị Thanh" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-md">
+                    <h4 class="text-xl font-bold text-text-dark">BS.CKII Nguyễn Thị Thanh</h4>
+                    <p class="text-sm text-primary mb-2">Chuyên khoa Da Liễu</p>
+                    <p class="text-xs text-text-muted line-clamp-3">Phó khoa Da Liễu tại BV Da Liễu TW. Chuyên gia điều trị các bệnh da liễu khó, mụn trứng cá và lão hóa da.</p>
+                    <a href="../Trang_Benh_Nhan/doctor_detail.html?id=doctor_thanh" class="mt-4 inline-block text-primary-dark hover:underline text-sm font-medium hover:text-primary transition duration-150">Xem hồ sơ & Đặt lịch</a>
+                </div>
+
+                <div class="bg-primary-light p-6 rounded-xl shadow-md border border-primary/20 text-center transition duration-300 hover:scale-[1.02] card-hover-shadow">
+                    <img src="../images/4ae747c1e15e6900304f.png" alt="Ảnh bác sĩ Nguyễn Xuân Trường" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-md">
+                    <h4 class="text-xl font-bold text-text-dark">PGS.TS Nguyễn Xuân Trường</h4>
+                    <p class="text-sm text-primary mb-2">Chuyên khoa Nhi Khoa (Tiêu hóa)</p>
+                    <p class="text-xs text-text-muted line-clamp-3">Chuyên gia hàng đầu về các bệnh tiêu hóa và dinh dưỡng ở trẻ em. Giảng viên trường Đại học Y Hà Nội.</p>
+                    <a href="../Trang_Benh_Nhan/doctor_detail.html?id=doctor_truong" class="mt-4 inline-block text-primary-dark hover:underline text-sm font-medium hover:text-primary transition duration-150">Xem hồ sơ & Đặt lịch</a>
+                </div>
+
+                <div class="bg-primary-light p-6 rounded-xl shadow-md border border-primary/20 text-center transition duration-300 hover:scale-[1.02] card-hover-shadow">
+                    <img src="../images/ths-bs-ckii-tran-kim-thanh.jpg" alt="Ảnh bác sĩ Phan Văn Quý" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-md">
+                    <h4 class="text-xl font-bold text-text-dark">PGS.TS.BS Lê Quang Quốc Ánh</h4>
+                    <p class="text-sm text-primary mb-2">Chuyên khoa Tiêu Hóa</p>
+                    <p class="text-xs text-text-muted line-clamp-3">PGS.TS.BS Lê Quang Quốc Ánh là một trong những chuyên gia hàng đầu trong lĩnh vực Tiêu hóa tại TP.HCM, đặc biệt có thế mạnh về phẫu thuật nội soi và nội soi can thiệp. Với hơn 40 năm kinh nghiệm lâm sàng, bác sĩ từng đảm nhiệm nhiều vị trí lãnh đạo tại các bệnh viện lớn như Nhân dân 115, Nguyễn Tri Phương, Gia Định.
+
+Bác sĩ Quốc Ánh được biết đến là người đầu tiên ở Việt Nam thực hiện ca nội soi ERCP lấy sỏi mật thành công tại Bệnh viện Bình Dân. Tính đến nay, ông đã thực hiện hơn 10.000 ca liên quan đến sỏi mật, đồng thời tích cực tham gia giảng dạy, nghiên cứu và xuất bản nhiều công trình chuyên sâu trong ngành.</p>
+                    <a href="../Trang_Benh_Nhan/doctor_detail.html?id=doctor_quy" class="mt-4 inline-block text-primary-dark hover:underline text-sm font-medium hover:text-primary transition duration-150">Xem hồ sơ & Đặt lịch</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="py-16 bg-bg-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-10">
+                <h3 class="text-2xl font-bold text-text-dark">📰 Tin Tức & Cẩm Nang Sức Khỏe</h3>
+                <a href="../Trang_Noi_Dung/blog.html" class="text-primary font-medium text-base hover:text-primary-dark transition duration-150 hover:underline">Đọc thêm Tin tức</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <a href="../Trang_Noi_Dung/blog_detail.html?id=1" class="block bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-2xl card-hover-shadow">
+                    <img src="https://placehold.co/600x400/C8E6F7/007BFF?text=Sức+Khỏe+Mùa+Đông" alt="Sức khỏe mùa đông" class="w-full h-48 object-cover">
+                    <div class="p-5">
+                        <span class="text-xs font-semibold text-white bg-primary py-1 px-3 rounded-full mb-2 inline-block">Mùa Vụ</span>
+                        <h4 class="text-lg font-bold text-text-dark mb-2 line-clamp-2 hover:text-primary transition duration-150">10 lời khuyên vàng giữ ấm cơ thể và phòng bệnh hô hấp mùa lạnh</h4>
+                        <p class="text-sm text-text-muted line-clamp-3">Chuyên gia y tế khuyến cáo các biện pháp đơn giản nhưng hiệu quả để bảo vệ sức khỏe khi nhiệt độ giảm sâu...</p>
+                        <p class="text-xs text-gray-400 mt-3">Ngày 10/11/2025</p>
+                    </div>
+                </a>
+
+                <a href="../Trang_Noi_Dung/blog_detail.html?id=2" class="block bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-2xl card-hover-shadow">
+                    <img src="https://placehold.co/600x400/C8E6F7/007BFF?text=Công+Nghệ+Y+Tế" alt="Công nghệ y tế" class="w-full h-48 object-cover">
+                    <div class="p-5">
+                        <span class="text-xs font-semibold text-white bg-primary-dark py-1 px-3 rounded-full mb-2 inline-block">Công Nghệ</span>
+                        <h4 class="text-lg font-bold text-text-dark mb-2 line-clamp-2 hover:text-primary transition duration-150">Ứng dụng AI giúp chẩn đoán ung thư sớm: Kỷ nguyên mới của y học</h4>
+                        <p class="text-sm text-text-muted line-clamp-3">Các bệnh viện hàng đầu đang triển khai hệ thống Trí tuệ nhân tạo (AI) để tăng tốc độ và độ chính xác trong chẩn đoán hình ảnh...</p>
+                        <p class="text-xs text-gray-400 mt-3">Ngày 05/11/2025</p>
+                    </div>
+                </a>
+
+                <a href="../Trang_Noi_Dung/blog_detail.html?id=3" class="block bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-2xl card-hover-shadow">
+                    <img src="https://placehold.co/600x400/C8E6F7/007BFF?text=Dinh+Dưỡng" alt="Dinh dưỡng" class="w-full h-48 object-cover">
+                    <div class="p-5">
+                        <span class="text-xs font-semibold text-text-dark bg-secondary py-1 px-3 rounded-full mb-2 inline-block">Dinh Dưỡng</span>
+                        <h4 class="text-lg font-bold text-text-dark mb-2 line-clamp-2 hover:text-primary transition duration-150">Chế độ ăn Địa Trung Hải: Bí quyết sống thọ của người Ý và Hy Lạp</h4>
+                        <p class="text-sm text-text-muted line-clamp-3">Phân tích chi tiết về chế độ ăn uống giàu rau xanh, dầu ô liu và cá, những lợi ích tuyệt vời cho tim mạch...</p>
+                        <p class="text-xs text-gray-400 mt-3">Ngày 28/10/2025</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h5 class="font-extrabold text-2xl mb-3 text-primary-dark">Medi<span class="text-primary">Book</span></h5>
+                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
+                <div class="mt-4 flex space-x-3">
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+                </div>
+                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
+                <ul class="space-y-2">
+                    <a href="../Trang_Bac_Si/doctor_profile_edit.html" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
+                <p class="mb-2">Email: contact@medibook.vn</p>
+                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const sidebar = document.getElementById('sidebar-menu');
+        const overlay = document.getElementById('sidebar-overlay');
+        const openBtn = document.getElementById('open-sidebar-mobile'); 
+        const closeBtn = document.getElementById('close-sidebar');
+
+        function toggleSidebar() {
+            if (sidebar.classList.contains('-translate-x-full')) {
+                // Mở Sidebar
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden'); // Ngăn cuộn body
+            } else {
+                // Đóng Sidebar
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        }
+
+        // Gắn sự kiện cho nút Hamburger (chỉ hiển thị trên mobile)
+        if(openBtn) {
+            openBtn.addEventListener('click', toggleSidebar);
+        }
+        closeBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar); 
+
+        // JS mô phỏng: Tương tác tìm kiếm
+        document.getElementById('search-bar').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                performSearch(event);
+            }
+        });
+        
+        // Nút tìm kiếm trên desktop (hidden sm:block) cũng cần sự kiện
+        const searchButtonLink = document.getElementById('search-button');
+        if (searchButtonLink) {
+            searchButtonLink.addEventListener('click', performSearch);
+        }
+        
+        function performSearch(event) {
+             event.preventDefault(); 
+             const searchBar = document.getElementById('search-bar').value;
+             
+             // Hiển thị thông báo tìm kiếm (thay thế cho alert)
+             const searchMessage = document.createElement('div');
+             searchMessage.textContent = `Đang tìm kiếm "${searchBar || 'tất cả'}"...`;
+             searchMessage.className = "fixed bottom-5 right-5 p-3 bg-primary-dark text-white rounded-lg shadow-xl z-50 text-sm animate-pulse";
+             document.body.appendChild(searchMessage);
+             
+             // Chuyển hướng đến trang danh sách bác sĩ sau 1 giây
+             setTimeout(() => {
+                 searchMessage.remove();
+                 // SỬA: Chuyển hướng tìm kiếm
+                 window.location.href = '../Trang_Benh_Nhan/doctor_list.html?q=' + encodeURIComponent(searchBar);
+             }, 1000); 
+        }
+
+    </script>
+
+</body>
+</html>

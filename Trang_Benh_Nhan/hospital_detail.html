@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">MediBook - Chi Tiết Bệnh Viện</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind CSS (Giữ nguyên)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45C3A5',
+                        'primary-dark': '#007BFF',
+                        'primary-light': '#E6FFF8',
+                        'secondary': '#f7d800',
+                        'text-dark': '#343a40',
+                        'text-muted': '#6c757d',
+                        'bg-light': '#f8f9fa',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .logo-mb {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 38px;
+             height: 38px;
+             background-color: #007BFF;
+             border-radius: 6px;
+             font-size: 18px;
+             font-weight: 800;
+             color: white;
+             box-shadow: 0 4px 8px rgba(76, 150, 230, 0.3);
+        }
+        .info-card { border-left: 4px solid #45C3A5; }
+    </style>
+</head>
+<body class="bg-bg-light text-text-dark">
+
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <a href="../Trang_Chung_Va_Tiep_Can/index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
+                    <div class="logo-mb">MB</div>
+                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
+                </a>
+            </div>
+           <nav class="hidden lg:flex space-x-8 text-base font-semibold">
+                <a href="hospital_list.html" class="text-text-dark hover:text-primary transition duration-150">Cơ sở y tế</a>
+                <a href="specialties.html" class="text-text-dark hover:text-primary transition duration-150">Chuyên khoa</a>
+                <a href="../Trang_Noi_Dung/health_packages.html" class="text-text-dark hover:text-primary transition duration-150">Gói khám</a>
+                <a href="../Trang_Noi_Dung/blog.html" class="text-text-dark hover:text-primary transition duration-150">Tin tức</a>
+                <a href="my_appointments.html" class="text-text-dark hover:text-primary transition duration-150">Lịch Khám Của Tôi</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" class="px-5 py-2 text-sm font-bold bg-primary-dark text-white hover:bg-blue-700 transition duration-150 rounded-lg shadow-md hover:shadow-lg">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-10 md:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <nav class="text-sm font-medium text-text-muted mb-6">
+                <a href="../Trang_Chung_Va_Tiep_Can/index.html" class="hover:text-primary transition duration-150">Trang chủ</a> /
+                <a href="hospital_list.html" class="hover:text-primary transition duration-150">Cơ sở y tế</a> /
+                <span class="text-primary-dark font-bold" id="breadcrumb-hospital-name">...</span>
+            </nav>
+
+            <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl">
+                <div class="lg:grid lg:grid-cols-3 lg:gap-8">
+                    
+                    <div class="lg:col-span-2">
+                        <img id="hospital-image" src="../images/Benh-vien-Cho-Ray-HCMC-Vietnam.jpg" alt="Hình ảnh Bệnh viện" class="w-full h-72 object-cover rounded-lg shadow-md mb-6">
+                        
+                        <h1 class="text-3xl font-extrabold text-primary-dark mb-2" id="hospital-name">Bệnh viện Chợ Rẫy</h1>
+                        <p class="text-lg text-text-muted font-medium mb-4" id="hospital-address">Quận 5, TP Hồ Chí Minh</p>
+
+                        <div class="space-y-4 text-text-dark">
+                            <h3 class="text-xl font-bold text-primary mb-2">Giới thiệu tổng quan</h3>
+                            <p id="hospital-bio" class="text-sm">...</p>
+
+                            <h3 class="text-xl font-bold text-primary pt-4 mb-2">Các chuyên khoa nổi bật</h3>
+                            <ul id="specialty-list" class="list-disc list-inside ml-4 space-y-1 text-sm text-text-muted">
+                                <li>Phẫu thuật Thần kinh - Sọ não</li>
+                            </ul>
+                            
+                            <a id="maps-link" target="_blank" class="text-primary-dark text-sm hover:underline mt-4 inline-block font-medium cursor-pointer">
+                                Xem vị trí chi tiết trên Google Maps
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-1 pt-6 lg:pt-0">
+                        <div class="sticky top-28 bg-primary-light p-5 rounded-xl shadow-lg border-2 border-primary">
+                            <h3 class="text-xl font-bold text-primary-dark mb-4">Đặt lịch khám tại đây</h3>
+                            
+                            <div class="space-y-3">
+                                <div class="info-card p-3 rounded-lg text-text-dark">
+                                    <p class="font-semibold">📞 Hotline liên hệ: 1900 6008</p>
+                                    <p class="text-sm text-text-muted">Đặt lịch nhanh qua tổng đài hỗ trợ</p>
+                                </div>
+                                <div class="info-card p-3 rounded-lg text-text-dark">
+                                    <p class="font-semibold">⏰ Thời gian làm việc:</p>
+                                    <p class="text-sm text-text-muted">Thứ Hai - Thứ Sáu: 7:00 - 16:30</p>
+                                    <p class="text-sm text-text-muted">Thứ Bảy (Khám dịch vụ): 7:00 - 11:30</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8">
+                                <p class="text-sm font-semibold text-text-dark mb-3">Tìm kiếm Bác sĩ theo chuyên khoa:</p>
+                                
+                                <a id="doctor-list-link" href="doctor_list.html?hospital=cho-ray" class="w-full py-3 bg-primary text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition duration-150 inline-block text-center">
+                                    Xem Danh Sách Bác Sĩ
+                                </a>
+                                
+                                <p class="text-center text-xs text-text-muted mt-4">Đặt lịch online nhanh chóng và nhận ưu tiên.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h5 class="font-extrabold text-2xl mb-3 text-primary-dark">Medi<span class="text-primary">Book</span></h5>
+                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
+                <div class="mt-4 flex space-x-3">
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+                </div>
+                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
+                <ul class="space-y-2">
+                    <li><a href="../Trang_Bac_Si/doctor_profile_edit.html" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
+                <p class="mb-2">Email: contact@medibook.vn</p>
+                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dữ liệu bệnh viện (BỔ SUNG BỆNH VIỆN ĐẠI HỌC Y DƯỢC)
+        const hospitalData = {
+            'cho-ray': {
+                name: 'Bệnh viện Chợ Rẫy',
+                address: '150 Hùng Vương, Quận 5, TP Hồ Chí Minh',
+                bio: 'Bệnh viện Chợ Rẫy là bệnh viện đa khoa hoàn chỉnh hạng đặc biệt, thuộc Bộ Y tế, có uy tín và là cơ sở y tế lớn nhất khu vực phía Nam Việt Nam. Bệnh viện nổi tiếng với đội ngũ chuyên gia hàng đầu và khả năng điều trị các ca bệnh phức tạp.',
+                specialties: ['Phẫu thuật Thần kinh - Sọ não', 'Tim mạch can thiệp', 'Ung bướu và Y học hạt nhân', 'Chấn thương Chỉnh hình'],
+                image: '../images/Benh-vien-Cho-Ray-HCMC-Vietnam.jpg',
+                mapsUrl: 'https://maps.app.goo.gl/3K8sM4N2hT7XpYmB8',
+                doctorCount: '75+'
+            },
+            'bach-mai': {
+                name: 'Bệnh viện Bạch Mai',
+                address: '78 Giải Phóng, Đống Đa, Hà Nội',
+                bio: 'Bệnh viện Bạch Mai là một trong những bệnh viện đa khoa lớn nhất và lâu đời nhất tại Việt Nam. Đây là trung tâm y học hàng đầu về đào tạo, nghiên cứu khoa học và khám chữa bệnh.',
+                specialties: ['Nội tiết - Đái tháo đường', 'Tâm thần', 'Hô hấp', 'Truyền nhiễm'],
+                image: '../images/22jun2023070309gmtupload00000362.jpg',
+                mapsUrl: 'https://maps.app.goo.gl/4Q3X2yM7bA6S6qL46',
+                doctorCount: '120+'
+            },
+            'vinmec': {
+                name: 'Bệnh viện Quốc tế Vinmec',
+                address: 'Hệ thống bệnh viện trên toàn quốc',
+                bio: 'Hệ thống y tế tư nhân cao cấp với cơ sở vật chất hiện đại, đội ngũ chuyên gia quốc tế và chất lượng dịch vụ chuẩn JCI, cung cấp các gói khám tổng quát và chuyên sâu.',
+                specialties: ['Sản Phụ khoa', 'Nhi khoa', 'Ung bướu', 'Tim mạch'],
+                image: '../images/Gallery_Vinmec_1_6ec1560ff5.jpg',
+                mapsUrl: 'https://maps.app.goo.gl/H4bF7qS1T2Ym4E3N6',
+                doctorCount: '50+'
+            },
+            'dh-y-duoc': {
+                name: 'Bệnh viện Đại học Y Dược TP.HCM',
+                address: '215 Hồng Bàng, Phường 11, Quận 5, TP.HCM',
+                bio: 'Bệnh viện Đại học Y Dược là cơ sở thực hành y khoa hàng đầu, gắn liền với Đại học Y Dược TP.HCM. Bệnh viện nổi tiếng về sự kết hợp giữa điều trị và nghiên cứu khoa học.',
+                specialties: ['Tiêu hóa - Gan Mật', 'Cơ Xương Khớp', 'Thần kinh', 'Tai Mũi Họng'],
+                image: '../images/benh-vien-dai-hoc-y-duoc-tphcm-la-mot-trong-nhung-benh-vien-da-khoa-hang-i-hang-dau-phia-nam.png',
+                mapsUrl: 'http://googleusercontent.com/maps.google.com/5',
+                doctorCount: '90+'
+            }
+        };
+
+        function loadHospitalDetail() {
+            const urlParams = new URLSearchParams(window.location.search);
+            // Mặc định là Cho Ray nếu không có ID, hoặc dùng dh-y-duoc nếu ID có trong URL
+            const hospitalId = urlParams.get('id') ? urlParams.get('id').toLowerCase() : 'cho-ray'; 
+            const data = hospitalData[hospitalId];
+
+            if (!data) {
+                document.getElementById('hospital-name').textContent = 'Không tìm thấy bệnh viện';
+                document.getElementById('hospital-bio').textContent = 'Mã bệnh viện không hợp lệ.';
+                document.getElementById('hospital-image').src = 'https://placehold.co/1200x400/990000/ffffff?text=LỖI+404';
+                document.getElementById('doctor-list-link').classList.add('hidden');
+                return;
+            }
+
+            // Cập nhật DOM
+            document.getElementById('page-title').textContent = data.name + ' - MediBook';
+            document.getElementById('breadcrumb-hospital-name').textContent = data.name;
+            document.getElementById('hospital-name').textContent = data.name;
+            document.getElementById('hospital-address').textContent = data.address;
+            document.getElementById('hospital-bio').textContent = data.bio;
+            // SỬA: Đường dẫn ảnh đã được đặt trong data, dùng đường dẫn mới
+            document.getElementById('hospital-image').src = data.image; 
+            document.getElementById('maps-link').href = data.mapsUrl;
+            
+            // Cập nhật liên kết đến trang danh sách bác sĩ tại cơ sở này
+            const doctorListLink = document.getElementById('doctor-list-link');
+            doctorListLink.href = `doctor_list.html?hospital=${hospitalId}`;
+            doctorListLink.textContent = `Xem Danh Sách Bác Sĩ (${data.doctorCount})`;
+
+            // Cập nhật danh sách chuyên khoa
+            const specialtyList = document.getElementById('specialty-list');
+            specialtyList.innerHTML = data.specialties.map(s => `<li>${s}</li>`).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', loadHospitalDetail);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Khám Của Tôi - MediBook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind và Font Inter
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45C3A5', 
+                        'primary-dark': '#007BFF', 
+                        'primary-light': '#E6FFF8', 
+                        'secondary': '#f7d800', 
+                        'text-dark': '#343a40', 
+                        'text-muted': '#6c757d', 
+                        'bg-light': '#f8f9fa',
+                        'status-pending': '#ffc107',
+                        'status-success': '#28a745',
+                        'status-cancelled': '#dc3545',
+                        'status-completed': '#007BFF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .logo-mb {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 38px;
+             height: 38px;
+             background-color: #007BFF; 
+             border-radius: 6px;
+             font-size: 18px;
+             font-weight: 800;
+             color: white;
+             box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        }
+        .status-badge {
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body class="bg-bg-light text-text-dark">
+
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            
+            <div class="flex items-center space-x-2">
+                <a href="../Trang_Chung_Va_Tiep_Can/index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
+                    <div class="w-8 h-8 bg-primary-dark rounded-md text-white flex items-center justify-center text-lg font-bold">MB</div>
+                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
+                </a>
+            </div>
+
+           <nav class="hidden lg:flex space-x-8 text-base font-semibold">
+                <a href="hospital_list.html" class="text-text-dark hover:text-primary transition duration-150">Cơ sở y tế</a>
+                <a href="specialties.html" class="text-text-dark hover:text-primary transition duration-150">Chuyên khoa</a>
+                <a href="../Trang_Noi_Dung/health_packages.html" class="text-text-dark hover:text-primary transition duration-150">Gói khám</a> 
+                <a href="../Trang_Noi_Dung/blog.html" class="text-text-dark hover:text-primary transition duration-150">Tin tức</a>
+                <a href="my_appointments.html" class="text-primary transition duration-150 border-b-2 border-primary-dark">Lịch Khám Của Tôi</a> 
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="profile.html" class="text-sm font-bold text-primary-dark hover:text-primary transition duration-150 hidden sm:block">
+                    Hồ sơ (Nguyễn Văn A)
+                </a>
+                <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" class="px-5 py-2 text-sm font-bold bg-gray-200 text-text-dark hover:bg-gray-300 transition duration-150 rounded-lg shadow-sm">
+                    Đăng xuất
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <h1 class="text-3xl font-bold text-text-dark mb-6">Lịch Khám Của Tôi</h1>
+
+        <div class="flex space-x-4 border-b border-gray-300 mb-6 overflow-x-auto">
+            <button data-status="upcoming" class="tab-button py-3 px-4 font-semibold text-text-dark border-b-2 border-primary-dark active-tab transition duration-150 hover:text-primary">Lịch Sắp tới (3)</button>
+            <button data-status="completed" class="tab-button py-3 px-4 font-semibold text-text-muted border-b-2 border-transparent transition duration-150 hover:text-primary">Đã hoàn thành (5)</button>
+            <button data-status="cancelled" class="tab-button py-3 px-4 font-semibold text-text-muted border-b-2 border-transparent transition duration-150 hover:text-primary">Đã hủy (1)</button>
+        </div>
+
+        <div id="appointments-list" class="space-y-6">
+            
+            <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-pending flex flex-col md:flex-row justify-between items-start md:items-center" data-status="upcoming">
+                <div class="flex-1 space-y-1 mb-4 md:mb-0">
+                    <p class="text-sm font-medium text-text-muted">Mã hẹn: MB20251112003</p>
+                    <h2 class="text-xl font-bold text-text-dark">GS.TS Trần Văn Hùng <span class="text-base font-normal text-primary">(Cơ Xương Khớp)</span></h2>
+                    <p class="text-lg font-semibold text-primary-dark">Thứ Tư, 20/11/2025 | 08:00 - 09:00</p>
+                    <p class="text-sm text-text-muted flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.899a2 2 0 01-2.828 0L6.343 16.657m0 0a2 2 0 01-2.828-2.828m2.828 2.828a2 2 0 002.828 0m0 0a2 2 0 012.828 2.828"></path></svg>
+                        <span>Bệnh viện Chấn thương Chỉnh hình, TP.HCM</span>
+                    </p>
+                </div>
+                
+                <div class="flex flex-col items-start md:items-end space-y-2">
+                    <span class="status-badge text-text-dark bg-status-pending">Chờ xác nhận</span>
+                    <button class="btn-detail py-2 px-4 text-sm font-bold bg-primary-dark text-white rounded-lg hover:bg-blue-700 transition duration-150">Xem chi tiết</button>
+                    <button class="btn-cancel py-2 px-4 text-sm font-bold bg-status-cancelled text-white rounded-lg hover:opacity-90 transition duration-150">Hủy lịch</button>
+                </div>
+            </div>
+
+             <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-success flex flex-col md:flex-row justify-between items-start md:items-center" data-status="upcoming">
+                <div class="flex-1 space-y-1 mb-4 md:mb-0">
+                    <p class="text-sm font-medium text-text-muted">Mã hẹn: MB20251111002</p>
+                    <h2 class="text-xl font-bold text-text-dark">BS.CKII Nguyễn Thị Thanh <span class="text-base font-normal text-primary">(Da Liễu)</span></h2>
+                    <p class="text-lg font-semibold text-primary-dark">Thứ Ba, 25/11/2025 | 16:00 - 17:30</p>
+                    <p class="text-sm text-text-muted flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.899a2 2 0 01-2.828 0L6.343 16.657m0 0a2 2 0 01-2.828-2.828m2.828 2.828a2 2 0 002.828 0m0 0a2 2 0 012.828 2.828"></path></svg>
+                        <span>Phòng khám Chuyên khoa Da Liễu Thanh, TP.HCM</span>
+                    </p>
+                </div>
+                
+                <div class="flex flex-col items-start md:items-end space-y-2">
+                    <span class="status-badge text-white bg-status-success">Đã xác nhận</span>
+                    <button class="btn-detail py-2 px-4 text-sm font-bold bg-primary-dark text-white rounded-lg hover:bg-blue-700 transition duration-150">Xem chi tiết</button>
+                    <button class="btn-cancel py-2 px-4 text-sm font-bold bg-status-cancelled text-white rounded-lg hover:opacity-90 transition duration-150">Hủy lịch</button>
+                </div>
+            </div>
+
+            <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-completed flex flex-col md:flex-row justify-between items-start md:items-center" data-status="completed" style="display: none;">
+                <div class="flex-1 space-y-1 mb-4 md:mb-0">
+                    <p class="text-sm font-medium text-text-muted">Mã hẹn: MB20251001001</p>
+                    <h2 class="text-xl font-bold text-text-dark">PGS.TS Nguyễn Xuân Trường <span class="text-base font-normal text-primary">(Nhi Khoa)</span></h2>
+                    <p class="text-lg font-semibold text-status-completed">Thứ Tư, 01/10/2025 | 10:00 - 11:00</p>
+                    <p class="text-sm text-text-muted flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.899a2 2 0 01-2.828 0L6.343 16.657m0 0a2 2 0 01-2.828-2.828m2.828 2.828a2 2 0 002.828 0m0 0a2 2 0 012.828 2.828"></path></svg>
+                        <span>Bệnh viện Đa khoa Hồng Ngọc, Hà Nội</span>
+                    </p>
+                </div>
+                
+                <div class="flex flex-col items-start md:items-end space-y-2">
+                    <span class="status-badge text-white bg-status-completed">Đã khám xong</span>
+                    <button class="btn-detail py-2 px-4 text-sm font-bold bg-primary-dark text-white rounded-lg hover:bg-blue-700 transition duration-150">Xem hồ sơ khám</button>
+                    <a href="review_doctor.html?app_id=MB20251001001" class="py-2 px-4 text-sm font-bold bg-secondary text-text-dark rounded-lg hover:bg-yellow-500 transition duration-150">Gửi Đánh Giá</a>
+                </div>
+            </div>
+
+             <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-cancelled flex flex-col md:flex-row justify-between items-start md:items-center" data-status="cancelled" style="display: none;">
+                <div class="flex-1 space-y-1 mb-4 md:mb-0">
+                    <p class="text-sm font-medium text-text-muted">Mã hẹn: MB20250915001</p>
+                    <h2 class="text-xl font-bold text-text-dark">TS.BS Phan Văn Quý <span class="text-base font-normal text-primary">(Tiêu Hóa)</span></h2>
+                    <p class="text-lg font-semibold text-status-cancelled">Thứ Hai, 15/09/2025 | 14:00 - 15:00</p>
+                    <p class="text-sm text-text-muted flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.899a2 2 0 01-2.828 0L6.343 16.657m0 0a2 2 0 01-2.828-2.828m2.828 2.828a2 2 0 002.828 0m0 0a2 2 0 012.828 2.828"></path></svg>
+                        <span>Phòng khám Đa khoa Tiêu Hóa Phương Đông, Hà Nội</span>
+                    </p>
+                </div>
+                
+                <div class="flex flex-col items-start md:items-end space-y-2">
+                    <span class="status-badge text-white bg-status-cancelled">Đã hủy</span>
+                    <button disabled class="btn-detail py-2 px-4 text-sm font-bold bg-gray-300 text-text-muted rounded-lg cursor-not-allowed">Đã hủy lịch</button>
+                    <button disabled class="py-2 px-4 text-sm font-bold bg-gray-300 text-text-muted rounded-lg cursor-not-allowed">Đánh giá</button>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div id="no-appointments" class="hidden bg-white p-10 rounded-xl shadow-lg border-2 border-dashed border-gray-300 text-center mt-6">
+            <svg class="w-16 h-16 text-primary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <p class="text-xl font-semibold text-text-dark mb-3">Bạn chưa có lịch hẹn nào thuộc trạng thái này.</p>
+            <p class="text-text-muted mb-4">Tìm kiếm và đặt lịch khám ngay để chăm sóc sức khỏe của bạn.</p>
+            <a href="doctor_list.html" class="py-2 px-5 bg-primary-dark text-white font-bold rounded-lg hover:bg-blue-700 transition duration-150">Đặt lịch ngay</a>
+        </div>
+        
+    </div>
+    
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h5 class="font-extrabold text-2xl mb-3 text-primary-dark">Medi<span class="text-primary">Book</span></h5>
+                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
+                <div class="mt-4 flex space-x-3">
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+                </div>
+                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
+                <ul class="space-y-2">
+                    <li><a href="../Trang_Bac_Si/doctor_profile_edit.html" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
+                <p class="mb-2">Email: contact@medibook.vn</p>
+                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Hàm xử lý chuyển Tab lọc trạng thái
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const appointmentCards = document.querySelectorAll('.appointment-card');
+        const noAppointments = document.getElementById('no-appointments');
+
+        function filterAppointments(status) {
+            let found = 0;
+            appointmentCards.forEach(card => {
+                if (status === 'all' || card.dataset.status === status) {
+                    card.style.display = 'flex';
+                    found++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (found === 0) {
+                noAppointments.classList.remove('hidden');
+            } else {
+                noAppointments.classList.add('hidden');
+            }
+        }
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Đổi trạng thái active của tab
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('active-tab', 'border-primary-dark', 'text-text-dark');
+                    btn.classList.add('border-transparent', 'text-text-muted');
+                });
+                this.classList.add('active-tab', 'border-primary-dark', 'text-text-dark');
+                this.classList.remove('border-transparent', 'text-text-muted');
+
+                // Thực hiện lọc
+                filterAppointments(this.dataset.status);
+            });
+        });
+
+        // Hàm xử lý nút Hủy lịch
+        document.querySelectorAll('.btn-cancel').forEach(button => {
+            button.addEventListener('click', function() {
+                // Thay thế alert/confirm
+                if (confirmAction("Bạn có chắc chắn muốn hủy lịch hẹn này? Hành động này không thể hoàn tác.")) {
+                    const appointmentId = this.closest('.appointment-card').querySelector('.text-sm.font-medium.text-text-muted').textContent.replace('Mã hẹn: ', '');
+                    // Mô phỏng gọi API Hủy lịch
+                    showSimpleMessage(`Đã gửi yêu cầu hủy lịch hẹn ${appointmentId}. Đang chờ xử lý...`, 'warning');
+                    
+                    // Mô phỏng cập nhật trạng thái (sau 1.5s)
+                    setTimeout(() => {
+                        this.closest('.appointment-card').dataset.status = 'cancelled';
+                        filterAppointments(document.querySelector('.active-tab').dataset.status);
+                        showSimpleMessage(`Lịch hẹn ${appointmentId} đã được hủy thành công.`, 'status-cancelled');
+                    }, 1500);
+                }
+            });
+        });
+        
+        // Hàm xử lý nút Xem chi tiết
+        document.querySelectorAll('.btn-detail').forEach(button => {
+            button.addEventListener('click', function() {
+                const appointmentId = this.closest('.appointment-card').querySelector('.text-sm.font-medium.text-text-muted').textContent.replace('Mã hẹn: ', '');
+                // Tạm thời mô phỏng bằng thông báo, trong thực tế sẽ là chuyển đến trang detail/modal
+                showSimpleMessage(`Xem chi tiết hồ sơ khám cho lịch hẹn ${appointmentId}...`, 'info');
+                // Trong thực tế: window.location.href = 'appointment_detail.html?id=' + appointmentId;
+            });
+        });
+
+        // Hàm hiển thị thông báo thay thế cho alert/confirm (Tái sử dụng)
+        function showSimpleMessage(message, type) {
+            const container = document.body;
+            let messageDiv = document.querySelector('.floating-message');
+            if (!messageDiv) {
+                messageDiv = document.createElement('div');
+                messageDiv.className = "floating-message fixed bottom-5 right-5 p-3 rounded-lg shadow-xl z-50 text-sm font-semibold transition-opacity duration-300";
+                container.appendChild(messageDiv);
+            }
+            
+            messageDiv.textContent = message;
+            messageDiv.style.backgroundColor = type === 'success' ? '#45C3A5' : (type === 'warning' ? '#f7d800' : (type === 'status-cancelled' ? '#dc3545' : '#007BFF'));
+            messageDiv.style.color = type === 'warning' ? '#343a40' : 'white';
+            messageDiv.style.opacity = '1';
+
+            setTimeout(() => {
+                messageDiv.style.opacity = '0';
+                setTimeout(() => messageDiv.remove(), 300);
+            }, 3000);
+        }
+
+        // Tái tạo hàm confirm bằng Modal/Prompt cơ bản (do không được dùng window.confirm)
+        function confirmAction(message) {
+            return prompt(message + " (Nhập 'OK' để xác nhận hủy)") === 'OK';
+        }
+
+
+        // Khởi tạo: Lọc mặc định hiển thị Lịch Sắp tới
+        document.addEventListener('DOMContentLoaded', () => {
+            filterAppointments('upcoming');
+            
+            // Kiểm tra nếu mới đặt lịch thành công từ booking.html
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('status') === 'success') {
+                showSimpleMessage("Đặt lịch thành công! Lịch hẹn của bạn đang chờ Bác sĩ xác nhận.", 'success');
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập & Đăng ký - MediBook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind và Font Inter (Sử dụng lại cấu hình từ index.html)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45C3A5', 
+                        'primary-dark': '#007BFF', 
+                        'primary-light': '#E6FFF8', 
+                        'secondary': '#f7d800', 
+                        'text-dark': '#343a40', 
+                        'text-muted': '#6c757d', 
+                        'bg-light': '#f8f9fa',
+                        'sidebar-bg': '#EBF5FF', 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #EBF5FF; /* Màu nền nhẹ nhàng cho trang đăng nhập */ }
+        .tab-active {
+            border-bottom: 4px solid #007BFF;
+            color: #007BFF;
+            font-weight: 700;
+        }
+        .tab-inactive {
+            border-bottom: 4px solid transparent;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <div class="bg-white rounded-xl shadow-2xl overflow-hidden max-w-lg w-full m-4">
+        
+        <div class="p-6 bg-primary-light border-b border-primary/20 text-center">
+            <a href="index.html" class="flex items-center justify-center space-x-2 text-3xl font-extrabold text-primary-dark">
+                <div class="w-8 h-8 bg-primary-dark rounded-md text-white flex items-center justify-center text-lg font-bold">MB</div>
+                <span>Medi<span class="text-primary">Book</span></span>
+            </a>
+            <p class="mt-2 text-text-muted text-sm">Chào mừng bạn trở lại nền tảng đặt lịch khám bệnh trực tuyến.</p>
+        </div>
+
+        <div class="flex border-b border-gray-200 text-lg">
+            <button id="login-tab" class="flex-1 py-4 text-center tab-active transition duration-300">
+                Đăng Nhập
+            </button>
+            <button id="register-tab" class="flex-1 py-4 text-center tab-inactive transition duration-300 hover:text-primary-dark">
+                Đăng Ký
+            </button>
+        </div>
+
+        <div class="p-8">
+            <form id="login-form" class="space-y-6">
+                <h3 class="text-2xl font-bold text-text-dark text-center mb-6">Đăng Nhập Tài Khoản</h3>
+                
+                <div>
+                    <label for="login-email" class="block text-sm font-medium text-text-dark mb-1">Email / Số điện thoại</label>
+                    <input type="text" id="login-email" name="email" required
+                           placeholder="Nhập email hoặc SĐT"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                </div>
+                
+                <div>
+                    <label for="login-password" class="block text-sm font-medium text-text-dark mb-1">Mật khẩu</label>
+                    <input type="password" id="login-password" name="password" required
+                           placeholder="Nhập mật khẩu của bạn"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                </div>
+
+                <div class="flex justify-between items-center text-sm">
+                    <label class="flex items-center space-x-2 text-text-muted hover:text-text-dark cursor-pointer">
+                        <input type="checkbox" class="rounded text-primary focus:ring-primary">
+                        <span>Ghi nhớ tôi</span>
+                    </label>
+                    <a href="forgot_password.html" class="text-primary-dark hover:underline font-medium">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-primary-dark text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition duration-150">
+                    ĐĂNG NHẬP
+                </button>
+                
+                <div class="text-center mt-4">
+                    <p class="text-sm text-text-muted">Hoặc đăng nhập với:</p>
+                    <div class="flex justify-center space-x-4 mt-2">
+                        <button type="button" class="w-12 h-12 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-100 transition duration-150" title="Google">G</button>
+                        <button type="button" class="w-12 h-12 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-100 transition duration-150" title="Facebook">f</button>
+                    </div>
+                </div>
+
+            </form>
+
+            <form id="register-form" class="space-y-6 hidden">
+                <h3 class="text-2xl font-bold text-text-dark text-center mb-6">Đăng Ký Tài Khoản Mới</h3>
+                
+                <div>
+                    <label for="register-name" class="block text-sm font-medium text-text-dark mb-1">Họ và Tên</label>
+                    <input type="text" id="register-name" name="name" required
+                           placeholder="Nhập họ tên của bạn"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                </div>
+
+                <div>
+                    <label for="register-email" class="block text-sm font-medium text-text-dark mb-1">Email / Số điện thoại</label>
+                    <input type="text" id="register-email" name="email" required
+                           placeholder="Email hoặc SĐT"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                </div>
+                
+                <div>
+                    <label for="register-password" class="block text-sm font-medium text-text-dark mb-1">Mật khẩu</label>
+                    <input type="password" id="register-password" name="password" required
+                           placeholder="Tối thiểu 6 ký tự"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                </div>
+                
+                <div>
+                    <label for="register-role" class="block text-sm font-medium text-text-dark mb-1">Bạn là:</label>
+                    <select id="register-role" name="role" required
+                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 bg-white">
+                        <option value="patient">Bệnh nhân (Đặt lịch khám)</option>
+                        <option value="doctor">Bác sĩ (Quản lý lịch hẹn)</option>
+                    </select>
+                </div>
+                
+                <div class="text-sm text-center text-text-muted">
+                    Bằng cách đăng ký, bạn đồng ý với <a href="#" class="text-primary-dark hover:underline">Điều khoản dịch vụ</a> của MediBook.
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-primary text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition duration-150">
+                    ĐĂNG KÝ TÀI KHOẢN
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const registerRoleSelect = document.getElementById('register-role');
+
+        // Hàm chuyển tab
+        function switchTab(target) {
+            if (target === 'login') {
+                loginTab.classList.add('tab-active');
+                loginTab.classList.remove('tab-inactive');
+                registerTab.classList.remove('tab-active');
+                registerTab.classList.add('tab-inactive');
+                
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+            } else if (target === 'register') {
+                registerTab.classList.add('tab-active');
+                registerTab.classList.remove('tab-inactive');
+                loginTab.classList.remove('tab-active');
+                loginTab.classList.add('tab-inactive');
+                
+                registerForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            }
+        }
+        
+        // Gán sự kiện chuyển tab
+        loginTab.addEventListener('click', () => switchTab('login'));
+        registerTab.addEventListener('click', () => switchTab('register'));
+
+        // Kiểm tra tham số URL để mặc định tab Đăng ký cho Bác sĩ
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const role = urlParams.get('role');
+            if (role === 'doctor') {
+                switchTab('register');
+                registerRoleSelect.value = 'doctor';
+            } else {
+                switchTab('login'); // Mặc định là tab Đăng nhập
+            }
+        });
+        
+        // Mô phỏng hành động Đăng nhập
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Trong thực tế, đây sẽ là nơi gọi API Đăng nhập
+            const email = document.getElementById('login-email').value;
+            
+            // Logic chuyển hướng mô phỏng theo vai trò (để test luồng frontend)
+            let redirectUrl = '../Trang_Chung_Va_Tiep_Can/index.html'; // Mặc định là Trang chủ
+            
+            // SỬA: Cập nhật các đường dẫn chuyển hướng cho 3 vai trò
+            if (email.includes('admin')) {
+                 // Admin Dashboard (Trang_Quan_Tri/)
+                 redirectUrl = '../Trang_Quan_Tri/admin_dashboard.html';
+            } else if (email.includes('doctor')) {
+                 // Doctor Schedule (Trang_Bac_Si/)
+                 redirectUrl = '../Trang_Bac_Si/doctor_schedule.html';
+            } else {
+                 // Patient Appointments (Trang_Benh_Nhan/)
+                 redirectUrl = '../Trang_Benh_Nhan/my_appointments.html';
+            }
+
+            showMessage("Đăng nhập thành công! Đang chuyển hướng...", 'success');
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 1500);
+        });
+
+        // Mô phỏng hành động Đăng ký
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const role = registerRoleSelect.value;
+            
+            // Trong thực tế, đây sẽ là nơi gọi API Đăng ký
+            showMessage(`Đăng ký vai trò ${role === 'doctor' ? 'Bác sĩ' : 'Bệnh nhân'} thành công! Vui lòng Đăng nhập.`, 'success');
+            
+            setTimeout(() => {
+                // Sau khi đăng ký thành công, chuyển sang tab Đăng nhập
+                switchTab('login'); 
+                // Xóa thông tin đã điền trong form Đăng ký (để giữ form sạch)
+                registerForm.reset();
+            }, 1500);
+        });
+        
+        // Hàm hiển thị thông báo thay thế cho alert/confirm
+        function showMessage(message, type) {
+            const container = document.body;
+            let messageDiv = document.querySelector('.floating-message');
+            if (!messageDiv) {
+                messageDiv = document.createElement('div');
+                messageDiv.className = "floating-message fixed bottom-5 right-5 p-3 rounded-lg shadow-xl z-50 text-sm font-semibold transition-opacity duration-300";
+                container.appendChild(messageDiv);
+            }
+            
+            messageDiv.textContent = message;
+            messageDiv.style.backgroundColor = type === 'success' ? '#45C3A5' : '#dc3545';
+            messageDiv.style.color = 'white';
+            messageDiv.style.opacity = '1';
+
+            setTimeout(() => {
+                messageDiv.style.opacity = '0';
+                setTimeout(() => messageDiv.remove(), 300);
+            }, 3000);
+        }
+
+    </script>
+
+</body>
+</html>

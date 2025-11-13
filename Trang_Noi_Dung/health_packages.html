@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediBook - Các Gói Khám Sức Khỏe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind CSS (Giữ nguyên)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45C3A5', // Xanh lục chủ đạo (Teal/Mint)
+                        'primary-dark': '#007BFF', // Xanh dương (Branding, Buttons)
+                        'primary-light': '#E6FFF8', // Màu nền nhẹ của primary
+                        'secondary': '#f7d800', // Màu vàng nổi bật (Tái tạo màu search)
+                        'text-dark': '#343a40', 
+                        'text-muted': '#6c757d', 
+                        'bg-light': '#f8f9fa',
+                        'sidebar-bg': '#EBF5FF', 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .logo-mb {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 38px;
+             height: 38px;
+             background-color: #007BFF; 
+             border-radius: 6px;
+             font-size: 18px;
+             font-weight: 800;
+             color: white;
+             box-shadow: 0 4px 8px rgba(76, 150, 230, 0.3);
+        }
+        /* Style cho Banner Khám Tổng Quát */
+        .package-hero-banner {
+             /* SỬA: Đường dẫn ảnh */
+             background-image: url('../images/Khám+Tổng+Quát+Background'); 
+             background-size: cover;
+             background-position: center;
+             background-color: rgba(0, 0, 0, 0.4); /* Lớp phủ mờ */
+             background-blend-mode: multiply;
+        }
+        .category-icon-wrap {
+            border: 1px solid #E6E6E6; /* Viền xám nhạt */
+            transition: all 0.2s;
+        }
+        .category-icon-wrap:hover {
+            border-color: #007BFF; /* Viền xanh dương khi hover */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-hover-shadow:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-bg-light text-text-dark">
+
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            
+            <div class="flex items-center space-x-2">
+                <button id="open-sidebar-mobile" class="text-gray-600 hover:text-primary-dark mr-2 lg:hidden p-1 rounded-md hover:bg-gray-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+                <a href="../Trang_Chung_Va_Tiep_Can/index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
+                    <div class="logo-mb">MB</div>
+                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
+                </a>
+            </div>
+
+           <nav class="hidden lg:flex space-x-8 text-base font-semibold">
+                <a href="../Trang_Benh_Nhan/hospital_list.html" class="text-text-dark hover:text-primary transition duration-150">Cơ sở y tế</a>
+                <a href="../Trang_Benh_Nhan/specialties.html" class="text-text-dark hover:text-primary transition duration-150">Chuyên khoa</a>
+                <a href="health_packages.html" class="text-primary font-bold transition duration-150 border-b-2 border-primary">Gói khám</a> 
+                <a href="blog.html" class="text-text-dark hover:text-primary transition duration-150">Tin tức</a>
+                <a href="../Trang_Benh_Nhan/my_appointments.html" class="text-text-dark hover:text-primary transition duration-150">Lịch Khám Của Tôi</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="tel:19006008" class="text-sm font-bold text-primary-dark hover:text-primary transition duration-150 hidden sm:block">
+                    HOTLINE: 1900 6008
+                </a>
+                <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" class="px-5 py-2 text-sm font-bold bg-primary-dark text-white hover:bg-blue-700 transition duration-150 rounded-lg shadow-md hover:shadow-lg">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="package-hero-banner relative pt-24 pb-48">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <h2 class="text-4xl font-extrabold text-white mb-6 tracking-wider drop-shadow-lg">KHÁM TỔNG QUÁT</h2>
+                
+                <div class="bg-white p-2 rounded-lg shadow-2xl flex items-center mb-4">
+                    <input type="text" placeholder="Tìm kiếm" class="flex-grow py-3 px-4 border-none focus:ring-0 text-lg placeholder-text-muted">
+                    <button class="bg-secondary text-text-dark font-bold py-3 px-6 rounded-lg hover:bg-yellow-500 transition duration-300">
+                        Tìm kiếm
+                    </button>
+                </div>
+                
+                <div class="bg-secondary p-3 rounded-lg shadow-xl flex flex-wrap justify-between items-center text-sm font-semibold space-y-2 sm:space-y-0">
+                    <select class="form-select border-none rounded-md py-2 px-3 text-text-dark w-full sm:w-auto">
+                        <option>Khu vực</option>
+                        <option>Hà Nội</option>
+                        <option>TP Hồ Chí Minh</option>
+                    </select>
+                    <select class="form-select border-none rounded-md py-2 px-3 text-text-dark w-full sm:w-auto">
+                        <option>Danh mục</option>
+                        <option>Gói khám VIP</option>
+                        <option>Nâng cao</option>
+                    </select>
+                    <select class="form-select border-none rounded-md py-2 px-3 text-text-dark w-full sm:w-auto">
+                        <option>Mức giá</option>
+                        <option>Dưới 2 triệu</option>
+                        <option>Từ 2-5 triệu</option>
+                    </select>
+                    <select class="form-select border-none rounded-md py-2 px-3 text-text-dark w-full sm:w-auto">
+                        <option>Cơ sở y tế</option>
+                        <option>Vinmec</option>
+                        <option>Bạch Mai</option>
+                    </select>
+                    <button class="flex items-center justify-center p-2 rounded-md bg-white text-primary-dark hover:bg-gray-100 transition duration-150 w-full sm:w-auto">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.995 8.995 0 0120 12a9 9 0 11-8-9.986"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-6 border-b border-gray-200 pb-2">
+                <h3 class="text-xl font-bold text-text-dark">Danh mục</h3>
+                <a href="../Trang_Benh_Nhan/specialties.html" class="text-sm font-medium text-text-muted hover:text-primary transition duration-150 uppercase">Xem thêm</a>
+            </div>
+            
+            <div class="flex overflow-x-auto space-x-6 pb-4">
+                <a href="package_list.html?cat=basic" class="flex-shrink-0 text-center w-24">
+                    <div class="category-icon-wrap w-24 h-24 rounded-full mx-auto mb-2 flex items-center justify-center bg-white shadow-sm">
+                        <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.618a8.995 8.995 0 011.085 2.158 9 9 0 11-14.832 5.094 8.995 8.995 0 011.085-2.158"></path></svg>
+                    </div>
+                    <p class="text-sm font-medium text-text-dark">Cơ bản</p>
+                </a>
+                 <a href="package_list.html?cat=vip" class="flex-shrink-0 text-center w-24">
+                    <div class="category-icon-wrap w-24 h-24 rounded-full mx-auto mb-2 flex items-center justify-center bg-white shadow-sm">
+                         <svg class="w-12 h-12 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.048 2.516l1.246 3.743c.12.35.45.597.838.597h3.948c.844 0 1.18.993.486 1.488l-3.18 2.31c-.3.218-.48.577-.48.974l1.246 3.743c.237.712-.66.697-1.028.188l-3.18-2.31c-.3-.218-.69-.218-1.028 0l-3.18 2.31c-.368.509-.27 1.202-.033 1.914l1.246-3.743c.092-.276-.046-.574-.26-.777l-3.18-2.31c-.694-.495-.358-1.488.486-1.488h3.948c.388 0 .718-.247.838-.597l1.246-3.743z"></path></svg>
+                    </div>
+                    <p class="text-sm font-medium text-text-dark">Gói khám VIP</p>
+                </a>
+                 <a href="package_list.html?cat=advanced" class="flex-shrink-0 text-center w-24">
+                    <div class="category-icon-wrap w-24 h-24 rounded-full mx-auto mb-2 flex items-center justify-center bg-white shadow-sm">
+                        <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0zM12 21.75V15.5m0-6.25V2.25m6 6.5h3.75M3 8.75h3.75M17.5 12a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z"></path></svg>
+                    </div>
+                    <p class="text-sm font-medium text-text-dark">Nâng cao</p>
+                </a>
+                 <a href="package_list.html?cat=male" class="flex-shrink-0 text-center w-24">
+                    <div class="category-icon-wrap w-24 h-24 rounded-full mx-auto mb-2 flex items-center justify-center bg-white shadow-sm">
+                        <svg class="w-12 h-12 text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    </div>
+                    <p class="text-sm font-medium text-text-dark">Nam</p>
+                </a>
+                 <a href="package_list.html?cat=female" class="flex-shrink-0 text-center w-24">
+                    <div class="category-icon-wrap w-24 h-24 rounded-full mx-auto mb-2 flex items-center justify-center bg-white shadow-sm">
+                        <svg class="w-12 h-12 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v4m0 0v4m0-4h4m-4 0H8"></path></svg>
+                    </div>
+                    <p class="text-sm font-medium text-text-dark">Nữ</p>
+                </a>
+                 <a href="package_list.html?cat=kids" class="flex-shrink-0 text-center w-24">
+                    <div class="category-icon-wrap w-24 h-24 rounded-full mx-auto mb-2 flex items-center justify-center bg-white shadow-sm">
+                        <svg class="w-12 h-12 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v2m-3-2v2m-3-2v2m-3-2v2m-3-2v2m-3-2v2m-3-2v2M4 6h16M4 18h16M5 10v4m14-4v4"></path></svg>
+                    </div>
+                    <p class="text-sm font-medium text-text-dark">Trẻ em</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="py-12 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center mb-6 border-b border-gray-200 pb-2">
+                    <h3 class="text-xl font-bold text-text-dark">Gói nổi bật</h3>
+                    <a href="health_packages.html" class="text-sm font-medium text-text-muted hover:text-primary transition duration-150 uppercase">Xem thêm</a>
+                </div>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    
+                    <a href="package_detail.html?id=pkyd1m" class="block rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition duration-200">
+                        <img src="https://placehold.co/200x120/E6E6E6/343a40?text=GÓI+KHÁM+CƠ+BẢN" alt="Gói khám cơ bản" class="w-full h-24 object-cover">
+                        <div class="p-3">
+                            <p class="text-xs font-semibold text-text-dark mb-1 line-clamp-2">Gói khám sức khỏe tổng quát cơ bản cho Nam (PKYD1M)</p>
+                            <p class="text-xs text-text-muted">Phòng khám Bệnh viện Đại học Y Dược 1</p>
+                            <div class="mt-2 flex items-end justify-between">
+                                <span class="text-xs text-text-muted font-medium">Giá:</span>
+                                <span class="text-sm font-bold text-red-600">2.200.000đ</span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="package_detail.html?id=pkyd1f" class="block rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition duration-200">
+                        <img src="https://placehold.co/200x120/E6E6E6/343a40?text=GÓI+KHÁM+CƠ+BẢN" alt="Gói khám cơ bản" class="w-full h-24 object-cover">
+                        <div class="p-3">
+                            <p class="text-xs font-semibold text-text-dark mb-1 line-clamp-2">Gói khám sức khỏe tổng quát cơ bản cho Nữ (PKYD1F)</p>
+                            <p class="text-xs text-text-muted">Phòng khám Bệnh viện Đại học Y Dược 1</p>
+                            <div class="mt-2 flex items-end justify-between">
+                                <span class="text-xs text-text-muted font-medium">Giá:</span>
+                                <span class="text-sm font-bold text-red-600">2.200.000đ</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="package_detail.html?id=nhhm8f" class="block rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition duration-200">
+                        <img src="https://placehold.co/200x120/90CAF9/007BFF?text=TIỀN+HÔN+NHÂN+NỮ" alt="Gói tiền hôn nhân nữ" class="w-full h-24 object-cover">
+                        <div class="p-3">
+                            <p class="text-xs font-semibold text-text-dark mb-1 line-clamp-2">Gói khám sức khỏe tiền hôn nhân cho Nữ (NHHM8F)</p>
+                            <p class="text-xs text-text-muted">Bệnh viện Nam học và Hiếm muộn Hà Nội</p>
+                            <div class="mt-2 flex items-end justify-between">
+                                <span class="text-xs text-text-muted font-medium">Giá:</span>
+                                <span class="text-sm font-bold text-red-600">1.599.000đ</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="package_detail.html?id=bernard-gold-f" class="block rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition duration-200">
+                        <img src="https://placehold.co/200x120/1976D2/ffffff?text=NINGEN+DOCK" alt="Gói Ningen Dock" class="w-full h-24 object-cover bg-primary-dark">
+                        <div class="p-3">
+                            <p class="text-xs font-semibold text-text-dark mb-1 line-clamp-2">Gói khám NINGEN DOCK BERNARD Gold dành cho Nữ</p>
+                            <p class="text-xs text-text-muted">Hệ thống Y khoa Chuyên sâu Quốc tế Bernard</p>
+                            <div class="mt-2 flex items-end justify-between">
+                                <span class="text-xs text-text-muted font-medium">Giá:</span>
+                                <span class="text-sm font-bold text-red-600">25.000.000đ</span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="package_detail.html?id=nhhm8m" class="block rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition duration-200">
+                        <img src="https://placehold.co/200x120/90CAF9/007BFF?text=TIỀN+HÔN+NHÂN+NAM" alt="Gói tiền hôn nhân nam" class="w-full h-24 object-cover">
+                        <div class="p-3">
+                            <p class="text-xs font-semibold text-text-dark mb-1 line-clamp-2">Gói khám sức khỏe tiền hôn nhân cho Nam (NHHM8M)</p>
+                            <p class="text-xs text-text-muted">Bệnh viện Nam học và Hiếm muộn Hà Nội</p>
+                            <div class="mt-2 flex items-end justify-between">
+                                <span class="text-xs text-text-muted font-medium">Giá:</span>
+                                <span class="text-sm font-bold text-red-600">1.299.000đ</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="package_detail.html?id=sg2m" class="block rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition duration-200">
+                        <img src="https://placehold.co/200x120/E6E6E6/343a40?text=TIÊU+CHUẨN+NAM" alt="Gói tiêu chuẩn nam" class="w-full h-24 object-cover">
+                        <div class="p-3">
+                            <p class="text-xs font-semibold text-text-dark mb-1 line-clamp-2">Gói khám tổng quát tiêu chuẩn dành cho Nam (SG2M)</p>
+                            <p class="text-xs text-text-muted">Phòng khám Quốc tế Sai Gon</p>
+                            <div class="mt-2 flex items-end justify-between">
+                                <span class="text-xs text-text-muted font-medium">Giá:</span>
+                                <span class="text-sm font-bold text-red-600">3.500.000đ</span>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 bg-bg-light">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center mb-6 border-b border-gray-200 pb-2">
+                    <h3 class="text-xl font-bold text-text-dark">Cơ sở y tế</h3>
+                    <a href="../Trang_Benh_Nhan/hospital_list.html" class="text-sm font-medium text-text-muted hover:text-primary transition duration-150 uppercase">Xem thêm</a>
+                </div>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    
+                    <a href="../Trang_Benh_Nhan/doctor_list.html?hospital=DoctorCheck" class="flex flex-col items-center justify-start p-3 bg-white rounded-lg border border-gray-200 hover:shadow-md transition duration-200 h-36">
+                        <img src="https://placehold.co/100x40/FF7800/FFFFFF?text=Doctor+Check" alt="Logo Doctor Check" class="h-10 object-contain mb-2">
+                        <p class="text-xs text-text-dark text-center font-medium">Doctor Check - Tầm Soát Bệnh Đế Sống Thọ Hơn</p>
+                    </a>
+                    
+                    <a href="../Trang_Benh_Nhan/doctor_list.html?hospital=YDuoc1" class="flex flex-col items-center justify-start p-3 bg-white rounded-lg border border-gray-200 hover:shadow-md transition duration-200 h-36">
+                        <img src="../images/logo-benh-vien-dai-hoc-y-duoc.png" alt="Logo BV Đại học Y Dược" class="h-10 object-contain mb-2">
+                        <p class="text-xs text-text-dark text-center font-medium">Phòng khám Bệnh viện Đại học Y Dược 1</p>
+                    </a>
+
+                    <a href="../Trang_Benh_Nhan/doctor_list.html?hospital=TCI" class="flex flex-col items-center justify-start p-3 bg-white rounded-lg border border-gray-200 hover:shadow-md transition duration-200 h-36">
+                        <img src="https://placehold.co/100x40/45C3A5/FFFFFF?text=TCI" alt="Logo TCI" class="h-10 object-contain mb-2">
+                        <p class="text-xs text-text-dark text-center font-medium">Hệ thống Y Tế Thu Cúc TCI</p>
+                    </a>
+
+                    <a href="../Trang_Benh_Nhan/doctor_list.html?hospital=NamHoc" class="flex flex-col items-center justify-start p-3 bg-white rounded-lg border border-gray-200 hover:shadow-md transition duration-200 h-36">
+                        <img src="https://placehold.co/100x40/A8D879/FFFFFF?text=AF+HANOI" alt="Logo AF Hanoi" class="h-10 object-contain mb-2">
+                        <p class="text-xs text-text-dark text-center font-medium">Bệnh viện Nam học và Hiếm muộn Hà Nội</p>
+                    </a>
+
+                    <a href="../Trang_Benh_Nhan/doctor_list.html?hospital=HongPhat" class="flex flex-col items-center justify-start p-3 bg-white rounded-lg border border-gray-200 hover:shadow-md transition duration-200 h-36">
+                        <img src="https://placehold.co/100x40/E53935/FFFFFF?text=HỒNG+PHÁT" alt="Logo Hồng Phát" class="h-10 object-contain mb-2">
+                        <p class="text-xs text-text-dark text-center font-medium">Bệnh viện Đa khoa Hồng Phát</p>
+                    </a>
+                    
+                    <a href="../Trang_Benh_Nhan/doctor_list.html?hospital=Bernard" class="flex flex-col items-center justify-start p-3 bg-white rounded-lg border border-gray-200 hover:shadow-md transition duration-200 h-36">
+                        <img src="https://placehold.co/100x40/0000FF/FFFFFF?text=Bernard" alt="Logo Bernard" class="h-10 object-contain mb-2">
+                        <p class="text-xs text-text-dark text-center font-medium">Hệ thống Y khoa Chuyên sâu Quốc tế Bernard</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h5 class="font-extrabold text-2xl mb-3 text-primary-dark">Medi<span class="text-primary">Book</span></h5>
+                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
+                <div class="mt-4 flex space-x-3">
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+                </div>
+                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
+                <ul class="space-y-2">
+                    <li><a href="../Trang_Bac_Si/doctor_profile_edit.html" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
+                <p class="mb-2">Email: contact@medibook.vn</p>
+                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

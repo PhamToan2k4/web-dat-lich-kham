@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediBook - Danh Sách Chuyên Khoa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind CSS (Giữ nguyên)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45C3A5',
+                        'primary-dark': '#007BFF',
+                        'primary-light': '#E6FFF8',
+                        'secondary': '#f7d800',
+                        'text-dark': '#343a40',
+                        'text-muted': '#6c757d',
+                        'bg-light': '#f8f9fa',
+                        'sidebar-bg': '#EBF5FF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .logo-mb {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 38px;
+             height: 38px;
+             background-color: #007BFF;
+             border-radius: 6px;
+             font-size: 18px;
+             font-weight: 800;
+             color: white;
+             box-shadow: 0 4px 8px rgba(76, 150, 230, 0.3);
+        }
+        /* Style cho khối chuyên khoa (lấy cảm hứng từ ảnh bạn gửi) */
+        .specialty-card {
+            background-color: #F8F8F8; /* Nền xám nhạt cho từng ô */
+            padding: 1rem;
+            border-radius: 8px;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: 1px solid transparent;
+        }
+        .specialty-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+            border-color: #E0E0E0;
+        }
+        .specialty-icon {
+            width: 100%;
+            height: 100px; /* Chiều cao cố định cho icon */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+    </style>
+</head>
+<body class="bg-bg-light text-text-dark">
+
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+
+            <div class="flex items-center space-x-2">
+                <a href="../Trang_Chung_Va_Tiep_Can/index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
+                    <div class="logo-mb">MB</div>
+                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
+                </a>
+            </div>
+
+           <nav class="hidden lg:flex space-x-8 text-base font-semibold">
+                <a href="hospital_list.html" class="text-text-dark hover:text-primary transition duration-150">Cơ sở y tế</a>
+                <a href="specialties.html" class="text-primary font-bold transition duration-150 border-b-2 border-primary">Chuyên khoa</a>
+                <a href="../Trang_Noi_Dung/health_packages.html" class="text-text-dark hover:text-primary transition duration-150">Gói khám</a>
+                <a href="../Trang_Noi_Dung/blog.html" class="text-text-dark hover:text-primary transition duration-150">Tin tức</a>
+                <a href="my_appointments.html" class="text-text-dark hover:text-primary transition duration-150">Lịch Khám Của Tôi</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="tel:19006008" class="text-sm font-bold text-primary-dark hover:text-primary transition duration-150 hidden sm:block">
+                    HOTLINE: 1900 6008
+                </a>
+                <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" class="px-5 py-2 text-sm font-bold bg-primary-dark text-white hover:bg-blue-700 transition duration-150 rounded-lg shadow-md hover:shadow-lg">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-10 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <nav class="text-sm font-medium text-text-muted mb-6">
+                <a href="../Trang_Chung_Va_Tiep_Can/index.html" class="hover:text-primary transition duration-150">Trang chủ</a> /
+                <span class="text-primary-dark font-bold">Khám Chuyên khoa</span>
+            </nav>
+
+            <h1 class="text-3xl font-extrabold text-text-dark mb-8">Danh Sách Các Chuyên Khoa Phổ Biến</h1>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+
+                <a href="doctor_list.html?specialty=co-xuong-khop" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/x0X3jFh.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Cơ Xương Khớp</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=than-kinh" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/vH90zGq.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Thần kinh</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=tieu-hoa" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/nN6T77J.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Tiêu hóa</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=tim-mach" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/0F95QdZ.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Tim mạch</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=tai-mui-hong" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/bKx2S3z.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Tai Mũi Họng</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=cot-song" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/yF0X2Xb.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Cột sống</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=y-hoc-co-truyen" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/Z4N1D6x.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Y Học Cổ truyền</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=cham-cuu" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/7XG0QkG.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Châm cứu</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=san-phu-khoa" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/L5B7D8d.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Sản Phụ khoa</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=nhi-khoa" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/sY912tX.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Nhi Khoa</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=da-lieu" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/G35Zg6K.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Da Liễu</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=nha-khoa" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/QpY1qU7.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Nha Khoa</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=noi-soi-tieu-hoa" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/f9sauif9sauif9sa.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Nội soi Tiêu hóa</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=ung-buou" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/T0b7O1c.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Ung bướu</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=phuc-hoi-chuc-nang" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/jM8cO6x.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Phục hồi chức năng</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=bac-si-gia-dinh" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Bác sĩ gia đình</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=phau-thuat-tao-hinh-tham-my" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Phẫu thuật tạo hình-Thẩm mỹ</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=tu-van-tri-lieu-tam-lyy" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Tư vấn, trị liệu Tâm lý</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=vo-sinh-hien-muon" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Vô sinh - Hiến muộn</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=chan-thuong-chinh-hinh" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Chấn thương chỉnh hình</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=nieng-rang" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Niềng răng</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=ngoai-khoa" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Ngoại khoa</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=tuyen-giap" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Tuyến giáp</p>
+                </a>
+
+                <a href="doctor_list.html?specialty=nha-khoa-tong-hop" class="specialty-card block text-center">
+                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
+                    <p class="text-sm font-semibold text-text-dark mt-2">Nha khoa tổng hợp</p>
+                </a>
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="doctor_list.html" class="px-8 py-3 text-base font-bold bg-primary-dark text-white hover:bg-blue-700 transition duration-150 rounded-lg shadow-md hover:shadow-lg">
+                    Xem tất cả chuyên khoa khác
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h5 class="font-extrabold text-2xl mb-3 text-primary-dark">Medi<span class="text-primary">Book</span></h5>
+                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
+                <div class="mt-4 flex space-x-3">
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+                </div>
+                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
+                <ul class="space-y-2">
+                    <li><a href="../Trang_Bac_Si/doctor_profile_edit.html" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
+                <p class="mb-2">Email: contact@medibook.vn</p>
+                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

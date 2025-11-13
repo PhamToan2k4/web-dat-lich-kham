@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediBook - Hồ Sơ Cá Nhân</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind CSS (Copy từ index.html)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45C3A5',
+                        'primary-dark': '#007BFF',
+                        'primary-light': '#E6FFF8',
+                        'secondary': '#f7d800', 
+                        'text-dark': '#343a40', 
+                        'text-muted': '#6c757d', 
+                        'bg-light': '#f8f9fa',
+                        'sidebar-bg': '#EBF5FF', 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .logo-mb {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 38px;
+             height: 38px;
+             background-color: #007BFF; 
+             border-radius: 6px;
+             font-size: 18px;
+             font-weight: 800;
+             color: white;
+             box-shadow: 0 4px 8px rgba(76, 150, 230, 0.3);
+        }
+        .tab-button.active {
+            border-bottom: 3px solid #007BFF;
+            color: #007BFF;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="bg-bg-light text-text-dark">
+
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            
+            <div class="flex items-center space-x-2">
+                <a href="../Trang_Chung_Va_Tiep_Can/index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
+                    <div class="logo-mb">MB</div>
+                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
+                </a>
+            </div>
+
+           <nav class="hidden lg:flex space-x-8 text-base font-semibold">
+                <a href="specialties.html" class="text-text-dark hover:text-primary transition duration-150">Chuyên khoa</a>
+                <a href="my_appointments.html" class="text-text-dark hover:text-primary transition duration-150">Lịch Khám Của Tôi</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" class="px-5 py-2 text-sm font-bold bg-gray-200 text-text-dark hover:bg-gray-300 transition duration-150 rounded-lg shadow-md">
+                    Đăng xuất
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <main class="py-10 md:py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <h1 class="text-3xl font-extrabold text-text-dark mb-8">Hồ Sơ Cá Nhân</h1>
+            
+            <div class="bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden">
+                
+                <div class="flex border-b border-gray-200">
+                    <button id="tab-info-btn" class="tab-button active flex-1 py-4 text-center text-text-muted hover:text-primary transition duration-150">
+                        Thông tin Tài khoản
+                    </button>
+                    <button id="tab-security-btn" class="tab-button flex-1 py-4 text-center text-text-muted hover:text-primary transition duration-150">
+                        Bảo mật & Mật khẩu
+                    </button>
+                </div>
+
+                <div class="p-6 sm:p-8">
+                    
+                    <div id="tab-info-content">
+                        <h2 class="text-xl font-bold text-text-dark mb-4">Chi tiết Hồ sơ</h2>
+                        <form id="profile-info-form" action="#">
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="full-name" class="block text-sm font-medium text-text-dark mb-1">Họ và Tên</label>
+                                    <input type="text" id="full-name" name="full-name" value="Nguyễn Văn A" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-text-dark mb-1">Email</label>
+                                    <input type="email" id="email" name="email" value="nguyenvana@gmail.com" readonly
+                                           class="w-full px-4 py-3 border border-gray-200 bg-gray-100 rounded-lg cursor-not-allowed">
+                                </div>
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-text-dark mb-1">Số điện thoại</label>
+                                    <input type="tel" id="phone" name="phone" value="0987654321" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div>
+                                    <label for="dob" class="block text-sm font-medium text-text-dark mb-1">Ngày sinh</label>
+                                    <input type="date" id="dob" name="dob" value="1990-01-01"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="address" class="block text-sm font-medium text-text-dark mb-1">Địa chỉ</label>
+                                    <input type="text" id="address" name="address" value="123 Đường Công Nghệ, Q.Tân Bình, TP.HCM"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 pt-6 border-t border-gray-200">
+                                <button type="submit" 
+                                        class="px-8 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark transition duration-150 shadow-md">
+                                    Lưu Thay Đổi
+                                </button>
+                                <span id="info-status" class="ml-4 text-sm font-medium text-green-600 hidden">Lưu thành công!</span>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="tab-security-content" class="hidden">
+                        <h2 class="text-xl font-bold text-text-dark mb-4">Thay đổi Mật khẩu</h2>
+                        <form id="security-form" action="#">
+                            
+                            <div class="space-y-6 max-w-sm">
+                                <div>
+                                    <label for="current-password" class="block text-sm font-medium text-text-dark mb-1">Mật khẩu hiện tại</label>
+                                    <input type="password" id="current-password" name="current-password" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div>
+                                    <label for="new-password" class="block text-sm font-medium text-text-dark mb-1">Mật khẩu mới</label>
+                                    <input type="password" id="new-password" name="new-password" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div>
+                                    <label for="confirm-password" class="block text-sm font-medium text-text-dark mb-1">Xác nhận mật khẩu mới</label>
+                                    <input type="password" id="confirm-password" name="confirm-password" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                                </div>
+                            </div>
+
+                            <div class="mt-8 pt-6 border-t border-gray-200">
+                                <button type="submit" 
+                                        class="px-8 py-3 bg-primary-dark text-white font-bold rounded-lg hover:bg-blue-700 transition duration-150 shadow-md">
+                                    Cập nhật Mật khẩu
+                                </button>
+                                <span id="security-status" class="ml-4 text-sm font-medium text-green-600 hidden">Mật khẩu đã được thay đổi!</span>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h5 class="font-extrabold text-2xl mb-3 text-primary-dark">Medi<span class="text-primary">Book</span></h5>
+                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
+                <div class="mt-4 flex space-x-3">
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+                </div>
+                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
+                <ul class="space-y-2">
+                    <li><a href="../Trang_Bac_Si/doctor_profile_edit.html" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
+                <p class="mb-2">Email: contact@medibook.vn</p>
+                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        const tabInfoBtn = document.getElementById('tab-info-btn');
+        const tabSecurityBtn = document.getElementById('tab-security-btn');
+        const tabInfoContent = document.getElementById('tab-info-content');
+        const tabSecurityContent = document.getElementById('tab-security-content');
+
+        function switchTab(target) {
+            if (target === 'info') {
+                tabInfoBtn.classList.add('active');
+                tabSecurityBtn.classList.remove('active');
+                tabInfoContent.classList.remove('hidden');
+                tabSecurityContent.classList.add('hidden');
+            } else {
+                tabSecurityBtn.classList.add('active');
+                tabInfoBtn.classList.remove('active');
+                tabSecurityContent.classList.remove('hidden');
+                tabInfoContent.classList.add('hidden');
+            }
+        }
+
+        tabInfoBtn.addEventListener('click', () => switchTab('info'));
+        tabSecurityBtn.addEventListener('click', () => switchTab('security'));
+
+        // Mô phỏng hành động Lưu thông tin
+        document.getElementById('profile-info-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('info-status').classList.remove('hidden');
+            setTimeout(() => document.getElementById('info-status').classList.add('hidden'), 3000);
+        });
+        
+        // Mô phỏng hành động Đổi mật khẩu
+        document.getElementById('security-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Thêm logic kiểm tra mật khẩu ở đây
+            document.getElementById('security-status').classList.remove('hidden');
+            setTimeout(() => document.getElementById('security-status').classList.add('hidden'), 3000);
+            this.reset(); // Xóa form sau khi gửi
+        });
+    </script>
+
+</body>
+</html>

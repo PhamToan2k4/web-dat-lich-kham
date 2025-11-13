@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Bác Sĩ - Admin</title>
+    <link rel="stylesheet" href="admin_style.css"> 
+    <style>
+        /* CSS Bố cục (Kế thừa từ Dashboard) */
+        body { font-family: Arial, sans-serif; background-color: #e9ecef; margin: 0; display: flex; }
+        .sidebar { width: 250px; background-color: #343a40; color: white; padding: 20px; height: 100vh; position: fixed; }
+        .sidebar a { display: block; padding: 10px; color: #adb5bd; text-decoration: none; border-radius: 4px; margin-bottom: 5px; }
+        .sidebar a:hover, .sidebar a.active { background-color: #007bff; color: white; }
+        .main-content { margin-left: 250px; flex-grow: 1; padding: 30px; }
+        
+        /* CSS cho Bảng & Công cụ */
+        .management-panel { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .filter-area { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; }
+        .filter-area input, .filter-area select { padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .doctor-table th, .doctor-table td { padding: 12px; border-bottom: 1px solid #dee2e6; text-align: left; font-size: 0.9em; }
+        .doctor-table { width: 100%; border-collapse: collapse; }
+        .status-active { color: green; font-weight: bold; }
+        .status-inactive { color: orange; font-weight: bold; }
+        .action-btns button { margin-right: 5px; padding: 6px 10px; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>👨‍💻 Admin Panel</h2>
+        <p style="color: #6c757d; border-bottom: 1px solid #495057; padding-bottom: 15px; margin-bottom: 15px;">Menu Chính</p>
+        <a href="admin_dashboard.html">Dashboard & Tổng quan</a>
+        <a href="admin_manage_doctors.html" class="active">Quản lý Bác sĩ</a>
+        <a href="admin_manage_appointments.html">Quản lý Lịch hẹn</a>
+        <a href="admin_reports.html">Thống kê - Báo cáo</a>
+        <div style="margin-top: 50px;">
+            <a href="login_register.html" onclick="logout()" style="background-color: #dc3545; color: white;">Đăng Xuất</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>🏥 Quản Lý Bác Sĩ</h1>
+        <p>Thêm, sửa, xóa và giám sát hoạt động của các Bác sĩ trong hệ thống.</p>
+        
+        <div class="management-panel">
+            <div style="text-align: right; margin-bottom: 20px;">
+                <button onclick="openAddDoctorModal()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
+                    + Thêm Bác Sĩ Mới
+                </button>
+            </div>
+
+            <div class="filter-area">
+                <input type="text" id="search-input" placeholder="Tìm theo Tên hoặc Email...">
+                <select id="filter-specialty">
+                    <option value="all">Tất cả Chuyên khoa</option>
+                    <option value="da_lieu">Da Liễu</option>
+                    <option value="tim_mach">Tim Mạch</option>
+                    <option value="nhi">Nhi</option>
+                    <option value="nha_khoa">Nha Khoa</option>
+                </select>
+                <select id="filter-status">
+                    <option value="all">Tất cả Trạng thái</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+                <button onclick="applyFilters()" style="padding: 10px 15px; background-color: #6c757d; color: white; border: none; border-radius: 4px;">Lọc</button>
+            </div>
+
+            <table class="doctor-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Họ Tên</th>
+                        <th>Email</th>
+                        <th>Chuyên Khoa</th>
+                        <th>Rating TB</th>
+                        <th>Trạng Thái</th>
+                        <th>Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody id="doctor-list">
+                    </tbody>
+            </table>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <button disabled style="padding: 8px 15px;">&laquo; Trước</button>
+                <span style="margin: 0 10px;">Trang 1 / 5</span>
+                <button style="padding: 8px 15px;">Sau &raquo;</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="doctor-modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+        <div style="background: white; padding: 30px; border-radius: 8px; max-width: 500px; width: 100%;">
+            <h2 id="modal-title">Thêm Bác Sĩ Mới</h2>
+            <div class="form-group"><label>Họ Tên:</label><input type="text" id="modal-name"></div>
+            <div class="form-group"><label>Email:</label><input type="email" id="modal-email"></div>
+            <div class="form-group"><label>Chuyên Khoa:</label>
+                <select id="modal-specialty">
+                    <option value="da_lieu">Da Liễu</option>
+                    <option value="tim_mach">Tim Mạch</option>
+                    <option value="nhi">Nhi</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Mật khẩu tạm:</label><input type="password" id="modal-password"></div>
+            
+            <div style="text-align: right; margin-top: 20px;">
+                <button onclick="saveDoctor()" style="background-color: #28a745; color: white; padding: 10px 15px;">Lưu</button>
+                <button onclick="closeDoctorModal()" style="margin-left: 10px; padding: 10px 15px;">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Dữ liệu giả lập (mock data)
+        let doctorsData = [
+            { id: 101, name: 'BS. Nguyễn Văn Khỏe', email: 'khỏe@hospital.com', specialty: 'Da Liễu', rating: 4.8, status: 'active' },
+            { id: 102, name: 'BS. Trần Thị Linh', email: 'linh@clinic.com', specialty: 'Nhi', rating: 4.9, status: 'active' },
+            { id: 103, name: 'BS. Phạm Văn An', email: 'an@vietduc.com', specialty: 'Tim Mạch', rating: 4.5, status: 'inactive' },
+            { id: 104, name: 'BS. Lê Hải Vân', email: 'van@medical.com', specialty: 'Nha Khoa', rating: 4.7, status: 'active' },
+            // ... thêm dữ liệu giả lập khác ...
+        ];
+        
+        let editingDoctorId = null; // Dùng để xác định chế độ Thêm hay Sửa
+
+        // --- Hàm Tải và Hiển thị Bác sĩ ---
+        function renderDoctorList(data) {
+            const tbody = document.getElementById('doctor-list');
+            tbody.innerHTML = ''; 
+
+            data.forEach(doctor => {
+                const statusClass = 'status-' + doctor.status;
+                const statusLabel = doctor.status === 'active' ? 'Hoạt động' : 'Vô hiệu hóa';
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${doctor.id}</td>
+                    <td>${doctor.name}</td>
+                    <td>${doctor.email}</td>
+                    <td>${getSpecialtyLabel(doctor.specialty)}</td>
+                    <td>${doctor.rating} ⭐</td>
+                    <td class="${statusClass}">${statusLabel}</td>
+                    <td class="action-btns">
+                        <button onclick="editDoctor(${doctor.id})" style="background-color: #ffc107;">Sửa</button>
+                        <button onclick="toggleStatus(${doctor.id}, '${doctor.status}')" style="background-color: ${doctor.status === 'active' ? '#dc3545' : '#28a745'}; color: white;">
+                            ${doctor.status === 'active' ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                        </button>
+                        <button onclick="deleteDoctor(${doctor.id})" style="background-color: #6c757d; color: white;">Xóa</button>
+                    </td>
+                `;
+            });
+
+            if (data.length === 0) {
+                 tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">Không tìm thấy Bác sĩ nào phù hợp.</td></tr>';
+            }
+        }
+
+        function getSpecialtyLabel(key) {
+             const specialties = { 'da_lieu': 'Da Liễu', 'tim_mach': 'Tim Mạch', 'nhi': 'Nhi', 'nha_khoa': 'Nha Khoa' };
+             return specialties[key] || key;
+        }
+
+        // --- Hàm Lọc & Tìm kiếm ---
+        function applyFilters() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const filterSpecialty = document.getElementById('filter-specialty').value;
+            const filterStatus = document.getElementById('filter-status').value;
+
+            const filteredList = doctorsData.filter(doctor => {
+                const searchMatch = doctor.name.toLowerCase().includes(searchTerm) || doctor.email.toLowerCase().includes(searchTerm);
+                const specialtyMatch = filterSpecialty === 'all' || doctor.specialty === filterSpecialty;
+                const statusMatch = filterStatus === 'all' || doctor.status === filterStatus;
+                return searchMatch && specialtyMatch && statusMatch;
+            });
+
+            renderDoctorList(filteredList);
+        }
+
+        // --- Hàm Quản lý (CRUD Actions) ---
+
+        function openAddDoctorModal() {
+            editingDoctorId = null;
+            document.getElementById('modal-title').textContent = 'Thêm Bác Sĩ Mới';
+            // Reset fields
+            document.getElementById('modal-name').value = '';
+            document.getElementById('modal-email').value = '';
+            document.getElementById('modal-password').value = '';
+            document.getElementById('modal-specialty').value = 'da_lieu';
+            document.getElementById('doctor-modal').style.display = 'flex';
+        }
+
+        function editDoctor(id) {
+            editingDoctorId = id;
+            const doctor = doctorsData.find(d => d.id === id);
+            if (doctor) {
+                document.getElementById('modal-title').textContent = 'Sửa Thông Tin Bác Sĩ';
+                document.getElementById('modal-name').value = doctor.name;
+                document.getElementById('modal-email').value = doctor.email;
+                document.getElementById('modal-specialty').value = doctor.specialty;
+                document.getElementById('modal-password').value = ''; // Không điền mật khẩu cũ
+                document.getElementById('doctor-modal').style.display = 'flex';
+            }
+        }
+        
+        function closeDoctorModal() {
+             document.getElementById('doctor-modal').style.display = 'none';
+        }
+
+        function saveDoctor() {
+            const name = document.getElementById('modal-name').value;
+            const email = document.getElementById('modal-email').value;
+            const specialty = document.getElementById('modal-specialty').value;
+            const password = document.getElementById('modal-password').value; // Chỉ cần cho Thêm mới/Đổi mật khẩu
+
+            if (!name || !email || !specialty) {
+                alert('Vui lòng điền đủ thông tin bắt buộc.');
+                return;
+            }
+
+            if (editingDoctorId) {
+                // Logic Sửa
+                console.log(`API Call: Cập nhật BS ID ${editingDoctorId}`);
+                alert(`Đã cập nhật thông tin cho BS ${name}.`);
+                // Cập nhật mock data (giả lập)
+                const docIndex = doctorsData.findIndex(d => d.id === editingDoctorId);
+                doctorsData[docIndex] = { ...doctorsData[docIndex], name, email, specialty };
+            } else {
+                // Logic Thêm mới
+                 if (!password) { alert('Vui lòng đặt mật khẩu tạm cho Bác sĩ mới.'); return; }
+                const newId = Math.max(...doctorsData.map(d => d.id)) + 1;
+                doctorsData.push({ id: newId, name, email, specialty, rating: 0, status: 'active' });
+                console.log(`API Call: Thêm BS mới ID ${newId}`);
+                alert(`Đã thêm BS ${name} vào hệ thống.`);
+            }
+
+            closeDoctorModal();
+            applyFilters(); // Hiển thị lại danh sách
+        }
+
+        function toggleStatus(id, currentStatus) {
+            const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+            if (confirm(`Bạn có chắc chắn muốn ${newStatus === 'inactive' ? 'VÔ HIỆU HÓA' : 'KÍCH HOẠT'} tài khoản BS ID ${id} không?`)) {
+                 console.log(`API Call: Cập nhật trạng thái BS ID ${id} thành ${newStatus}`);
+                 // Cập nhật mock data
+                 const doctor = doctorsData.find(d => d.id === id);
+                 if (doctor) doctor.status = newStatus;
+                 applyFilters();
+            }
+        }
+        
+        function deleteDoctor(id) {
+             if (confirm(`Bạn có chắc chắn muốn XÓA VĨNH VIỄN BS ID ${id} không? (Nên dùng Vô hiệu hóa)`)) {
+                 console.log(`API Call: Xóa BS ID ${id}`);
+                 // Cập nhật mock data
+                 doctorsData = doctorsData.filter(d => d.id !== id);
+                 applyFilters();
+                 alert(`Đã xóa BS ID ${id}.`);
+            }
+        }
+
+        function logout() {
+            console.log('Đăng xuất Admin');
+            // window.location.href = 'login_register.html';
+        }
+
+        // Khởi chạy khi tài liệu tải xong
+        document.addEventListener('DOMContentLoaded', () => {
+             renderDoctorList(doctorsData);
+        });
+    </script>
+</body>
+</html>

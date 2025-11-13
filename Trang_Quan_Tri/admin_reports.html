@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống Kê & Báo Cáo - Admin</title>
+    <link rel="stylesheet" href="admin_style.css"> 
+    <style>
+        /* CSS Bố cục (Kế thừa từ Dashboard) */
+        body { font-family: Arial, sans-serif; background-color: #e9ecef; margin: 0; display: flex; }
+        .sidebar { width: 250px; background-color: #343a40; color: white; padding: 20px; height: 100vh; position: fixed; }
+        .sidebar a { display: block; padding: 10px; color: #adb5bd; text-decoration: none; border-radius: 4px; margin-bottom: 5px; }
+        .sidebar a:hover, .sidebar a.active { background-color: #007bff; color: white; }
+        .main-content { margin-left: 250px; flex-grow: 1; padding: 30px; }
+        
+        /* CSS cho Báo cáo */
+        .report-panel { background-color: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .chart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        
+        /* CSS cho Bảng xếp hạng */
+        .top-doctors th, .top-doctors td { padding: 10px; border-bottom: 1px solid #dee2e6; text-align: left; }
+        .top-doctors { width: 100%; border-collapse: collapse; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>👨‍💻 Admin Panel</h2>
+        <p style="color: #6c757d; border-bottom: 1px solid #495057; padding-bottom: 15px; margin-bottom: 15px;">Menu Chính</p>
+        <a href="admin_dashboard.html">Dashboard & Tổng quan</a>
+        <a href="admin_manage_doctors.html">Quản lý Bác sĩ</a>
+        <a href="admin_manage_appointments.html">Quản lý Lịch hẹn</a>
+        <a href="admin_reports.html" class="active">Thống kê - Báo cáo</a>
+        <div style="margin-top: 50px;">
+            <a href="login_register.html" onclick="logout()" style="background-color: #dc3545; color: white;">Đăng Xuất</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>📊 Thống Kê & Báo Cáo</h1>
+        <p>Phân tích hiệu suất hệ thống và xu hướng đặt khám.</p>
+        
+        <div class="report-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <div>
+                    <label for="date-range">Chọn Kỳ Báo Cáo:</label>
+                    <input type="month" id="date-range" value="2025-11" onchange="loadReportData()">
+                    <button onclick="loadReportData()" style="padding: 8px 15px; background-color: #6c757d; color: white; border: none; border-radius: 4px;">Xem</button>
+                </div>
+                
+                <button onclick="exportReport()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
+                    ⬇️ Xuất Báo Cáo (PDF/Excel)
+                </button>
+            </div>
+
+            <div class="chart-grid">
+                <div>
+                    <h2>Lượt Khám Hoàn Thành (Tháng 11/2025)</h2>
+                    <canvas id="appointment-trend-chart" height="150"></canvas>
+                </div>
+                
+                <div style="max-width: 400px; margin: auto;">
+                    <h2>Tỷ Lệ Đặt Khám theo Chuyên Khoa</h2>
+                    <canvas id="specialty-pie-chart" height="200"></canvas>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="report-panel">
+            <h2>🥇 Top 5 Bác Sĩ Có Lượt Đặt Khám Cao Nhất</h2>
+            <table class="top-doctors">
+                <thead>
+                    <tr>
+                        <th>Hạng</th>
+                        <th>Tên Bác Sĩ</th>
+                        <th>Chuyên Khoa</th>
+                        <th>Tổng Lượt Hoàn Thành</th>
+                        <th>Rating Trung Bình</th>
+                    </tr>
+                </thead>
+                <tbody id="top-doctors-list">
+                    </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // Dữ liệu giả lập cho Báo cáo (Tùy thuộc vào bộ lọc thời gian)
+        const mockReportData = {
+            trend: {
+                labels: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
+                completed: [550, 620, 580, 710],
+                cancelled: [50, 70, 60, 80]
+            },
+            specialty: [
+                { name: 'Nhi', count: 350, color: '#007bff' },
+                { name: 'Da Liễu', count: 510, color: '#28a745' },
+                { name: 'Tim Mạch', count: 420, color: '#ffc107' },
+                { name: 'Nha Khoa', count: 180, color: '#dc3545' },
+                { name: 'Khác', count: 200, color: '#6c757d' }
+            ],
+            topDoctors: [
+                { rank: 1, name: 'BS. Trần Thị Linh', specialty: 'Nhi', count: 185, rating: 4.9 },
+                { rank: 2, name: 'BS. Nguyễn Văn Khỏe', specialty: 'Da Liễu', count: 162, rating: 4.8 },
+                { rank: 3, name: 'BS. Phạm Văn An', specialty: 'Tim Mạch', count: 140, rating: 4.5 },
+                { rank: 4, name: 'BS. Hoàng Yến', specialty: 'Da Liễu', count: 121, rating: 4.7 },
+                { rank: 5, name: 'BS. Lê Hải Vân', specialty: 'Nha Khoa', count: 98, rating: 4.6 }
+            ]
+        };
+        
+        let trendChart = null;
+        let pieChart = null;
+
+        // --- Hàm Tải Dữ liệu Báo cáo ---
+        function loadReportData() {
+            const dateRange = document.getElementById('date-range').value;
+            console.log(`API Call: Lấy dữ liệu báo cáo cho kỳ: ${dateRange}`);
+            
+            // 1. Render Biểu đồ Xu hướng
+            renderAppointmentTrendChart(mockReportData.trend);
+
+            // 2. Render Biểu đồ Chuyên khoa
+            renderSpecialtyPieChart(mockReportData.specialty);
+
+            // 3. Render Bảng Top Bác sĩ
+            renderTopDoctors(mockReportData.topDoctors);
+        }
+
+        // --- Hàm Vẽ Biểu đồ Xu hướng (Line Chart) ---
+        function renderAppointmentTrendChart(data) {
+            const ctx = document.getElementById('appointment-trend-chart').getContext('2d');
+            
+            if (trendChart) trendChart.destroy(); // Xóa biểu đồ cũ nếu có
+
+            trendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            label: 'Hoàn Thành',
+                            data: data.completed,
+                            borderColor: '#28a745',
+                            backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                            fill: true, tension: 0.3
+                        },
+                        {
+                            label: 'Đã Hủy',
+                            data: data.cancelled,
+                            borderColor: '#dc3545',
+                            backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                            fill: true, tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { title: { display: false } }
+                }
+            });
+        }
+
+        // --- Hàm Vẽ Biểu đồ Chuyên khoa (Pie Chart) ---
+        function renderSpecialtyPieChart(data) {
+            const ctx = document.getElementById('specialty-pie-chart').getContext('2d');
+
+            if (pieChart) pieChart.destroy(); // Xóa biểu đồ cũ nếu có
+
+            pieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.map(d => d.name),
+                    datasets: [{
+                        data: data.map(d => d.count),
+                        backgroundColor: data.map(d => d.color),
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'right' }
+                    }
+                }
+            });
+        }
+
+        // --- Hàm Hiển thị Bảng Top Bác sĩ ---
+        function renderTopDoctors(data) {
+            const tbody = document.getElementById('top-doctors-list');
+            tbody.innerHTML = ''; 
+
+            data.forEach((doctor, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${doctor.rank}</td>
+                    <td>${doctor.name}</td>
+                    <td>${doctor.specialty}</td>
+                    <td>${doctor.count}</td>
+                    <td>${doctor.rating} ⭐</td>
+                `;
+            });
+        }
+        
+        // --- Hàm Xuất Báo Cáo ---
+        function exportReport() {
+            const dateRange = document.getElementById('date-range').value;
+            console.log(`API Call: Xuất báo cáo cho kỳ: ${dateRange} (Mô phỏng)`);
+            alert(`Mô phỏng: Đã tạo và tải file Báo Cáo tháng ${dateRange}.`);
+        }
+        
+        function logout() {
+            console.log('Đăng xuất Admin');
+            // window.location.href = 'login_register.html';
+        }
+
+        // Khởi chạy khi tài liệu tải xong
+        document.addEventListener('DOMContentLoaded', loadReportData);
+    </script>
+</body>
+</html>

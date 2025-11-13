@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cập Nhật Hồ Sơ - Bác Sĩ</title>
+    <link rel="stylesheet" href="../assets/css/style.css"> 
+    <style>
+        /* CSS Cơ Bản Cho Trang Này */
+        body { font-family: Arial, sans-serif; background-color: #f4f7f9; }
+        .container { max-width: 1000px; margin: auto; padding-top: 20px; }
+        .profile-section { background-color: white; padding: 25px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
+        .form-group input[type="text"], .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .profile-pic-container { text-align: center; margin-bottom: 20px; }
+        .profile-pic-container img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #007bff; }
+        .schedule-table th, .schedule-table td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+        .schedule-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        
+        /* Thêm CSS cơ bản từ cấu hình Tailwind để đảm bảo style không bị mất */
+        .navbar { background-color: white; border-bottom: 1px solid #ddd; padding: 10px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .navbar nav a { padding: 10px 15px; text-decoration: none; color: #343a40; font-weight: 600; }
+        .navbar nav a.active { color: #007bff; border-bottom: 2px solid #007bff; }
+        .navbar nav button { padding: 8px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; float: right; }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container">
+            <nav style="display: flex; justify-content: flex-end; align-items: center; gap: 15px;">
+                <a href="doctor_schedule.html">Lịch Khám</a>
+                <a href="doctor_profile_edit.html" class="active">Cập Nhật Hồ Sơ</a>
+                <button onclick="logout()">Đăng Xuất</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>🛠️ Cập Nhật Hồ Sơ Chuyên Môn</h1>
+        <p>Quản lý thông tin hiển thị công khai và lịch làm việc của bạn.</p>
+        
+        <div style="text-align: right; margin-bottom: 20px;">
+            <button onclick="saveAllChanges()" style="padding: 12px 25px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-size: 1.1em; cursor: pointer;">
+                Lưu Tất Cả Cập Nhật
+            </button>
+        </div>
+
+        <div class="profile-section">
+            <h2>1. Thông Tin Hồ Sơ & Chuyên Môn</h2>
+
+            <div class="profile-pic-container">
+                <img id="profile-image" src="../images/default_doctor.jpg" alt="Ảnh đại diện">
+                <input type="file" id="profile-image-upload" accept="image/*" onchange="previewImage(event)" style="margin-top: 10px;">
+            </div>
+
+            <div class="form-group">
+                <label for="doctor-name">Họ Tên:</label>
+                <input type="text" id="doctor-name" value="BS. Nguyễn Văn Khỏe" readonly>
+                <small>Họ tên không thể thay đổi, liên hệ Quản trị viên nếu cần.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="specialty">Chuyên Khoa Chính:</label>
+                <select id="specialty">
+                    <option value="tim_mach">Tim Mạch</option>
+                    <option value="da_lieu" selected>Da Liễu</option>
+                    <option value="nha_khoa">Nha Khoa</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="bio">Mô Tả Cá Nhân (Bio - Tối đa 500 ký tự):</label>
+                <textarea id="bio" rows="4">Bác sĩ chuyên khoa Da Liễu với 10 năm kinh nghiệm điều trị mụn trứng cá, viêm da cơ địa và các bệnh lý về tóc. Tận tâm và luôn cập nhật phương pháp điều trị mới nhất.</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">Kinh nghiệm & Bằng cấp (Liệt kê):</label>
+                <textarea id="experience" rows="6">
+- Tốt nghiệp Đại học Y Dược TP.HCM (2015)
+- 10 năm công tác tại Bệnh viện Da Liễu Trung Ương
+- Chứng chỉ điều trị laser thẩm mỹ
+                </textarea>
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2>2. Quản Lý Giờ Làm Việc (Lịch Công Khai)</h2>
+            <p>Thiết lập khung giờ bạn sẽ có mặt để nhận lịch hẹn từ bệnh nhân.</p>
+
+            <table id="schedule-management" class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>Ngày</th>
+                        <th>Giờ Bắt Đầu</th>
+                        <th>Giờ Kết Thúc</th>
+                        <th>Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+            
+            <div style="margin-top: 20px;">
+                <label for="new-day">Thêm Giờ Làm Việc Mới:</label>
+                <select id="new-day" style="padding: 8px;">
+                    <option value="T2">Thứ Hai</option>
+                    <option value="T3">Thứ Ba</option>
+                    <option value="T4">Thứ Tư</option>
+                    <option value="T5">Thứ Năm</option>
+                    <option value="T6">Thứ Sáu</option>
+                    <option value="T7">Thứ Bảy</option>
+                    <option value="CN">Chủ Nhật</option>
+                </select>
+                <input type="time" id="new-start-time" value="09:00" style="padding: 8px; margin: 0 5px;">
+                đến
+                <input type="time" id="new-end-time" value="11:00" style="padding: 8px; margin: 0 5px;">
+                <button onclick="addScheduleSlot()" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px;">Thêm Slot</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Dữ liệu giả lập hồ sơ và lịch làm việc
+        let doctorProfile = {
+            name: "BS. Nguyễn Văn Khỏe",
+            specialty: "da_lieu",
+            bio: "Bác sĩ chuyên khoa Da Liễu với 10 năm kinh nghiệm điều trị mụn trứng cá, viêm da cơ địa và các bệnh lý về tóc. Tận tâm và luôn cập nhật phương pháp điều trị mới nhất.",
+            experience: "- Tốt nghiệp Đại học Y Dược TP.HCM (2015)\n- 10 năm công tác tại Bệnh viện Da Liễu Trung Ương\n- Chứng chỉ điều trị laser thẩm mỹ",
+            schedule: [
+                { day: "T2", start: "08:00", end: "12:00" },
+                { day: "T4", start: "14:00", end: "17:00" },
+                { day: "T7", start: "09:00", end: "11:00" }
+            ]
+        };
+
+        // --- Hàm tải dữ liệu lên Form ---
+        function loadProfileData() {
+            document.getElementById('doctor-name').value = doctorProfile.name;
+            document.getElementById('specialty').value = doctorProfile.specialty;
+            document.getElementById('bio').value = doctorProfile.bio;
+            document.getElementById('experience').value = doctorProfile.experience.trim();
+            renderSchedule();
+        }
+
+        // --- Hàm hiển thị Lịch làm việc ---
+        function renderSchedule() {
+            const tbody = document.querySelector('#schedule-management tbody');
+            tbody.innerHTML = '';
+            
+            doctorProfile.schedule.sort((a, b) => {
+                const dayOrder = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+                return dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
+            });
+
+            doctorProfile.schedule.forEach((slot, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${slot.day}</td>
+                    <td><input type="time" value="${slot.start}" data-index="${index}" data-field="start" onchange="updateScheduleSlot(${index}, 'start', this.value)"></td>
+                    <td><input type="time" value="${slot.end}" data-index="${index}" data-field="end" onchange="updateScheduleSlot(${index}, 'end', this.value)"></td>
+                    <td><button onclick="removeScheduleSlot(${index})" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px;">Xóa</button></td>
+                `;
+            });
+        }
+
+        // --- Hàm thêm Slot mới ---
+        function addScheduleSlot() {
+            const day = document.getElementById('new-day').value;
+            const start = document.getElementById('new-start-time').value;
+            const end = document.getElementById('new-end-time').value;
+
+            if (start >= end) {
+                alert('Giờ kết thúc phải lớn hơn giờ bắt đầu.');
+                return;
+            }
+
+            doctorProfile.schedule.push({ day, start, end });
+            renderSchedule();
+        }
+
+        // --- Hàm cập nhật Slot (khi thay đổi input time) ---
+        function updateScheduleSlot(index, field, value) {
+            doctorProfile.schedule[index][field] = value;
+            // Kiểm tra logic giờ sau khi cập nhật (có thể thêm)
+            console.log(`Cập nhật slot ${index}, field ${field} thành ${value}`);
+        }
+
+        // --- Hàm xóa Slot ---
+        function removeScheduleSlot(index) {
+            if (confirm("Bạn có chắc chắn muốn xóa khung giờ này không?")) {
+                doctorProfile.schedule.splice(index, 1);
+                renderSchedule();
+            }
+        }
+
+        // --- Hàm xem trước ảnh đại diện ---
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const output = document.getElementById('profile-image');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        // --- Hàm Lưu Tất Cả ---
+        function saveAllChanges() {
+            // 1. Lấy dữ liệu mới từ Form
+            const newProfileData = {
+                specialty: document.getElementById('specialty').value,
+                bio: document.getElementById('bio').value,
+                experience: document.getElementById('experience').value,
+                schedule: doctorProfile.schedule // Lịch làm việc đã được cập nhật qua các hàm trên
+            };
+            
+            // 2. Gửi dữ liệu qua API
+            console.log("Dữ liệu gửi đi:", newProfileData);
+            alert('✅ Cập nhật hồ sơ thành công! Dữ liệu công khai đã được thay đổi.');
+
+            // Sau khi lưu, có thể chuyển hướng về trang lịch khám
+            window.location.href = 'doctor_schedule.html'; 
+        }
+
+        function logout() {
+            console.log('Đăng xuất Bác sĩ');
+            // SỬA: Đường dẫn Đăng Xuất (Trang_Chung_Va_Tiep_Can/login_register.html)
+            window.location.href = '../Trang_Chung_Va_Tiep_Can/login_register.html';
+        }
+
+        // Tải dữ liệu ban đầu khi trang được tải
+        document.addEventListener('DOMContentLoaded', loadProfileData);
+    </script>
+</body>
+</html>

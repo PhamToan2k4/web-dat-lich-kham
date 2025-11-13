@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediBook - Chuyên khoa Khám Từ Xa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind CSS (Giữ nguyên)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45C3A5',
+                        'primary-dark': '#007BFF',
+                        'primary-light': '#E6FFF8',
+                        'secondary': '#f7d800',
+                        'text-dark': '#343a40',
+                        'text-muted': '#6c757d',
+                        'bg-light': '#f8f9fa',
+                        'sidebar-bg': '#EBF5FF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .logo-mb {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 38px;
+             height: 38px;
+             background-color: #007BFF;
+             border-radius: 6px;
+             font-size: 18px;
+             font-weight: 800;
+             color: white;
+             box-shadow: 0 4px 8px rgba(76, 150, 230, 0.3);
+        }
+        .tele-item {
+            transition: background-color 0.2s;
+        }
+        .tele-item:hover {
+            background-color: #f0f4f7;
+        }
+    </style>
+</head>
+<body class="bg-bg-light text-text-dark">
+
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+
+            <div class="flex items-center space-x-2">
+                <a href="../Trang_Chung_Va_Tiep_Can/index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
+                    <div class="logo-mb">MB</div>
+                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
+                </a>
+            </div>
+
+           <nav class="hidden lg:flex space-x-8 text-base font-semibold">
+                <a href="hospital_list.html" class="text-text-dark hover:text-primary transition duration-150">Cơ sở y tế</a>
+                <a href="specialties.html" class="text-text-dark hover:text-primary transition duration-150">Chuyên khoa</a>
+                <a href="../Trang_Noi_Dung/health_packages.html" class="text-text-dark hover:text-primary transition duration-150">Gói khám</a>
+                <a href="../Trang_Noi_Dung/blog.html" class="text-text-dark hover:text-primary transition duration-150">Tin tức</a>
+                <a href="my_appointments.html" class="text-text-dark hover:text-primary transition duration-150">Lịch Khám Của Tôi</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="tel:19006008" class="text-sm font-bold text-primary-dark hover:text-primary transition duration-150 hidden sm:block">
+                    HOTLINE: 1900 6008
+                </a>
+                <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" class="px-5 py-2 text-sm font-bold bg-primary-dark text-white hover:bg-blue-700 transition duration-150 rounded-lg shadow-md hover:shadow-lg">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <nav class="text-sm font-medium text-text-muted mb-6">
+                <a href="../Trang_Chung_Va_Tiep_Can/index.html" class="hover:text-primary transition duration-150">Trang chủ</a> /
+                <span class="text-primary-dark font-bold">Khám Từ Xa</span>
+            </nav>
+
+            <h1 class="text-3xl font-extrabold text-text-dark mb-8">Chuyên khoa Khám từ xa</h1>
+
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 divide-y divide-gray-100">
+                
+                <a href="doctor_list.html?filter=remote&specialty=tam-ly" class="tele-item flex items-center p-4 sm:p-6 space-x-4">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0">
+                         <img src="https://placehold.co/64x64/90CAF9/007BFF?text=TL" alt="Icon Tâm lý" class="w-full h-full object-contain">
+                    </div>
+                    <p class="text-lg font-semibold text-text-dark">Tư vấn, trị liệu Tâm lý từ xa</p>
+                </a>
+                
+                <a href="doctor_list.html?filter=remote&specialty=tam-than" class="tele-item flex items-center p-4 sm:p-6 space-x-4">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0">
+                         <img src="https://placehold.co/64x64/FFD54F/343a40?text=SKTT" alt="Icon Tâm thần" class="w-full h-full object-contain">
+                    </div>
+                    <p class="text-lg font-semibold text-text-dark">Sức khỏe tâm thần từ xa</p>
+                </a>
+                
+                <a href="doctor_list.html?filter=remote&specialty=da-lieu" class="tele-item flex items-center p-4 sm:p-6 space-x-4">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0">
+                         <img src="https://placehold.co/64x64/F8BBD0/E91E63?text=DL" alt="Icon Da liễu" class="w-full h-full object-contain">
+                    </div>
+                    <p class="text-lg font-semibold text-text-dark">Bác sĩ Da liễu từ xa</p>
+                </a>
+                
+                <a href="doctor_list.html?filter=remote&specialty=co-xuong-khop" class="tele-item flex items-center p-4 sm:p-6 space-x-4">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0">
+                         <img src="https://placehold.co/64x64/A5D6A7/4CAF50?text=CXK" alt="Icon Cơ Xương Khớp" class="w-full h-full object-contain">
+                    </div>
+                    <p class="text-lg font-semibold text-text-dark">Bác sĩ Cơ Xương Khớp từ xa</p>
+                </a>
+                
+                <a href="doctor_list.html?filter=remote&specialty=tieu-hoa" class="tele-item flex items-center p-4 sm:p-6 space-x-4">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0">
+                         <img src="https://placehold.co/64x64/FFCC80/FF9800?text=TH" alt="Icon Tiêu hóa" class="w-full h-full object-contain">
+                    </div>
+                    <p class="text-lg font-semibold text-text-dark">Bác sĩ Tiêu hóa từ xa</p>
+                </a>
+                
+                <a href="doctor_list.html?filter=remote&specialty=tim-mach" class="tele-item flex items-center p-4 sm:p-6 space-x-4">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0">
+                         <img src="https://placehold.co/64x64/EF9A9A/F44336?text=TM" alt="Icon Tim mạch" class="w-full h-full object-contain">
+                    </div>
+                    <p class="text-lg font-semibold text-text-dark">Bác sĩ Tim mạch từ xa</p>
+                </a>
+                
+                <a href="doctor_list.html?filter=remote&specialty=tai-mui-hong" class="tele-item flex items-center p-4 sm:p-6 space-x-4">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0">
+                         <img src="https://placehold.co/64x64/B3E5FC/03A9F4?text=TMH" alt="Icon Tai Mũi Họng" class="w-full h-full object-contain">
+                    </div>
+                    <p class="text-lg font-semibold text-text-dark">Bác sĩ Tai Mũi Họng từ xa</p>
+                </a>
+                
+                <a href="doctor_list.html?filter=remote&specialty=than-kinh" class="tele-item flex items-center p-4 sm:p-6 space-x-4">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0">
+                         <img src="https://placehold.co/64x64/C5CAE9/3F51B5?text=TK" alt="Icon Thần kinh" class="w-full h-full object-contain">
+                    </div>
+                    <p class="text-lg font-semibold text-text-dark">Bác sĩ Thần kinh từ xa</p>
+                </a>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h5 class="font-extrabold text-2xl mb-3 text-primary-dark">Medi<span class="text-primary">Book</span></h5>
+                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
+                <div class="mt-4 flex space-x-3">
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+                </div>
+                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
+                <ul class="space-y-2">
+                    <li><a href="../Trang_Bac_Si/doctor_profile_edit.html" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
+                <p class="mb-2">Email: contact@medibook.vn</p>
+                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

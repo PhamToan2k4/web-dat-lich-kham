@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ Bác sĩ - GS.TS Trần Văn Hùng - MediBook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind và Font Inter
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45C3A5', 
+                        'primary-dark': '#007BFF', 
+                        'primary-light': '#E6FFF8', 
+                        'secondary': '#f7d800', 
+                        'text-dark': '#343a40', 
+                        'text-muted': '#6c757d', 
+                        'bg-light': '#f8f9fa',
+                        'sidebar-bg': '#EBF5FF', 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .logo-mb {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 38px;
+             height: 38px;
+             background-color: #007BFF; 
+             border-radius: 6px;
+             font-size: 18px;
+             font-weight: 800;
+             color: white;
+             box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        }
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+        .time-slot {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .time-slot.active {
+            background-color: #007BFF; /* primary-dark */
+            color: white;
+            border-color: #007BFF;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        }
+        .time-slot:not(.booked):hover {
+            background-color: #EBF5FF; /* Màu hover nhẹ nhàng */
+            border-color: #007BFF;
+        }
+        .time-slot.booked {
+            background-color: #f8f9fa;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="bg-bg-light text-text-dark">
+
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            
+            <div class="flex items-center space-x-2">
+                <a href="../Trang_Chung_Va_Tiep_Can/index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
+                    <div class="logo-mb">MB</div>
+                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
+                </a>
+            </div>
+
+           <nav class="hidden lg:flex space-x-8 text-base font-semibold">
+                <a href="hospital_list.html" class="text-text-dark hover:text-primary transition duration-150">Cơ sở y tế</a>
+                <a href="specialties.html" class="text-text-dark hover:text-primary transition duration-150">Chuyên khoa</a>
+                <a href="../Trang_Noi_Dung/health_packages.html" class="text-text-dark hover:text-primary transition duration-150">Gói khám</a> 
+                <a href="../Trang_Noi_Dung/blog.html" class="text-text-dark hover:text-primary transition duration-150">Tin tức</a>
+                <a href="my_appointments.html" class="text-text-dark hover:text-primary transition duration-150">Lịch Khám Của Tôi</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" class="px-5 py-2 text-sm font-bold bg-primary-dark text-white hover:bg-blue-700 transition duration-150 rounded-lg shadow-md hover:shadow-lg">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <a href="doctor_list.html" class="text-primary-dark hover:underline text-sm mb-4 inline-flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Quay lại danh sách Bác sĩ
+        </a>
+
+        <div class="lg:grid lg:grid-cols-3 lg:gap-8 bg-white p-6 sm:p-8 rounded-xl shadow-xl">
+            
+            <section class="lg:col-span-2 space-y-6 border-r pr-6 border-gray-100">
+                
+                <div class="flex items-start space-x-6">
+                    <img src="https://placehold.co/150x150/007BFF/ffffff?text=GS+Hùng" alt="Ảnh bác sĩ Trần Văn Hùng" class="w-36 h-36 rounded-full object-cover border-4 border-primary-light shadow-md flex-shrink-0">
+                    <div>
+                        <p class="text-sm font-semibold text-primary-dark">Chuyên khoa Cơ Xương Khớp</p>
+                        <h1 class="text-3xl font-extrabold text-text-dark mt-1">GS.TS Trần Văn Hùng</h1>
+                        <p class="text-lg text-text-muted font-medium mb-2">Trưởng khoa Phẫu thuật Chỉnh hình - Bệnh viện Chấn thương Chỉnh hình TP.HCM</p>
+                        <div class="flex items-center text-secondary text-sm">
+                            <span>★★★★★</span>
+                            <span class="ml-2 text-text-muted">(Đã có 35 đánh giá)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-bg-light p-4 rounded-lg border border-gray-200">
+                    <p class="font-bold text-lg text-primary-dark mb-2">Giá khám: 500.000 VNĐ</p>
+                    <p class="text-sm text-text-dark flex items-center space-x-2">
+                         <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.899a2 2 0 01-2.828 0L6.343 16.657m0 0a2 2 0 01-2.828-2.828m2.828 2.828a2 2 0 002.828 0m0 0a2 2 0 012.828 2.828"></path></svg>
+                        <span>Địa điểm: **Bệnh viện Chấn thương Chỉnh hình** - 929 Trần Hưng Đạo, Quận 5, TP.HCM</span>
+                    </p>
+                    <a href="https://www.google.com/maps/search/929+Trần+Hưng+Đạo,+Quận+5,+TP.HCM" target="_blank" class="text-primary-dark text-xs hover:underline mt-1 inline-block">
+                        Xem trên Google Maps
+                    </a>
+                </div>
+
+                <div class="pt-4">
+                    <h3 class="text-xl font-bold text-primary mb-3">Thông tin chi tiết</h3>
+                    <div class="space-y-4 text-text-dark text-sm">
+                        <p>GS.TS Trần Văn Hùng là một trong những chuyên gia hàng đầu về phẫu thuật Cơ Xương Khớp tại Việt Nam với hơn 30 năm kinh nghiệm trong ngành.</p>
+                        
+                        <h4 class="font-bold text-text-dark mt-4">Quá trình công tác:</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-1 text-text-muted">
+                            <li>Giám đốc Trung tâm Chấn thương chỉnh hình, Bệnh viện Chấn thương Chỉnh hình (2015 - Nay)</li>
+                            <li>Trưởng khoa Phẫu thuật Khớp, Bệnh viện Chợ Rẫy (2000 - 2015)</li>
+                            <li>Giảng viên cao cấp tại Đại học Y Dược TP.HCM</li>
+                        </ul>
+                        
+                        <h4 class="font-bold text-text-dark mt-4">Lĩnh vực chuyên sâu:</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-1 text-text-muted">
+                            <li>Phẫu thuật thay khớp gối và khớp háng toàn phần/bán phần.</li>
+                            <li>Điều trị bệnh lý cột sống (thoái hóa, thoát vị đĩa đệm).</li>
+                            <li>Điều trị chấn thương thể thao, nội soi khớp.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-gray-200">
+                    <h3 class="text-xl font-bold text-primary mb-4">Đánh giá từ Bệnh nhân (35 Reviews)</h3>
+                    
+                    <div class="bg-bg-light p-4 rounded-lg mb-3 border border-gray-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-semibold text-text-dark">Nguyễn Văn A</span>
+                            <span class="text-secondary text-sm">★★★★★</span>
+                        </div>
+                        <p class="text-sm text-text-muted italic">"Bác sĩ rất tận tâm, giải thích chi tiết về tình trạng bệnh và phương pháp phẫu thuật. Sau mổ gối, tôi đã hồi phục rất nhanh."</p>
+                        <p class="text-xs text-gray-400 mt-2">Ngày khám: 15/10/2025</p>
+                    </div>
+
+                    <div class="bg-bg-light p-4 rounded-lg mb-3 border border-gray-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-semibold text-text-dark">Trần Thị B</span>
+                            <span class="text-secondary text-sm">★★★★★</span>
+                        </div>
+                        <p class="text-sm text-text-muted italic">"Dịch vụ đặt lịch nhanh chóng. GS Hùng có chuyên môn rất cao, tư vấn chính xác. Tôi hoàn toàn tin tưởng."</p>
+                        <p class="text-xs text-gray-400 mt-2">Ngày khám: 01/11/2025</p>
+                    </div>
+
+                    <a href="#" class="text-primary-dark text-sm hover:underline mt-3 inline-block font-medium">Xem tất cả đánh giá</a>
+                </div>
+
+            </section>
+
+            <aside class="lg:col-span-1 pt-6 lg:pt-0">
+                <div class="sticky top-28 bg-primary-light p-5 rounded-xl shadow-lg border-2 border-primary">
+                    <h3 class="text-xl font-bold text-primary-dark mb-4">Chọn Lịch Khám</h3>
+                    
+                    <div class="mb-4">
+                        <label for="booking-date" class="block text-sm font-semibold text-text-dark mb-1">Chọn ngày</label>
+                        <input type="date" id="booking-date" value="2025-11-20" min="2025-11-13"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 bg-white text-sm">
+                    </div>
+
+                    <div class="mb-6">
+                        <p class="text-sm font-semibold text-text-dark mb-2">Khung giờ còn trống (Ngày 20/11/2025):</p>
+                        <div id="time-slots-container" class="schedule-grid">
+                            <button data-time="08:00" class="time-slot px-2 py-2 text-sm border rounded-lg active">
+                                08:00 - 09:00
+                            </button>
+                            <button data-time="09:00" class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg text-text-dark">
+                                09:00 - 10:00
+                            </button>
+                            <button data-time="10:00" disabled class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg booked">
+                                10:00 - 11:00 (Hết)
+                            </button>
+                            <button data-time="14:00" class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg text-text-dark">
+                                14:00 - 15:00
+                            </button>
+                            <button data-time="15:00" class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg text-text-dark">
+                                15:00 - 16:00
+                            </button>
+                            <button data-time="16:00" disabled class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg booked">
+                                16:00 - 17:00 (Hết)
+                            </button>
+                        </div>
+                        <p class="text-xs text-red-500 mt-3 hidden" id="no-slot-warning">Không có lịch trống trong ngày này.</p>
+                    </div>
+
+                    <button id="book-button" class="w-full py-3 bg-primary text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition duration-150">
+                        XÁC NHẬN ĐẶT LỊCH
+                    </button>
+                    <p class="text-center text-xs text-text-muted mt-2">Vui lòng chọn ngày và khung giờ trước khi đặt.</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+    
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h5 class="font-extrabold text-2xl mb-3 text-primary-dark">Medi<span class="text-primary">Book</span></h5>
+                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
+                <div class="mt-4 flex space-x-3">
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+                </div>
+                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
+                <ul class="space-y-2">
+                    <li><a href="../Trang_Bac_Si/doctor_profile_edit.html" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
+                <p class="mb-2">Email: contact@medibook.vn</p>
+                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let selectedTime = '08:00';
+        let selectedDate = '2025-11-20';
+        const doctorId = 'doctor_hung'; // Lấy từ URL trong thực tế
+
+        // Hàm xử lý khi chọn slot giờ
+        document.getElementById('time-slots-container').addEventListener('click', function(e) {
+            const button = e.target.closest('.time-slot:not(.booked)');
+            if (button) {
+                // Xóa trạng thái active của tất cả các slot
+                document.querySelectorAll('.time-slot').forEach(slot => {
+                    slot.classList.remove('active');
+                });
+                
+                // Đặt trạng thái active cho slot được chọn
+                button.classList.add('active');
+                selectedTime = button.dataset.time;
+            }
+        });
+
+        // Hàm xử lý khi chọn ngày
+        document.getElementById('booking-date').addEventListener('change', function(e) {
+            selectedDate = e.target.value;
+            // Trong thực tế, bạn sẽ gọi API để tải lại các slot trống cho ngày này
+            
+            // Mô phỏng tải lại slot: Giữ slot như cũ, nhưng cảnh báo cho người dùng
+            const warning = document.getElementById('no-slot-warning');
+            const slotsContainer = document.getElementById('time-slots-container');
+
+            if (selectedDate === '2025-11-15') {
+                 // Mô phỏng ngày không có slot
+                 slotsContainer.innerHTML = '';
+                 warning.classList.remove('hidden');
+            } else {
+                 // Mô phỏng ngày có slot (Tạm thời không thay đổi DOM)
+                 if (slotsContainer.innerHTML === '') {
+                     // Nếu đã xóa, load lại nội dung mặc định (chỉ phục vụ demo)
+                     slotsContainer.innerHTML = `
+                         <button data-time="08:00" class="time-slot px-2 py-2 text-sm border rounded-lg active">
+                             08:00 - 09:00
+                         </button>
+                         <button data-time="09:00" class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg text-text-dark">
+                             09:00 - 10:00
+                         </button>
+                         <button data-time="10:00" disabled class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg booked">
+                             10:00 - 11:00 (Hết)
+                         </button>
+                         <button data-time="14:00" class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg text-text-dark">
+                             14:00 - 15:00
+                         </button>
+                          <button data-time="15:00" class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg text-text-dark">
+                             15:00 - 16:00
+                         </button>
+                         <button data-time="16:00" disabled class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg booked">
+                             16:00 - 17:00 (Hết)
+                         </button>
+                     `;
+                 }
+                 warning.classList.add('hidden');
+                 // Sau khi load lại, chọn slot đầu tiên là active
+                 const firstSlot = document.querySelector('.time-slot:not(.booked)');
+                 if(firstSlot) {
+                     firstSlot.classList.add('active');
+                     selectedTime = firstSlot.dataset.time;
+                 } else {
+                      selectedTime = null;
+                 }
+            }
+
+            // Cập nhật thông tin ngày trên tiêu đề slot
+            const dateDisplay = document.querySelector('#time-slots-container').previousElementSibling;
+            dateDisplay.textContent = `Khung giờ còn trống (Ngày ${new Date(selectedDate).toLocaleDateString('vi-VN')}):`;
+            
+            showSimpleMessage(`Đã tải lịch trống cho ngày ${new Date(selectedDate).toLocaleDateString('vi-VN')}`, 'info');
+        });
+
+        // Hàm xử lý nút Đặt lịch (Chuyển sang trang booking.html)
+        document.getElementById('book-button').addEventListener('click', function() {
+            if (selectedTime && document.querySelector('.time-slot.active')) {
+                // SỬA: Chuyển hướng đến trang booking.html với các tham số
+                const bookingURL = `booking.html?doctor=${doctorId}&date=${selectedDate}&time=${selectedTime}`;
+                showSimpleMessage("Đang chuyển đến trang xác nhận đặt lịch...", 'success');
+                setTimeout(() => {
+                    window.location.href = bookingURL;
+                }, 800);
+            } else {
+                showSimpleMessage("Vui lòng chọn một khung giờ trống trước khi xác nhận.", 'warning');
+            }
+        });
+
+
+        // Hàm hiển thị thông báo thay thế cho alert/confirm (Tái sử dụng)
+        function showSimpleMessage(message, type) {
+            const container = document.body;
+            let messageDiv = document.querySelector('.floating-message');
+            if (!messageDiv) {
+                messageDiv = document.createElement('div');
+                messageDiv.className = "floating-message fixed bottom-5 right-5 p-3 rounded-lg shadow-xl z-50 text-sm font-semibold transition-opacity duration-300";
+                container.appendChild(messageDiv);
+            }
+            
+            messageDiv.textContent = message;
+            messageDiv.style.backgroundColor = type === 'success' ? '#45C3A5' : (type === 'warning' ? '#f7d800' : '#007BFF');
+            messageDiv.style.color = type === 'warning' ? '#343a40' : 'white';
+            messageDiv.style.opacity = '1';
+
+            setTimeout(() => {
+                messageDiv.style.opacity = '0';
+                setTimeout(() => messageDiv.remove(), 300);
+            }, 3000);
+        }
+
+    </script>
+
+</body>
+</html>

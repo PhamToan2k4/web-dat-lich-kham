@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Khám Của Tôi - Bác Sĩ [Tên BS]</title>
+    <link rel="stylesheet" href="../assets/css/style.css"> 
+    <style>
+        /* CSS Cơ Bản Cho Trang Này */
+        body { font-family: Arial, sans-serif; background-color: #f4f7f9; }
+        .container { max-width: 1200px; margin: auto; padding-top: 20px; }
+        .schedule-card { border-left: 5px solid #007bff; margin-bottom: 15px; padding: 15px; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .status-badge { padding: 4px 8px; border-radius: 12px; font-size: 0.85em; font-weight: bold; }
+        .status-pending { background-color: #ffc107; color: #343a40; }
+        .status-confirmed { background-color: #28a745; color: white; }
+        .status-cancelled { background-color: #dc3545; color: white; }
+        .action-btn { margin-left: 10px; }
+
+        /* Thêm CSS cơ bản cho Navbar vì code gốc không dùng Tailwind */
+        .navbar { background-color: white; border-bottom: 1px solid #ddd; padding: 10px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .navbar nav { display: flex; justify-content: flex-end; align-items: center; gap: 15px; max-width: 1200px; margin: auto; padding: 0 20px; }
+        .navbar nav a { padding: 10px 15px; text-decoration: none; color: #343a40; font-weight: 600; }
+        .navbar nav a.active { color: #007bff; border-bottom: 2px solid #007bff; }
+        .navbar nav button { padding: 8px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <nav>
+            <a href="../Trang_Chung_Va_Tiep_Can/index.html">Trang Chủ</a> 
+            <a href="doctor_schedule.html" class="active">Lịch Khám</a>
+            <a href="doctor_profile_edit.html">Cập Nhật Hồ Sơ</a>
+            <button onclick="logout()">Đăng Xuất</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>📅 Lịch Khám Của Bác Sĩ</h1>
+        <p>Quản lý các cuộc hẹn khám bệnh của bạn.</p>
+
+        <div class="filter-controls" style="margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 8px;">
+            <div style="display: flex; gap: 15px; align-items: center;">
+                
+                <div>
+                    <label for="date-select">Chọn Ngày:</label>
+                    <input type="date" id="date-select" value="2025-11-12" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+
+                <div>
+                    <label for="status-filter">Lọc theo Trạng thái:</label>
+                    <select id="status-filter" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="all">Tất cả</option>
+                        <option value="pending">Chờ xác nhận</option>
+                        <option value="confirmed">Đã xác nhận</option>
+                        <option value="cancelled">Đã hủy</option>
+                    </select>
+                </div>
+
+                <button onclick="applyFilters()" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px;">Áp Dụng</button>
+            </div>
+        </div>
+
+        <div id="appointment-list">
+            <div class="schedule-card" data-status="pending" data-date="2025-11-12">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3>Bệnh nhân: **Nguyễn Văn A**</h3>
+                        <p><strong>Giờ:</strong> 09:00 - 09:30</p>
+                        <p><strong>Lý do:</strong> Đau đầu kéo dài và mất ngủ.</p>
+                    </div>
+                    <div>
+                        <span class="status-badge status-pending">Chờ xác nhận</span>
+                        <button class="action-btn" onclick="confirmAppointment(1)">Xác Nhận</button>
+                        <button class="action-btn" onclick="openCancelModal(1)">Hủy Lịch</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-card" data-status="confirmed" data-date="2025-11-12">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3>Bệnh nhân: **Trần Thị B**</h3>
+                        <p><strong>Giờ:</strong> 10:00 - 10:30</p>
+                        <p><strong>Lý do:</strong> Kiểm tra định kỳ và tái khám tiểu đường.</p>
+                    </div>
+                    <div>
+                        <span class="status-badge status-confirmed">Đã xác nhận</span>
+                        <button class="action-btn" onclick="viewDetails(2)">Xem Chi Tiết</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div id="cancel-modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+        <div style="background: white; padding: 20px; border-radius: 8px; max-width: 400px;">
+            <h2>Xác nhận Hủy Lịch</h2>
+            <p>Bạn có chắc chắn muốn hủy lịch hẹn này không?</p>
+            <label for="cancel-reason">Lý do hủy:</label>
+            <textarea id="cancel-reason" style="width: 100%; margin-bottom: 15px;"></textarea>
+            <button onclick="executeCancel()" style="background-color: #dc3545; color: white; padding: 10px;">Xác Nhận Hủy</button>
+            <button onclick="closeCancelModal()" style="margin-left: 10px; padding: 10px;">Đóng</button>
+        </div>
+    </div>
+
+
+    <script>
+        // Dữ liệu giả lập cho lịch hẹn
+        const appointments = [
+            { id: 1, patient: 'Nguyễn Văn A', time: '09:00', reason: 'Đau đầu kéo dài', status: 'pending', date: '2025-11-12' },
+            { id: 2, patient: 'Trần Thị B', time: '10:00', reason: 'Tái khám tiểu đường', status: 'confirmed', date: '2025-11-12' },
+            { id: 3, patient: 'Phạm Văn C', time: '14:30', reason: 'Khám tổng quát', status: 'confirmed', date: '2025-11-13' },
+            { id: 4, patient: 'Lê Thị D', time: '16:00', reason: 'Tư vấn dinh dưỡng', status: 'pending', date: '2025-11-13' },
+            { id: 5, patient: 'Vũ Đình E', time: '17:00', reason: 'Cảm lạnh', status: 'cancelled', date: '2025-11-12' },
+        ];
+
+        let currentAppointmentIdToCancel = null;
+
+        // Hàm mô phỏng tải và hiển thị lịch hẹn
+        function renderAppointments(data) {
+            const listElement = document.getElementById('appointment-list');
+            listElement.innerHTML = ''; // Xóa nội dung cũ
+
+            data.forEach(app => {
+                const statusClass = 'status-' + app.status;
+                const actions = (app.status === 'pending') ?
+                    `<button class="action-btn" onclick="confirmAppointment(${app.id})">Xác Nhận</button>
+                     <button class="action-btn" onclick="openCancelModal(${app.id})">Hủy Lịch</button>` :
+                    (app.status === 'confirmed') ? 
+                    `<button class="action-btn" onclick="viewDetails(${app.id})">Xem Chi Tiết</button>` :
+                    '';
+
+                const html = `
+                    <div class="schedule-card" data-status="${app.status}" data-date="${app.date}">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3>Bệnh nhân: **${app.patient}**</h3>
+                                <p><strong>Giờ:</strong> ${app.time}</p>
+                                <p><strong>Lý do:</strong> ${app.reason}</p>
+                            </div>
+                            <div>
+                                <span class="status-badge ${statusClass}">${getStatusLabel(app.status)}</span>
+                                ${actions}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                listElement.innerHTML += html;
+            });
+
+            if (data.length === 0) {
+                 listElement.innerHTML = '<p style="padding: 20px; text-align: center; color: #6c757d;">Không tìm thấy lịch hẹn nào phù hợp.</p>';
+            }
+        }
+
+        // Hàm lấy nhãn trạng thái
+        function getStatusLabel(status) {
+            switch (status) {
+                case 'pending': return 'Chờ xác nhận';
+                case 'confirmed': return 'Đã xác nhận';
+                case 'cancelled': return 'Đã hủy';
+                default: return 'Không rõ';
+            }
+        }
+
+        // Hàm áp dụng bộ lọc
+        function applyFilters() {
+            const selectedDate = document.getElementById('date-select').value;
+            const selectedStatus = document.getElementById('status-filter').value;
+
+            const filteredList = appointments.filter(app => {
+                const dateMatch = (selectedDate === '' || app.date === selectedDate);
+                const statusMatch = (selectedStatus === 'all' || app.status === selectedStatus);
+                return dateMatch && statusMatch;
+            });
+
+            renderAppointments(filteredList);
+        }
+
+        // --- Các hàm Hành Động (Action Functions) ---
+
+        function confirmAppointment(id) {
+            console.log(`API Call: Xác nhận lịch hẹn ID: ${id}`);
+            alert(`Đã gửi yêu cầu xác nhận lịch hẹn ID: ${id}. (Cập nhật trạng thái bằng API)`);
+            // Sau khi API thành công: Cập nhật lại dữ liệu và render lại trang
+            // Ví dụ: appointments.find(a => a.id === id).status = 'confirmed'; 
+            // applyFilters(); 
+        }
+
+        function openCancelModal(id) {
+            currentAppointmentIdToCancel = id;
+            document.getElementById('cancel-modal').style.display = 'flex';
+        }
+
+        function closeCancelModal() {
+            document.getElementById('cancel-modal').style.display = 'none';
+            document.getElementById('cancel-reason').value = ''; // Reset lý do
+            currentAppointmentIdToCancel = null;
+        }
+
+        function executeCancel() {
+            const id = currentAppointmentIdToCancel;
+            const reason = document.getElementById('cancel-reason').value;
+
+            if (!reason) {
+                alert('Vui lòng nhập lý do hủy.');
+                return;
+            }
+
+            console.log(`API Call: Hủy lịch hẹn ID: ${id} với lý do: ${reason}`);
+            alert(`Đã gửi yêu cầu hủy lịch hẹn ID: ${id} với lý do: ${reason}. (Cập nhật trạng thái bằng API)`);
+            
+            // Sau khi API thành công: Cập nhật lại dữ liệu và render lại trang
+            // Ví dụ: appointments.find(a => a.id === id).status = 'cancelled'; 
+            closeCancelModal();
+            // applyFilters(); 
+        }
+
+        function viewDetails(id) {
+            console.log(`Mở Modal/Trang chi tiết bệnh nhân cho ID: ${id}`);
+            alert(`Mô phỏng: Mở Modal xem chi tiết bệnh nhân cho lịch hẹn ID: ${id}`);
+        }
+
+        function logout() {
+            console.log('Đăng xuất Bác sĩ');
+            // SỬA: Đường dẫn Đăng Xuất (Trang_Chung_Va_Tiep_Can/login_register.html)
+            window.location.href = '../Trang_Chung_Va_Tiep_Can/login_register.html';
+        }
+        
+        // Tải lịch hẹn ban đầu khi trang được tải
+        document.addEventListener('DOMContentLoaded', () => {
+             // Đặt ngày mặc định là ngày hôm nay cho input date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date-select').value = today;
+            applyFilters();
+        });
+
+    </script>
+</body>
+</html>

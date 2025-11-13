@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Quản Trị Hệ Thống</title>
+    <link rel="stylesheet" href="admin_style.css"> 
+    <style>
+        /* Thiết lập bố cục Grid cho Admin */
+        body { font-family: Arial, sans-serif; background-color: #e9ecef; margin: 0; display: flex; }
+        .sidebar { width: 250px; background-color: #343a40; color: white; padding: 20px; height: 100vh; position: fixed; }
+        .sidebar a { display: block; padding: 10px; color: #adb5bd; text-decoration: none; border-radius: 4px; margin-bottom: 5px; }
+        .sidebar a:hover, .sidebar a.active { background-color: #007bff; color: white; }
+        .main-content { margin-left: 250px; flex-grow: 1; padding: 30px; }
+        
+        /* Metrics Cards */
+        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        .metric-card { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #007bff; cursor: pointer; }
+        .metric-card h3 { margin-top: 0; color: #6c757d; font-size: 0.9em; }
+        .metric-card .number { font-size: 2.5em; font-weight: bold; color: #343a40; }
+
+        /* Chart & Tables */
+        .dashboard-panel { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .recent-table th, .recent-table td { padding: 12px; border-bottom: 1px solid #dee2e6; text-align: left; }
+        .recent-table { width: 100%; border-collapse: collapse; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>👨‍💻 Admin Panel</h2>
+        <p style="color: #6c757d; border-bottom: 1px solid #495057; padding-bottom: 15px; margin-bottom: 15px;">Menu Chính</p>
+        <a href="admin_dashboard.html" class="active">Dashboard & Tổng quan</a>
+        <a href="admin_manage_doctors.html">Quản lý Bác sĩ</a>
+        <a href="admin_manage_appointments.html">Quản lý Lịch hẹn</a>
+        <a href="admin_reports.html">Thống kê - Báo cáo</a>
+        <div style="margin-top: 50px;">
+            <a href="login_register.html" onclick="logout()" style="background-color: #dc3545; color: white;">Đăng Xuất</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>Dashboard Tổng Quan Hệ Thống</h1>
+        
+        <div class="metrics-grid">
+            <div class="metric-card" onclick="goToReports('doctors')">
+                <h3>Tổng Số Bác Sĩ</h3>
+                <div class="number" id="total-doctors">85</div>
+            </div>
+            <div class="metric-card" onclick="goToReports('appointments-today')">
+                <h3>Lịch Hẹn Hôm Nay</h3>
+                <div class="number" id="appointments-today">142</div>
+            </div>
+            <div class="metric-card" onclick="goToReports('users')">
+                <h3>Tổng Người Dùng (BN)</h3>
+                <div class="number" id="total-users">4,120</div>
+            </div>
+            <div class="metric-card" onclick="goToReports('cancellation-rate')">
+                <h3>Tỷ Lệ Hủy (Tháng)</h3>
+                <div class="number" id="cancellation-rate">12.5%</div>
+            </div>
+        </div>
+
+        <div class="dashboard-panel">
+            <h2>Lượt Đặt Khám (7 Ngày Gần Nhất)</h2>
+            <canvas id="appointment-chart" height="100"></canvas>
+        </div>
+
+        <div class="dashboard-panel">
+            <h2>Hoạt Động Gần Đây (Lịch Hẹn Mới)</h2>
+            <table class="recent-table">
+                <thead>
+                    <tr>
+                        <th>Mã Hẹn</th>
+                        <th>Bệnh Nhân</th>
+                        <th>Bác Sĩ</th>
+                        <th>Thời Gian</th>
+                        <th>Trạng Thái</th>
+                    </tr>
+                </thead>
+                <tbody id="recent-appointments">
+                    </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // Dữ liệu giả lập
+        const mockMetrics = {
+            totalDoctors: 85,
+            appointmentsToday: 142,
+            totalUsers: 4120,
+            cancellationRate: '12.5%'
+        };
+
+        const mockChartData = {
+            labels: ['06/11', '07/11', '08/11', '09/11', '10/11', '11/11', '12/11'],
+            data: [150, 180, 165, 200, 190, 210, 142] // Lượt đặt khám
+        };
+
+        const mockRecentAppointments = [
+            { id: 1005, patient: 'Lê Thị F', doctor: 'BS. Khỏe (Da Liễu)', time: '11:30', status: 'Chờ xác nhận' },
+            { id: 1004, patient: 'Trần Văn E', doctor: 'BS. Linh (Nhi)', time: '09:00', status: 'Đã xác nhận' },
+            { id: 1003, patient: 'Nguyễn B', doctor: 'BS. An (Tim Mạch)', time: 'Hôm qua', status: 'Đã hoàn thành' },
+        ];
+
+
+        // --- Hàm Tải Dữ liệu ---
+        function loadDashboardData() {
+            // Cập nhật Metrics
+            document.getElementById('total-doctors').textContent = mockMetrics.totalDoctors;
+            document.getElementById('appointments-today').textContent = mockMetrics.appointmentsToday;
+            document.getElementById('total-users').textContent = mockMetrics.totalUsers.toLocaleString('vi-VN');
+            document.getElementById('cancellation-rate').textContent = mockMetrics.cancellationRate;
+
+            // Render Bảng gần đây
+            renderRecentAppointments();
+
+            // Vẽ biểu đồ
+            renderChart();
+        }
+
+        function renderRecentAppointments() {
+            const tbody = document.getElementById('recent-appointments');
+            tbody.innerHTML = '';
+            mockRecentAppointments.forEach(app => {
+                const row = tbody.insertRow();
+                let statusColor = '';
+                if (app.status === 'Chờ xác nhận') statusColor = 'orange';
+                else if (app.status === 'Đã xác nhận') statusColor = 'green';
+                else if (app.status === 'Đã hoàn thành') statusColor = 'blue';
+
+                row.innerHTML = `
+                    <td>${app.id}</td>
+                    <td>${app.patient}</td>
+                    <td>${app.doctor}</td>
+                    <td>${app.time}</td>
+                    <td style="color: ${statusColor}; font-weight: bold;">${app.status}</td>
+                `;
+            });
+        }
+
+        // --- Hàm Vẽ Biểu đồ (Sử dụng Chart.js) ---
+        function renderChart() {
+            const ctx = document.getElementById('appointment-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: mockChartData.labels,
+                    datasets: [{
+                        label: 'Lượt Đặt Khám',
+                        data: mockChartData.data,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // --- Hàm Điều hướng ---
+        function goToReports(metricType) {
+            console.log(`Điều hướng đến trang báo cáo với tham số lọc: ${metricType}`);
+            // Ví dụ: window.location.href = `admin_reports.html?filter=${metricType}`;
+            alert(`Mô phỏng: Điều hướng đến trang Báo cáo để xem chi tiết ${metricType}.`);
+        }
+
+        function logout() {
+            console.log('Đăng xuất Admin');
+            // window.location.href = 'login_register.html';
+        }
+
+        // Khởi chạy khi tài liệu tải xong
+        document.addEventListener('DOMContentLoaded', loadDashboardData);
+    </script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediBook - Danh Sách Cơ Sở Y Tế</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind CSS (Giữ nguyên)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45C3A5',
+                        'primary-dark': '#007BFF',
+                        'primary-light': '#E6FFF8',
+                        'secondary': '#f7d800',
+                        'text-dark': '#343a40',
+                        'text-muted': '#6c757d',
+                        'bg-light': '#f8f9fa',
+                        'sidebar-bg': '#EBF5FF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .logo-mb {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 38px;
+             height: 38px;
+             background-color: #007BFF;
+             border-radius: 6px;
+             font-size: 18px;
+             font-weight: 800;
+             color: white;
+             box-shadow: 0 4px 8px rgba(76, 150, 230, 0.3);
+        }
+        .hospital-card {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: 1px solid #E0E0E0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .hospital-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .hospital-logo-container {
+            width: 100%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+        }
+        .hospital-logo {
+            max-width: 90%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body class="bg-bg-light text-text-dark">
+
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+
+            <div class="flex items-center space-x-2">
+                <a href="../Trang_Chung_Va_Tiep_Can/index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
+                    <div class="logo-mb">MB</div>
+                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
+                </a>
+            </div>
+
+           <nav class="hidden lg:flex space-x-8 text-base font-semibold">
+                <a href="hospital_list.html" class="text-primary font-bold transition duration-150 border-b-2 border-primary">Cơ sở y tế</a>
+                <a href="specialties.html" class="text-text-dark hover:text-primary transition duration-150">Chuyên khoa</a>
+                <a href="../Trang_Noi_Dung/health_packages.html" class="text-text-dark hover:text-primary transition duration-150">Gói khám</a>
+                <a href="../Trang_Noi_Dung/blog.html" class="text-text-dark hover:text-primary transition duration-150">Tin tức</a>
+                <a href="my_appointments.html" class="text-text-dark hover:text-primary transition duration-150">Lịch Khám Của Tôi</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="tel:19006008" class="text-sm font-bold text-primary-dark hover:text-primary transition duration-150 hidden sm:block">
+                    HOTLINE: 1900 6008
+                </a>
+                <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" class="px-5 py-2 text-sm font-bold bg-primary-dark text-white hover:bg-blue-700 transition duration-150 rounded-lg shadow-md hover:shadow-lg">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <h1 class="text-3xl font-extrabold text-text-dark mb-2">Danh Sách Cơ Sở Y Tế & Phòng Khám</h1>
+            <p class="text-lg text-text-muted mb-8">Tìm kiếm bệnh viện hoặc phòng khám gần bạn nhất.</p>
+
+            <div class="bg-white p-4 rounded-xl shadow-lg mb-8 flex flex-col md:flex-row gap-4 items-center border border-gray-200">
+                
+                <div class="w-full md:w-1/4">
+                    <select id="city-filter" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 text-sm">
+                        <option value="">Lọc theo Tỉnh/Thành</option>
+                        <option value="Hanoi">Hà Nội</option>
+                        <option value="HCMC">TP Hồ Chí Minh</option>
+                        <option value="Danang">Đà Nẵng</option>
+                    </select>
+                </div>
+
+                <div class="w-full md:w-3/4 flex items-center">
+                    <input type="text" id="search-hospital" placeholder="Nhập tên bệnh viện, phòng khám cần tìm..."
+                           class="flex-grow px-4 py-3 border border-gray-300 rounded-l-lg focus:ring-primary focus:border-primary transition duration-150 text-sm">
+                    <button class="px-6 py-3 bg-primary-dark text-white font-bold rounded-r-lg hover:bg-blue-700 transition duration-150">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                
+                <a href="doctor_list.html?hospital=AnViet" class="hospital-card">
+                    <div class="hospital-logo-container">
+                        <img src="https://placehold.co/150x80/FFFFFF/E53935?text=AN+VIET" alt="Logo Bệnh viện An Việt" class="hospital-logo">
+                    </div>
+                    <p class="text-sm font-semibold text-text-dark text-center mt-auto">Bệnh viện Đa khoa An Việt</p>
+                </a>
+
+                <a href="doctor_list.html?hospital=AnDuc" class="hospital-card">
+                    <div class="hospital-logo-container">
+                        <img src="https://placehold.co/150x80/FFFFFF/1976D2?text=AN+DUC" alt="Logo An Đức" class="hospital-logo">
+                    </div>
+                    <p class="text-sm font-semibold text-text-dark text-center mt-auto">Phòng khám Phối quốc tế An Đức</p>
+                </a>
+                
+                <a href="doctor_list.html?hospital=ACC_HCMC" class="hospital-card">
+                    <div class="hospital-logo-container">
+                        <img src="https://placehold.co/150x80/FFFFFF/4CAF50?text=ACC" alt="Logo ACC" class="hospital-logo">
+                    </div>
+                    <p class="text-sm font-semibold text-text-dark text-center mt-auto">Phòng khám ACC - Chiropractic Clinic</p>
+                    <p class="text-xs text-text-muted text-center">Quận 1 TP.HCM</p>
+                </a>
+                
+                <a href="doctor_list.html?hospital=ACC_HN" class="hospital-card">
+                    <div class="hospital-logo-container">
+                        <img src="https://placehold.co/150x80/FFFFFF/4CAF50?text=ACC" alt="Logo ACC" class="hospital-logo">
+                    </div>
+                    <p class="text-sm font-semibold text-text-dark text-center mt-auto">Phòng khám ACC - Chiropractic Clinic</p>
+                    <p class="text-xs text-text-muted text-center">Hà Nội</p>
+                </a>
+                
+                <a href="doctor_list.html?hospital=AnPhuoc" class="hospital-card">
+                    <div class="hospital-logo-container">
+                        <img src="https://placehold.co/150x80/FFFFFF/B71C1C?text=AN+PHƯỚC" alt="Logo An Phước" class="hospital-logo">
+                    </div>
+                    <p class="text-sm font-semibold text-text-dark text-center mt-auto">Phòng khám Chuyên khoa Nội An Phước</p>
+                </a>
+                
+                <a href="doctor_list.html?hospital=NhaKhoaAsia" class="hospital-card">
+                    <div class="hospital-logo-container">
+                        <img src="https://placehold.co/150x80/FFFFFF/009688?text=ASIA" alt="Logo Nha Khoa Asia" class="hospital-logo">
+                    </div>
+                    <p class="text-sm font-semibold text-text-dark text-center mt-auto">Nha khoa Asia</p>
+                </a>
+                
+                <a href="doctor_list.html?hospital=NhaKhoaAChau" class="hospital-card">
+                    <div class="hospital-logo-container">
+                        <img src="https://placehold.co/150x80/FFFFFF/7CB342?text=Á+CHÂU" alt="Logo Nha Khoa Quốc Tế Á Châu" class="hospital-logo">
+                    </div>
+                    <p class="text-sm font-semibold text-text-dark text-center mt-auto">Nha khoa Quốc tế Á Châu</p>
+                </a>
+                
+                <a href="doctor_list.html?hospital=AnhMyClinic" class="hospital-card">
+                    <div class="hospital-logo-container">
+                        <img src="https://placehold.co/150x80/FFFFFF/FFB300?text=ANH+MỸ" alt="Logo Anh Mỹ Clinic" class="hospital-logo">
+                    </div>
+                    <p class="text-sm font-semibold text-text-dark text-center mt-auto">Phòng khám Chuyên khoa Da Liễu Anh Mỹ</p>
+                </a>
+
+                <a href="doctor_list.html?hospital=Anchee" class="hospital-card">
+                    <div class="hospital-logo-container">
+                        <img src="https://placehold.co/150x80/FFFFFF/00BFA5?text=ANCHEE" alt="Logo An Chee" class="hospital-logo">
+                    </div>
+                    <p class="text-sm font-semibold text-text-dark text-center mt-auto">Viện thẩm mỹ Anchee</p>
+                </a>
+                
+                <a href="doctor_list.html?hospital=AlisaDental" class="hospital-card">
+                    <div class="hospital-logo-container">
+                        <img src="https://placehold.co/150x80/FFFFFF/5E35B1?text=ALISA" alt="Logo Alisa Dental" class="hospital-logo">
+                    </div>
+                    <p class="text-sm font-semibold text-text-dark text-center mt-auto">Alisa Dental</p>
+                </a>
+                
+                <a href="doctor_list.html?hospital=AnSinh" class="hospital-card">
+                    <div class="hospital-logo-container">
+                        <img src="https://placehold.co/150x80/FFFFFF/2196F3?text=AN+SINH" alt="Logo An Sinh" class="hospital-logo">
+                    </div>
+                    <p class="text-sm font-semibold text-text-dark text-center mt-auto">Phòng khám chuyên khoa Sản Phụ Khoa An Sinh</p>
+                </a>
+                
+                <a href="doctor_list.html?hospital=ASINA" class="hospital-card">
+                    <div class="hospital-logo-container">
+                        <img src="https://placehold.co/150x80/FFFFFF/4DD0E1?text=ASINA" alt="Logo ASINA" class="hospital-logo">
+                    </div>
+                    <p class="text-sm font-semibold text-text-dark text-center mt-auto">ASINA - Sổ một về Bàn chân</p>
+                </a>
+            </div>
+            
+            <div class="mt-12 flex justify-center space-x-2">
+                <button class="px-4 py-2 text-sm font-semibold text-gray-400 border border-gray-300 rounded-lg" disabled>&larr; Trước</button>
+                <button class="px-4 py-2 text-sm font-bold bg-primary text-white rounded-lg shadow-md">1</button>
+                <button class="px-4 py-2 text-sm font-semibold text-text-dark hover:bg-gray-200 rounded-lg transition duration-150">2</button>
+                <button class="px-4 py-2 text-sm font-semibold text-text-dark hover:bg-gray-200 rounded-lg transition duration-150">3</button>
+                <button class="px-4 py-2 text-sm font-semibold text-primary-dark border border-primary-dark hover:bg-primary-dark hover:text-white rounded-lg transition duration-150">Tiếp &rarr;</button>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h5 class="font-extrabold text-2xl mb-3 text-primary-dark">Medi<span class="text-primary">Book</span></h5>
+                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
+                <div class="mt-4 flex space-x-3">
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+                </div>
+                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
+                <ul class="space-y-2">
+                    <li><a href="../Trang_Bac_Si/doctor_profile_edit.html" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
+                    <li><a href="#" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
+                <p class="mb-2">Email: contact@medibook.vn</p>
+                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>
