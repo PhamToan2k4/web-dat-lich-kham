@@ -129,7 +129,7 @@
                 <div>
                     <label for="register-role" class="block text-sm font-medium text-text-dark mb-1">Bạn là:</label>
                     <select id="register-role" name="role" required
-                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 bg-white">
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 bg-white">
                         <option value="patient">Bệnh nhân (Đặt lịch khám)</option>
                         <option value="doctor">Bác sĩ (Quản lý lịch hẹn)</option>
                     </select>
@@ -147,6 +147,19 @@
     </div>
 
     <script>
+        // --- DỮ LIỆU GIẢ LẬP TÀI KHOẢN (MOCK ACCOUNTS) ---
+        const MOCK_ACCOUNTS = [
+            // Admin
+            { email: 'admin@medibook.vn', password: 'admin123', role: 'admin', name: 'Quản trị viên' },
+            // Bác Sĩ (2 tài khoản)
+            { email: 'doctor1@medibook.vn', password: 'doctor123', role: 'doctor', name: 'BS. Nguyễn Văn Khỏe', doctorId: 101 },
+            { email: 'doctor2@medibook.vn', password: 'doctor123', role: 'doctor', name: 'BS. Trần Thị Thanh', doctorId: 102 },
+            // Bệnh Nhân (Patient)
+            { email: 'patient@medibook.vn', password: 'patient123', role: 'patient', name: 'Bệnh nhân Demo' },
+            { email: 'user@medibook.vn', password: 'user123', role: 'patient', name: 'Người dùng Test' },
+        ];
+        
+        // --- CÁC THÀNH PHẦN DOM ---
         const loginTab = document.getElementById('login-tab');
         const registerTab = document.getElementById('register-tab');
         const loginForm = document.getElementById('login-form');
@@ -155,7 +168,8 @@
 
         // Hàm chuyển tab
         function switchTab(target) {
-            if (target === 'login') {
+            // ... (Logic chuyển tab của bạn) ...
+             if (target === 'login') {
                 loginTab.classList.add('tab-active');
                 loginTab.classList.remove('tab-inactive');
                 registerTab.classList.remove('tab-active');
@@ -178,61 +192,6 @@
         loginTab.addEventListener('click', () => switchTab('login'));
         registerTab.addEventListener('click', () => switchTab('register'));
 
-        // Kiểm tra tham số URL để mặc định tab Đăng ký cho Bác sĩ
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const role = urlParams.get('role');
-            if (role === 'doctor') {
-                switchTab('register');
-                registerRoleSelect.value = 'doctor';
-            } else {
-                switchTab('login'); // Mặc định là tab Đăng nhập
-            }
-        });
-        
-        // Mô phỏng hành động Đăng nhập
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Trong thực tế, đây sẽ là nơi gọi API Đăng nhập
-            const email = document.getElementById('login-email').value;
-            
-            // Logic chuyển hướng mô phỏng theo vai trò (để test luồng frontend)
-            let redirectUrl = '../Trang_Chung_Va_Tiep_Can/index.html'; // Mặc định là Trang chủ
-            
-            // SỬA: Cập nhật các đường dẫn chuyển hướng cho 3 vai trò
-            if (email.includes('admin')) {
-                 // Admin Dashboard (Trang_Quan_Tri/)
-                 redirectUrl = '../Trang_Quan_Tri/admin_dashboard.html';
-            } else if (email.includes('doctor')) {
-                 // Doctor Schedule (Trang_Bac_Si/)
-                 redirectUrl = '../Trang_Bac_Si/doctor_schedule.html';
-            } else {
-                 // Patient Appointments (Trang_Benh_Nhan/)
-                 redirectUrl = '../Trang_Benh_Nhan/my_appointments.html';
-            }
-
-            showMessage("Đăng nhập thành công! Đang chuyển hướng...", 'success');
-            setTimeout(() => {
-                window.location.href = redirectUrl;
-            }, 1500);
-        });
-
-        // Mô phỏng hành động Đăng ký
-        registerForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const role = registerRoleSelect.value;
-            
-            // Trong thực tế, đây sẽ là nơi gọi API Đăng ký
-            showMessage(`Đăng ký vai trò ${role === 'doctor' ? 'Bác sĩ' : 'Bệnh nhân'} thành công! Vui lòng Đăng nhập.`, 'success');
-            
-            setTimeout(() => {
-                // Sau khi đăng ký thành công, chuyển sang tab Đăng nhập
-                switchTab('login'); 
-                // Xóa thông tin đã điền trong form Đăng ký (để giữ form sạch)
-                registerForm.reset();
-            }, 1500);
-        });
-        
         // Hàm hiển thị thông báo thay thế cho alert/confirm
         function showMessage(message, type) {
             const container = document.body;
@@ -253,6 +212,83 @@
                 setTimeout(() => messageDiv.remove(), 300);
             }, 3000);
         }
+
+        // --- MOCK LOGIC ĐĂNG NHẬP ---
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            
+            // 1. Tìm kiếm tài khoản trong MOCK_ACCOUNTS
+            const user = MOCK_ACCOUNTS.find(
+                acc => acc.email === email && acc.password === password
+            );
+
+            if (user) {
+                // 2. Đăng nhập thành công, xác định URL chuyển hướng
+                let redirectUrl;
+                
+                if (user.role === 'admin') {
+                    redirectUrl = '../Trang_Quan_Tri/admin_dashboard.html';
+                } else if (user.role === 'doctor') {
+                    redirectUrl = '../Trang_Bac_Si/doctor_schedule.html';
+                } else { // patient
+                    redirectUrl = '../Trang_Benh_Nhan/my_appointments.html';
+                }
+
+                // 3. Mô phỏng lưu Token/Role (để Front-end biết ai đang đăng nhập)
+                // Trong thực tế sẽ lưu JWT vào localStorage/SessionStorage
+                sessionStorage.setItem('userRole', user.role);
+                sessionStorage.setItem('userName', user.name);
+                if (user.doctorId) {
+                    sessionStorage.setItem('doctorId', user.doctorId);
+                }
+
+                showMessage(`Chào mừng ${user.name}! Đang chuyển hướng...`, 'success');
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 1500);
+                
+            } else {
+                // Đăng nhập thất bại
+                showMessage("Đăng nhập thất bại. Vui lòng kiểm tra Email/SĐT và Mật khẩu.", 'error');
+            }
+        });
+
+        // --- MOCK LOGIC ĐĂNG KÝ ---
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const role = registerRoleSelect.value;
+            
+            // MOCK: Giả định đăng ký thành công
+            showMessage(`Đăng ký vai trò ${role === 'doctor' ? 'Bác sĩ' : 'Bệnh nhân'} thành công! Vui lòng Đăng nhập.`, 'success');
+            
+            setTimeout(() => {
+                // Sau khi đăng ký thành công, chuyển sang tab Đăng nhập
+                switchTab('login'); 
+                // Xóa thông tin đã điền trong form Đăng ký
+                registerForm.reset();
+            }, 1500);
+        });
+        
+        // Gán sự kiện chuyển tab
+        loginTab.addEventListener('click', () => switchTab('login'));
+        registerTab.addEventListener('click', () => switchTab('register'));
+
+        // Kiểm tra tham số URL để mặc định tab Đăng ký cho Bác sĩ
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const role = urlParams.get('role');
+            if (role === 'doctor') {
+                switchTab('register');
+                // Nếu bạn có trường select vai trò trong form đăng ký:
+                const registerRoleSelect = document.getElementById('register-role');
+                if (registerRoleSelect) registerRoleSelect.value = 'doctor';
+            } else {
+                switchTab('login'); // Mặc định là tab Đăng nhập
+            }
+        });
 
     </script>
 

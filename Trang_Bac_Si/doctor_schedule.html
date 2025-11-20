@@ -3,156 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lịch Khám Của Tôi - Bác Sĩ [Tên BS]</title>
-    <link rel="stylesheet" href="../assets/css/style.css"> 
+    <title>Lịch Khám Của Bác Sĩ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind và Font Inter
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45C3A5', 
+                        'primary-dark': '#007BFF', 
+                        'primary-light': '#E6FFF8', 
+                        'secondary': '#f7d800', 
+                        'text-dark': '#343a40', 
+                        'text-muted': '#6c757d', 
+                        'bg-light': '#f4f7f9',
+                        'status-pending': '#ffc107',
+                        'status-confirmed': '#28a745',
+                        'status-cancelled': '#dc3545',
+                        'status-completed': '#007BFF',
+                        'chat': '#4a90e2' // Màu xanh dương mới cho Chat
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* CSS Cơ Bản Cho Trang Này */
-        body { font-family: Arial, sans-serif; background-color: #f4f7f9; }
-        .container { max-width: 1200px; margin: auto; padding-top: 20px; }
-        .schedule-card { border-left: 5px solid #007bff; margin-bottom: 15px; padding: 15px; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .status-badge { padding: 4px 8px; border-radius: 12px; font-size: 0.85em; font-weight: bold; }
-        .status-pending { background-color: #ffc107; color: #343a40; }
-        .status-confirmed { background-color: #28a745; color: white; }
-        .status-cancelled { background-color: #dc3545; color: white; }
-        .action-btn { margin-left: 10px; }
-
-        /* Thêm CSS cơ bản cho Navbar vì code gốc không dùng Tailwind */
-        .navbar { background-color: white; border-bottom: 1px solid #ddd; padding: 10px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .navbar nav { display: flex; justify-content: flex-end; align-items: center; gap: 15px; max-width: 1200px; margin: auto; padding: 0 20px; }
-        .navbar nav a { padding: 10px 15px; text-decoration: none; color: #343a40; font-weight: 600; }
-        .navbar nav a.active { color: #007bff; border-bottom: 2px solid #007bff; }
-        .navbar nav button { padding: 8px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        body { font-family: 'Inter', sans-serif; background-color: #f4f7f9; }
+        .logo-mb {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 38px;
+             height: 38px;
+             background-color: #007BFF; 
+             border-radius: 6px;
+             font-size: 18px;
+             font-weight: 800;
+             color: white;
+             box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        }
+        .status-badge { padding: 4px 10px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; }
+        .action-btn { 
+            padding: 8px 12px; 
+            font-size: 0.9em; 
+            font-weight: 600; 
+            border-radius: 8px; /* Tăng border radius */
+            border: none; 
+            cursor: pointer;
+            transition: background-color 0.15s, transform 0.1s;
+            width: 100%; /* Đảm bảo nút chiếm đủ chiều rộng */
+        }
+        .action-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+        .action-btn:disabled { 
+            background-color: #e5e7eb !important; 
+            color: #9ca3af !important; 
+            cursor: not-allowed; 
+        }
+        .schedule-card {
+             transition: box-shadow 0.2s;
+             border-left-width: 5px; /* Giữ lại thanh màu */
+        }
+        .schedule-card:hover {
+             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
-<body>
+<body class="bg-bg-light text-text-dark">
 
-    <header class="navbar">
-        <nav style="display: flex; justify-content: flex-end; align-items: center; gap: 15px; max-width: 1200px; margin: auto; padding: 0 20px;">
-            <a href="../index.html">Trang Chủ</a> 
-            <a href="doctor_schedule.html" class="active">Lịch Khám</a>
-            <a href="doctor_profile_edit.html">Cập Nhật Hồ Sơ</a>
-            <button onclick="logout()">Đăng Xuất</button>
-        </nav>
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <a href="../index.html" class="flex items-center space-x-1.5 text-xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
+                    <div class="w-8 h-8 bg-primary-dark rounded-md text-white flex items-center justify-center text-lg font-bold">MB</div>
+                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
+                </a>
+            </div>
+            <nav class="hidden lg:flex space-x-8 text-base font-semibold">
+                <a href="doctor_schedule.html" class="text-primary-dark transition duration-150 border-b-2 border-primary-dark font-bold">Lịch Khám</a>
+                <a href="doctor_profile_edit.html" class="text-text-dark hover:text-primary-dark transition duration-150">Cập Nhật Hồ Sơ</a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                 <p id="doctor-name-display" class="text-sm font-bold text-primary-dark hidden sm:block">BS. Nguyễn Văn Khỏe</p>
+                 <button onclick="logout()" class="px-3 py-2 bg-gray-200 text-text-dark hover:bg-gray-300 rounded-lg text-sm font-bold">Đăng Xuất</button>
+            </div>
+        </div>
     </header>
 
-    <div class="container">
-        <h1>📅 Lịch Khám Của Bác Sĩ</h1>
-        <p>Quản lý các cuộc hẹn khám bệnh của bạn.</p>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <h1 class="text-3xl font-bold text-text-dark mb-4 mt-6">📅 Lịch Khám Của Bác Sĩ</h1>
+        <p class="text-text-muted mb-6">Quản lý các cuộc hẹn khám bệnh của bạn.</p>
 
-        <div class="filter-controls" style="margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 8px;">
-            <div style="display: flex; gap: 15px; align-items: center;">
-                
-                <div>
-                    <label for="date-select">Chọn Ngày:</label>
-                    <input type="date" id="date-select" value="2025-11-12" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        <div class="filter-controls mb-6 bg-white p-4 rounded-xl shadow-lg border-l-4 border-primary-dark">
+            <div class="flex flex-wrap items-center gap-4">
+                <div class="flex flex-col">
+                    <label for="date-select" class="text-sm font-medium text-text-dark mb-1">Chọn Ngày:</label>
+                    <input type="date" id="date-select" class="p-2 border border-gray-300 rounded-lg">
                 </div>
-
-                <div>
-                    <label for="status-filter">Lọc theo Trạng thái:</label>
-                    <select id="status-filter" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <div class="flex flex-col">
+                    <label for="status-filter" class="text-sm font-medium text-text-dark mb-1">Lọc theo Trạng thái:</label>
+                    <select id="status-filter" class="p-2 border border-gray-300 rounded-lg bg-white text-text-dark">
                         <option value="all">Tất cả</option>
                         <option value="pending">Chờ xác nhận</option>
                         <option value="confirmed">Đã xác nhận</option>
+                        <option value="completed">Đã hoàn thành</option>
                         <option value="cancelled">Đã hủy</option>
                     </select>
                 </div>
-
-                <button onclick="applyFilters()" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px;">Áp Dụng</button>
+                <button onclick="applyFilters()" class="action-btn bg-primary-dark text-white shadow-md hover:bg-blue-700 h-10 mt-auto">Áp Dụng Lọc</button>
             </div>
         </div>
 
-        <div id="appointment-list">
-            <div class="schedule-card" data-status="pending" data-date="2025-11-12">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h3>Bệnh nhân: **Nguyễn Văn A**</h3>
-                        <p><strong>Giờ:</strong> 09:00 - 09:30</p>
-                        <p><strong>Lý do:</strong> Đau đầu kéo dài và mất ngủ.</p>
-                    </div>
-                    <div>
-                        <span class="status-badge status-pending">Chờ xác nhận</span>
-                        <button class="action-btn" onclick="confirmAppointment(1)">Xác Nhận</button>
-                        <button class="action-btn" onclick="openCancelModal(1)">Hủy Lịch</button>
-                    </div>
-                </div>
+        <div id="appointment-list" class="space-y-4">
             </div>
-
-            <div class="schedule-card" data-status="confirmed" data-date="2025-11-12">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h3>Bệnh nhân: **Trần Thị B**</h3>
-                        <p><strong>Giờ:</strong> 10:00 - 10:30</p>
-                        <p><strong>Lý do:</strong> Kiểm tra định kỳ và tái khám tiểu đường.</p>
-                    </div>
-                    <div>
-                        <span class="status-badge status-confirmed">Đã xác nhận</span>
-                        <button class="action-btn" onclick="viewDetails(2)">Xem Chi Tiết</button>
-                    </div>
-                </div>
-            </div>
+        
+        <div id="no-appointments" class="hidden bg-white p-10 rounded-xl shadow-lg border-2 border-dashed border-gray-300 text-center mt-6">
+             Không tìm thấy lịch hẹn nào phù hợp với tiêu chí đã chọn.
         </div>
         
     </div>
 
-    <div id="cancel-modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
-        <div style="background: white; padding: 20px; border-radius: 8px; max-width: 400px;">
-            <h2>Xác nhận Hủy Lịch</h2>
-            <p>Bạn có chắc chắn muốn hủy lịch hẹn này không?</p>
-            <label for="cancel-reason">Lý do hủy:</label>
-            <textarea id="cancel-reason" style="width: 100%; margin-bottom: 15px;"></textarea>
-            <button onclick="executeCancel()" style="background-color: #dc3545; color: white; padding: 10px;">Xác Nhận Hủy</button>
-            <button onclick="closeCancelModal()" style="margin-left: 10px; padding: 10px;">Đóng</button>
+    <div id="cancel-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center hidden">
+        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-sm w-full">
+            <h2 class="text-xl font-bold text-red-600 mb-4">Xác nhận Hủy Lịch</h2>
+            <p class="text-text-dark mb-4">Bạn có chắc chắn muốn hủy lịch hẹn này không?</p>
+            <label for="cancel-reason" class="block text-sm font-medium text-text-dark mb-1">Lý do hủy:</label>
+            <textarea id="cancel-reason" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4" rows="3"></textarea>
+            <div class="flex justify-end space-x-3">
+                 <button onclick="closeCancelModal()" class="action-btn bg-gray-200 text-text-dark">Đóng</button>
+                 <button id="modal-confirm-cancel-btn" class="action-btn bg-red-600 text-white hover:bg-red-700">Xác Nhận Hủy</button>
+            </div>
         </div>
     </div>
 
 
     <script>
-        // Dữ liệu giả lập cho lịch hẹn
+        // --- CHAT LOGIC VÀ CÁC BIẾN CHUNG ---
+        const DAY_LIMIT = 15;
+        // Dùng ngày cố định '2025-11-19' để mô phỏng, thay bằng new Date() khi chạy thực tế
+        const today = new Date('2025-11-19'); 
+        
+        // Dữ liệu giả lập (completion_date được giả định là ngày hoàn thành khám)
         const appointments = [
-            { id: 1, patient: 'Nguyễn Văn A', time: '09:00', reason: 'Đau đầu kéo dài', status: 'pending', date: '2025-11-12' },
-            { id: 2, patient: 'Trần Thị B', time: '10:00', reason: 'Tái khám tiểu đường', status: 'confirmed', date: '2025-11-12' },
-            { id: 3, patient: 'Phạm Văn C', time: '14:30', reason: 'Khám tổng quát', status: 'confirmed', date: '2025-11-13' },
-            { id: 4, patient: 'Lê Thị D', time: '16:00', reason: 'Tư vấn dinh dưỡng', status: 'pending', date: '2025-11-13' },
-            { id: 5, patient: 'Vũ Đình E', time: '17:00', reason: 'Cảm lạnh', status: 'cancelled', date: '2025-11-12' },
+            // Lịch chờ xác nhận
+            { id: 1, patient: 'Nguyễn Văn A', time: '09:00', reason: 'Đau đầu kéo dài', status: 'pending', date: '2025-11-20', patient_id: 101 },
+            // Lịch ĐÃ XÁC NHẬN (Chat Active)
+            { id: 2, patient: 'Trần Thị B', time: '10:00', reason: 'Tái khám tiểu đường', status: 'confirmed', date: '2025-11-20', patient_id: 102 },
+            { id: 3, patient: 'Phạm Văn C', time: '14:30', reason: 'Khám tổng quát', status: 'confirmed', date: '2025-11-21', patient_id: 103 },
+            // Lịch ĐÃ HOÀN THÀNH (Còn hạn Chat: 15/11/2025, 19/11/2025 => Còn 10 ngày)
+            { id: 6, patient: 'Lê Hoài D', time: '11:00', reason: 'Hậu phẫu thuật', status: 'completed', date: '2025-11-19', completion_date: '2025-11-15', patient_id: 104 }, 
+            // Lịch ĐÃ HOÀN THÀNH (Hết hạn Chat: 01/10/2025)
+            { id: 7, patient: 'Nguyễn Đình E', time: '15:00', reason: 'Kiểm tra tổng quát', status: 'completed', date: '2025-10-01', completion_date: '2025-10-01', patient_id: 105 }, 
+            // Lịch ĐÃ HỦY
+            { id: 5, patient: 'Vũ Đình F', time: '17:00', reason: 'Cảm lạnh', status: 'cancelled', date: '2025-11-12', patient_id: 106 },
         ];
 
-        let currentAppointmentIdToCancel = null;
+        let currentAppointmentIdToCancel = null; 
 
+        // --- HÀM KIỂM TRA CHAT ACTIVE (Giới hạn 15 ngày) ---
+        function isChatActive(completionDateString) {
+            const completedDate = new Date(completionDateString);
+            const diffTime = today.getTime() - completedDate.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            return diffDays <= DAY_LIMIT && diffDays >= 0; 
+        }
+
+        // --- HÀM RENDER NÚT CHAT ---
+        function renderChatButton(actionContainer, app) {
+            const status = app.status;
+            
+            // Xóa nút chat cũ
+            actionContainer.querySelectorAll('.btn-chat-action').forEach(btn => btn.remove());
+
+            let buttonText = '';
+            let isDisabled = false;
+            let isChatLink = false;
+
+            // Chat Active nếu là pending, confirmed, HOẶC completed (còn hạn)
+            const isPreChat = status === 'pending' || status === 'confirmed';
+            const isPostChatActive = status === 'completed' && app.completion_date && isChatActive(app.completion_date);
+
+
+            if (isPreChat) {
+                buttonText = status === 'pending' ? 'Hỗ trợ trước khám' : 'Chat trước khám';
+                isChatLink = true;
+            } else if (isPostChatActive) {
+                const completedDate = new Date(app.completion_date);
+                const expiryDate = new Date(completedDate);
+                expiryDate.setDate(completedDate.getDate() + DAY_LIMIT);
+                const daysRemaining = Math.ceil((expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+                buttonText = `Chat Sau Khám (${daysRemaining} ngày)`;
+                isChatLink = true;
+            } else if (status === 'completed' && !isPostChatActive) {
+                isDisabled = true;
+                buttonText = `Hết hạn Chat (${DAY_LIMIT} ngày)`;
+            } else {
+                return; 
+            }
+
+            const chatButton = document.createElement(isDisabled ? 'button' : 'a');
+            chatButton.classList.add('action-btn', 'btn-chat-action');
+            chatButton.textContent = buttonText;
+            
+            if (isDisabled || status === 'cancelled') {
+                 chatButton.disabled = true;
+                 chatButton.classList.add('bg-gray-300', 'text-text-muted');
+            } else if (isChatLink) {
+                // Bác sĩ chat với Bệnh nhân
+                 chatButton.href = `../Trang_Chung_Va_Tiep_Can/chat_room.html?app_id=${app.id}&partner=${app.patient.replace(/ /g, '_')}`;
+                 chatButton.classList.add('bg-chat', 'text-white', 'hover:bg-blue-500');
+            }
+            
+            actionContainer.appendChild(chatButton);
+        }
+        
         // Hàm mô phỏng tải và hiển thị lịch hẹn
         function renderAppointments(data) {
             const listElement = document.getElementById('appointment-list');
-            listElement.innerHTML = ''; // Xóa nội dung cũ
+            listElement.innerHTML = ''; 
+            const noAppointmentsDiv = document.getElementById('no-appointments');
+
+            if (data.length === 0) {
+                 noAppointmentsDiv.style.display = 'block';
+                 return;
+            } else {
+                 noAppointmentsDiv.style.display = 'none';
+            }
+
 
             data.forEach(app => {
                 const statusClass = 'status-' + app.status;
-                const actions = (app.status === 'pending') ?
-                    `<button class="action-btn" onclick="confirmAppointment(${app.id})">Xác Nhận</button>
-                     <button class="action-btn" onclick="openCancelModal(${app.id})">Hủy Lịch</button>` :
-                    (app.status === 'confirmed') ? 
-                    `<button class="action-btn" onclick="viewDetails(${app.id})">Xem Chi Tiết</button>` :
-                    '';
+                const statusLabel = getStatusLabel(app.status);
+                
+                const card = document.createElement('div');
+                card.className = `schedule-card bg-white p-6 rounded-xl shadow-lg border-l-4 border-${statusClass}`; 
+                card.dataset.status = app.status;
+                if (app.completion_date) {
+                    card.dataset.completionDate = app.completion_date; 
+                }
 
-                const html = `
-                    <div class="schedule-card" data-status="${app.status}" data-date="${app.date}">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <h3>Bệnh nhân: **${app.patient}**</h3>
-                                <p><strong>Giờ:</strong> ${app.time}</p>
-                                <p><strong>Lý do:</strong> ${app.reason}</p>
-                            </div>
-                            <div>
-                                <span class="status-badge ${statusClass}">${getStatusLabel(app.status)}</span>
-                                ${actions}
-                            </div>
+
+                let actionButtonsHTML = '';
+                
+                // 1. Nút Hành động chính
+                if (app.status === 'pending') {
+                    actionButtonsHTML += `
+                        <button class="action-btn bg-status-confirmed text-white hover:bg-green-600" onclick="confirmAppointment(${app.id})">Xác Nhận</button>
+                        <button class="action-btn bg-status-cancelled text-white hover:bg-red-600" onclick="openCancelModal(${app.id})">Hủy Lịch</button>
+                    `;
+                } else if (app.status === 'confirmed') {
+                    actionButtonsHTML += `
+                        <button class="action-btn bg-primary-dark text-white hover:bg-blue-700" onclick="viewDetails(${app.id})">Xem Hồ sơ BN</button>
+                        <button class="action-btn bg-primary text-white hover:bg-teal-600" onclick="completeAppointment(${app.id})">Hoàn thành khám</button>
+                        <button class="action-btn bg-status-cancelled text-white hover:bg-red-600" onclick="openCancelModal(${app.id})">Hủy Lịch</button>
+                    `;
+                } else if (app.status === 'completed') {
+                    actionButtonsHTML += `
+                        <button class="action-btn bg-primary-dark text-white hover:bg-blue-700" onclick="viewDetails(${app.id})">Xem Hồ sơ khám</button>
+                    `;
+                } else if (app.status === 'cancelled') {
+                    actionButtonsHTML += `
+                        <button disabled class="action-btn bg-gray-300 text-text-muted">Đã Hủy</button>
+                    `;
+                }
+
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start space-x-4">
+                        <div class="flex-1 space-y-1">
+                            <h3 class="font-bold text-xl text-primary-dark">Bệnh nhân: ${app.patient}</h3>
+                            <p class="text-sm text-text-muted"><strong>Mã hẹn:</strong> ${app.id}</p>
+                            <p class="text-base text-text-dark mt-2"><strong>Ngày:</strong> ${app.date} | <strong>Giờ:</strong> ${app.time}</p>
+                            <p class="text-sm text-text-muted"><strong>Lý do:</strong> ${app.reason}</p>
+                        </div>
+                        <div class="action-btns-container flex flex-col items-end space-y-2 w-48">
+                            <span class="status-badge ${statusClass} text-white mb-1">${statusLabel}</span>
+                            ${actionButtonsHTML}
                         </div>
                     </div>
                 `;
-                listElement.innerHTML += html;
+                
+                listElement.appendChild(card);
+                
+                // Sau khi chèn thẻ, chèn nút Chat 
+                renderChatButton(card.querySelector('.action-btns-container'), app); 
             });
-
-            if (data.length === 0) {
-                 listElement.innerHTML = '<p style="padding: 20px; text-align: center; color: #6c757d;">Không tìm thấy lịch hẹn nào phù hợp.</p>';
-            }
         }
 
         // Hàm lấy nhãn trạng thái
@@ -160,6 +302,7 @@
             switch (status) {
                 case 'pending': return 'Chờ xác nhận';
                 case 'confirmed': return 'Đã xác nhận';
+                case 'completed': return 'Đã hoàn thành';
                 case 'cancelled': return 'Đã hủy';
                 default: return 'Không rõ';
             }
@@ -169,6 +312,7 @@
         function applyFilters() {
             const selectedDate = document.getElementById('date-select').value;
             const selectedStatus = document.getElementById('status-filter').value;
+            // Không cần todayDate vì đã dùng biến today cố định/mặc định
 
             const filteredList = appointments.filter(app => {
                 const dateMatch = (selectedDate === '' || app.date === selectedDate);
@@ -182,26 +326,41 @@
         // --- Các hàm Hành Động (Action Functions) ---
 
         function confirmAppointment(id) {
-            console.log(`API Call: Xác nhận lịch hẹn ID: ${id}`);
-            alert(`Đã gửi yêu cầu xác nhận lịch hẹn ID: ${id}. (Cập nhật trạng thái bằng API)`);
-            // Sau khi API thành công: Cập nhật lại dữ liệu và render lại trang
-            // Ví dụ: appointments.find(a => a.id === id).status = 'confirmed'; 
-            // applyFilters(); 
+            const app = appointments.find(a => a.id === id);
+            if (app) {
+                app.status = 'confirmed';
+                alert(`Đã xác nhận lịch hẹn của Bệnh nhân ${app.patient}. Chat trước khám đã được kích hoạt.`);
+                applyFilters(); 
+            }
+        }
+        
+        function completeAppointment(id) {
+            const app = appointments.find(a => a.id === id);
+            if (app) {
+                const todayStr = new Date().toISOString().split('T')[0];
+                app.status = 'completed';
+                app.completion_date = todayStr; // Cập nhật ngày hoàn thành
+                alert(`Đã ghi nhận hoàn thành khám cho Bệnh nhân ${app.patient}. Chat sau khám đã được kích hoạt trong 15 ngày.`);
+                applyFilters(); 
+            }
         }
 
+        document.getElementById('modal-confirm-cancel-btn').addEventListener('click', executeCancel);
+
+
         function openCancelModal(id) {
-            currentAppointmentIdToCancel = id;
+            currentAppointmentIdToCancel = id; 
             document.getElementById('cancel-modal').style.display = 'flex';
         }
 
         function closeCancelModal() {
             document.getElementById('cancel-modal').style.display = 'none';
-            document.getElementById('cancel-reason').value = ''; // Reset lý do
+            document.getElementById('cancel-reason').value = ''; 
             currentAppointmentIdToCancel = null;
         }
 
         function executeCancel() {
-            const id = currentAppointmentIdToCancel;
+            const id = currentAppointmentIdToCancel; 
             const reason = document.getElementById('cancel-reason').value;
 
             if (!reason) {
@@ -209,32 +368,37 @@
                 return;
             }
 
-            console.log(`API Call: Hủy lịch hẹn ID: ${id} với lý do: ${reason}`);
-            alert(`Đã gửi yêu cầu hủy lịch hẹn ID: ${id} với lý do: ${reason}. (Cập nhật trạng thái bằng API)`);
+            const app = appointments.find(a => a.id === id);
+            if (app) {
+                app.status = 'cancelled';
+                alert(`Đã hủy lịch hẹn của Bệnh nhân ${app.patient} với lý do: ${reason}.`);
+            }
             
-            // Sau khi API thành công: Cập nhật lại dữ liệu và render lại trang
-            // Ví dụ: appointments.find(a => a.id === id).status = 'cancelled'; 
             closeCancelModal();
-            // applyFilters(); 
+            applyFilters(); 
         }
 
         function viewDetails(id) {
-            console.log(`Mở Modal/Trang chi tiết bệnh nhân cho ID: ${id}`);
-            alert(`Mô phỏng: Mở Modal xem chi tiết bệnh nhân cho lịch hẹn ID: ${id}`);
+            alert(`Mô phỏng: Mở Modal/Trang xem chi tiết hồ sơ bệnh nhân cho lịch hẹn ID: ${id}`);
         }
 
         function logout() {
-            console.log('Đăng xuất Bác sĩ');
-            // SỬA: Đường dẫn Đăng Xuất (Trang_Chung_Va_Tiep_Can/login_register.html)
+            sessionStorage.clear();
             window.location.href = '../Trang_Chung_Va_Tiep_Can/login_register.html';
         }
         
         // Tải lịch hẹn ban đầu khi trang được tải
         document.addEventListener('DOMContentLoaded', () => {
              // Đặt ngày mặc định là ngày hôm nay cho input date
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('date-select').value = today;
-            applyFilters();
+             const todayStr = new Date().toISOString().split('T')[0];
+             document.getElementById('date-select').value = todayStr;
+             applyFilters();
+             
+             // Set Doctor Name from Session
+             const sessionName = sessionStorage.getItem('userName');
+             if(sessionName) {
+                 document.getElementById('doctor-name-display').textContent = sessionName;
+             }
         });
 
     </script>

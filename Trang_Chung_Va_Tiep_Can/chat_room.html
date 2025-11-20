@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Phòng Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45C3A5', 
+                        'primary-dark': '#007BFF', 
+                        'primary-light': '#E6FFF8', 
+                        'text-dark': '#343a40', 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        .chat-container {
+            max-width: 800px;
+            height: 85vh; /* Chiều cao cố định cho màn hình chat */
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
+        }
+        #chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #fcfcfc;
+        }
+        .message-bubble {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .sender-bubble { /* Bubble cho người đang đăng nhập (Sender) */
+            background-color: #007BFF;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        .receiver-bubble { /* Bubble cho đối tác (Receiver) */
+            background-color: #E6FFF8;
+            color: #343a40;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        .chat-header {
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen lg:py-10">
+
+    <div class="chat-container bg-white rounded-xl shadow-2xl w-full">
+        
+        <div class="chat-header p-4 flex justify-between items-center sticky top-0 z-10">
+            <div>
+                <a href="javascript:history.back()" class="text-primary-dark hover:text-primary mr-3">
+                    <svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                </a>
+                <span class="text-xl font-bold text-text-dark" id="chat-partner-name">Đang tải...</span>
+                <p class="text-xs text-text-muted mt-1" id="chat-status">Tư vấn miễn phí: Đã kích hoạt</p>
+            </div>
+            <button id="view-profile-btn" class="text-sm text-primary-dark hover:underline">Xem Hồ sơ</button>
+        </div>
+        
+        <div id="chat-messages" class="flex flex-col">
+            </div>
+
+        <div class="p-4 border-t border-gray-200 sticky bottom-0 bg-white">
+            <div class="flex space-x-3">
+                <input type="text" id="message-input" placeholder="Nhập tin nhắn..." 
+                        class="flex-grow px-4 py-3 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary">
+                <button id="send-button" class="bg-primary-dark text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-700 transition duration-150">
+                    Gửi
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- CÁC BIẾN GLOBAL VÀ MOCK LOGIC ---
+        // SENDER_KEY sẽ là 'patient' nếu người dùng là bệnh nhân, và 'doctor' nếu là bác sĩ
+        const USER_ROLE = sessionStorage.getItem('userRole') || 'patient'; 
+        const USER_NAME = sessionStorage.getItem('userName') || (USER_ROLE === 'patient' ? 'Bạn (BN)' : 'Bạn (BS)');
+        const APPOINTMENT_ID = new URLSearchParams(window.location.search).get('app_id');
+        
+        // Đọc tên đối tác từ tham số 'partner' trong URL
+        const PARTNER_NAME_URL = new URLSearchParams(window.location.search).get('partner');
+        const PARTNER_NAME = PARTNER_NAME_URL ? 
+            decodeURIComponent(PARTNER_NAME_URL).replace(/_/g, ' ') : 
+            (USER_ROLE === 'patient' ? 'Bác sĩ' : 'Bệnh nhân'); 
+
+        // Khai báo tên người gửi (dùng cho Mock Storage)
+        const SENDER_KEY = USER_ROLE === 'patient' ? 'patient' : 'doctor';
+
+        // --- MOCK LOGIC TẠO/LƯU/TẢI TIN NHẮN (Dùng localStorage) ---
+        
+        function getChatHistory(appId) {
+            // Lấy lịch sử chat từ localStorage bằng Mã hẹn (appId) làm KEY
+            const history = localStorage.getItem(`chat_app_${appId}`);
+            if (history) {
+                return JSON.parse(history);
+            } else {
+                // Tạo lịch sử chat ban đầu
+                const initialSenderRole = USER_ROLE === 'patient' ? 'Bác sĩ' : 'Bệnh nhân';
+                return [
+                    { sender: USER_ROLE === 'patient' ? 'doctor' : 'patient', role: initialSenderRole, content: `Chào bạn, tôi là ${PARTNER_NAME}. Tôi sẵn sàng hỗ trợ bạn về lịch hẹn ${appId} này.`, time: '09:00' }
+                ];
+            }
+        }
+        
+        function saveMessage(appId, content) {
+            // Lưu tin nhắn mới vào localStorage
+            const history = getChatHistory(appId);
+            const time = new Date().toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
+            
+            const newMessage = {
+                sender: SENDER_KEY, // 'patient' hoặc 'doctor'
+                role: USER_NAME.includes('(BN)') || USER_NAME.includes('(BS)') ? USER_NAME : USER_NAME.split(' ').pop(),
+                content: content, 
+                time: time
+            };
+            
+            history.push(newMessage);
+            localStorage.setItem(`chat_app_${appId}`, JSON.stringify(history));
+            return newMessage;
+        }
+
+        // --- HÀM RENDER ---
+
+        function renderMessage(msg) {
+            // Kiểm tra xem tin nhắn là của người dùng hiện tại hay đối tác
+            // Logic: Nếu msg.sender == SENDER_KEY ('patient'/'doctor') => là tin nhắn của mình (sender-bubble)
+            const isSender = (msg.sender === SENDER_KEY);
+            const senderName = msg.role; 
+
+            return `
+                <div class="flex ${isSender ? 'justify-end' : 'justify-start'}">
+                    <div class="message-bubble ${isSender ? 'sender-bubble' : 'receiver-bubble'}">
+                        <p class="text-xs ${isSender ? 'opacity-80' : 'text-text-muted'} mb-0.5">${senderName} (${msg.time})</p>
+                        ${msg.content}
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadChatHistory() {
+            if (!APPOINTMENT_ID) {
+                document.getElementById('chat-messages').innerHTML = '<p class="text-center text-red-600">Lỗi: Không tìm thấy Mã lịch hẹn (app_id).</p>';
+                return;
+            }
+            
+            const chatHistory = getChatHistory(APPOINTMENT_ID);
+            const chatContainer = document.getElementById('chat-messages');
+            chatContainer.innerHTML = '';
+            
+            chatHistory.forEach(msg => {
+                // Logic render: Sử dụng msg.sender (patient/doctor) so sánh với SENDER_KEY (patient/doctor)
+                chatContainer.innerHTML += renderMessage(msg);
+            });
+
+            // Cuộn xuống tin nhắn cuối cùng
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // Cập nhật tên đối tác chat và trạng thái
+            document.getElementById('chat-partner-name').textContent = PARTNER_NAME;
+            document.getElementById('page-title').textContent = `Chat với ${PARTNER_NAME}`;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const content = input.value.trim();
+
+            if (content === '') return;
+
+            // 1. Lưu tin nhắn và nhận lại object
+            const newMessage = saveMessage(APPOINTMENT_ID, content);
+            
+            // 2. Render tin nhắn mới nhất
+            const chatContainer = document.getElementById('chat-messages');
+            chatContainer.innerHTML += renderMessage(newMessage); // renderMessage sẽ tự động nhận biết nó là sender
+            
+            // 3. Xóa input và cuộn xuống
+            input.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // --- GÁN SỰ KIỆN ---
+        document.addEventListener('DOMContentLoaded', loadChatHistory);
+        document.getElementById('send-button').addEventListener('click', sendMessage);
+        document.getElementById('message-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+        document.getElementById('view-profile-btn').addEventListener('click', () => {
+            // Chuyển hướng đến hồ sơ của đối tác chat (BS hoặc BN)
+            const targetUrl = USER_ROLE === 'patient' ? '../Trang_Benh_Nhan/doctor_detail.html?id=mock_doctor' : '../Trang_Benh_Nhan/profile.html?user_id=mock_patient';
+            window.location.href = targetUrl;
+        });
+
+    </script>
+</body>
+</html>

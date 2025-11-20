@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xác nhận Đặt Lịch Khám - MediBook</title>
+    <title id="page-title">Xác nhận Đặt Lịch & Thanh Toán</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // Cấu hình Tailwind và Font Inter
@@ -11,41 +11,36 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary': '#45C3A5', 
-                        'primary-dark': '#007BFF', 
-                        'primary-light': '#E6FFF8', 
-                        'secondary': '#f7d800', 
+                        'primary': '#45C3A5', // Xanh lục chủ đạo (Teal/Mint)
+                        'primary-dark': '#007BFF', // Xanh dương (Branding, Buttons)
+                        'primary-light': '#E6FFF8', // Màu nền nhẹ của primary
+                        'secondary': '#f7d800', // Màu vàng nổi bật
                         'text-dark': '#343a40', 
                         'text-muted': '#6c757d', 
                         'bg-light': '#f8f9fa',
-                        'sidebar-bg': '#EBF5FF', 
+                        'status-pending': '#ffc107',
+                        'status-success': '#28a745',
+                        'status-cancelled': '#dc3545',
+                        'status-completed': '#007BFF',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                     },
                 }
             }
-        }
+        };
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .logo-mb {
-             display: inline-flex;
-             align-items: center;
-             justify-content: center;
-             width: 38px;
-             height: 38px;
-             background-color: #007BFF; 
-             border-radius: 6px;
-             font-size: 18px;
-             font-weight: 800;
-             color: white;
-             box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        body { font-family: 'Inter', sans-serif; background-color: #f4f7f9; }
+        .step-active { border-left-color: #007BFF; }
+        .step-inactive { border-left-color: #e0e0e0; }
+        .form-input {
+             @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150;
         }
-        .required-field::after {
-            content: " *";
-            color: red;
+        .payment-option-active {
+            border-color: #007BFF;
+            box-shadow: 0 0 0 3px #007BFF33;
         }
     </style>
 </head>
@@ -53,216 +48,254 @@
 
     <header class="bg-white shadow-md sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            
-            <div class="flex items-center space-x-2">
-                <a href="../index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
-                    <div class="w-8 h-8 bg-primary-dark rounded-md text-white flex items-center justify-center text-lg font-bold">MB</div>
-                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
-                </a>
-            </div>
-
-           <nav class="hidden lg:flex space-x-8 text-base font-semibold">
-                <a href="hospital_list.html" class="text-text-dark hover:text-primary transition duration-150">Cơ sở y tế</a>
-                <a href="specialties.html" class="text-text-dark hover:text-primary transition duration-150">Chuyên khoa</a>
-                <a href="../Trang_Noi_Dung/health_packages.html" class="text-text-dark hover:text-primary transition duration-150">Gói khám</a> 
-                <a href="../Trang_Noi_Dung/blog.html" class="text-text-dark hover:text-primary transition duration-150">Tin tức</a>
-                <a href="my_appointments.html" class="text-text-dark hover:text-primary transition duration-150">Lịch Khám Của Tôi</a>
-            </nav>
-
-            <div class="flex items-center space-x-4">
-                <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" class="px-5 py-2 text-sm font-bold bg-primary-dark text-white hover:bg-blue-700 transition duration-150 rounded-lg shadow-md hover:shadow-lg">
-                    Đăng nhập
-                </a>
-            </div>
+            <a href="../index.html" class="text-xl font-extrabold text-primary-dark">Medi<span class="text-primary">Book</span></a>
+            <a href="javascript:history.back()" class="text-sm font-semibold text-text-muted hover:text-primary">
+                 ← Quay lại Chi tiết Bác sĩ
+            </a>
         </div>
     </header>
 
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <h1 class="text-3xl font-bold text-text-dark mb-6 text-center">Xác Nhận Đặt Lịch Khám</h1>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <h1 class="text-3xl font-bold text-text-dark mb-8">Xác nhận & Thanh Toán Đặt Lịch</h1>
 
-        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl border-t-4 border-primary">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <div class="lg:grid lg:grid-cols-3 lg:gap-8">
+            <!-- CỘT 1: FORM THÔNG TIN BỆNH NHÂN -->
+            <div class="lg:col-span-2 space-y-6">
                 
-                <div class="lg:col-span-1 border-r pr-6 mb-6 lg:mb-0">
-                    <h3 class="text-xl font-bold text-primary-dark mb-4 border-b pb-2">Thông tin Lịch hẹn</h3>
-                    
-                    <div class="space-y-3">
-                        <div class="text-sm">
-                            <p class="text-text-muted">Bác sĩ</p>
-                            <p class="font-bold text-lg text-text-dark" id="summary-doctor-name">GS.TS Trần Văn Hùng</p>
-                            <p class="text-primary">Cơ Xương Khớp</p>
-                        </div>
-                        
-                        <div class="text-sm">
-                            <p class="text-text-muted">Ngày & Giờ</p>
-                            <p class="font-bold text-text-dark text-lg" id="summary-datetime">Thứ Ba, 20/11/2025 | 08:00 - 09:00</p>
-                        </div>
-                        
-                        <div class="text-sm">
-                            <p class="text-text-muted">Địa điểm</p>
-                            <p class="font-bold text-text-dark" id="summary-location">Bệnh viện Chấn thương Chỉnh hình, TP.HCM</p>
-                        </div>
-
-                        <div class="text-sm pt-4 border-t">
-                            <p class="text-text-muted">Giá khám (Đã bao gồm VAT)</p>
-                            <p class="font-bold text-red-500 text-2xl" id="summary-price">500.000 VNĐ</p>
-                        </div>
+                <!-- PROGRESS BAR -->
+                <div class="bg-white p-4 rounded-xl shadow-md border-t-4 border-primary-dark mb-6">
+                    <h2 class="text-xl font-bold text-text-dark mb-4">Bước 2: Thông tin Bệnh nhân</h2>
+                    <div class="flex space-x-6 text-sm font-medium">
+                        <div class="step-active border-l-4 pl-3">1. Chọn Giờ Khám (Hoàn tất)</div>
+                        <div class="step-active border-l-4 pl-3">2. Điền Thông tin (Hiện tại)</div>
+                        <div class="step-inactive border-l-4 pl-3 text-text-muted">3. Thanh toán</div>
                     </div>
-                    
-                    <a href="doctor_detail.html?id=doctor_hung" class="text-primary-dark text-xs hover:underline mt-4 inline-block font-medium">
-                        (Thay đổi Bác sĩ/Lịch hẹn)
-                    </a>
                 </div>
 
-                <form id="booking-form" class="lg:col-span-2 space-y-5">
-                    <h3 class="text-xl font-bold text-text-dark mb-4 border-b pb-2">Thông tin Bệnh nhân</h3>
+                <form id="booking-form" class="bg-white p-6 rounded-xl shadow-lg space-y-5">
                     
                     <div>
-                        <label for="full-name" class="block text-sm font-medium text-text-dark mb-1 required-field">Họ và Tên</label>
-                        <input type="text" id="full-name" name="fullName" required placeholder="Ví dụ: Nguyễn Văn A"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                        <label for="patient-name" class="block text-sm font-medium text-text-dark mb-1">Họ và Tên (*)</label>
+                        <input type="text" id="patient-name" name="name" required class="form-input" value="Lê Văn B">
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label for="phone" class="block text-sm font-medium text-text-dark mb-1 required-field">Số điện thoại</label>
-                            <input type="tel" id="phone" name="phone" required placeholder="Số điện thoại liên hệ"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                            <label for="patient-phone" class="block text-sm font-medium text-text-dark mb-1">Số điện thoại (*)</label>
+                            <input type="tel" id="patient-phone" name="phone" required class="form-input" value="090555666">
                         </div>
                         <div>
-                            <label for="email" class="block text-sm font-medium text-text-dark mb-1">Email</label>
-                            <input type="email" id="email" name="email" placeholder="Email (tùy chọn)"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                            <label for="patient-email" class="block text-sm font-medium text-text-dark mb-1">Email</label>
+                            <input type="email" id="patient-email" name="email" class="form-input" value="benhnhan.b@mail.com">
                         </div>
                     </div>
                     
                     <div>
-                        <label for="patient-type" class="block text-sm font-medium text-text-dark mb-1 required-field">Đối tượng khám</label>
-                        <select id="patient-type" name="patientType" required
-                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 bg-white">
-                            <option value="self">Khám cho bản thân</option>
-                            <option value="child">Khám cho con</option>
-                            <option value="relative">Khám cho người thân</option>
-                        </select>
+                        <label for="appointment-reason" class="block text-sm font-medium text-text-dark mb-1">Lý do khám bệnh (*)</label>
+                        <textarea id="appointment-reason" name="reason" rows="4" required class="form-input" placeholder="Mô tả triệu chứng hoặc vấn đề sức khỏe của bạn để bác sĩ chuẩn bị tốt hơn..."></textarea>
                     </div>
 
                     <div>
-                        <label for="reason" class="block text-sm font-medium text-text-dark mb-1 required-field">Lý do khám bệnh</label>
-                        <textarea id="reason" name="reason" rows="3" required placeholder="Mô tả triệu chứng hoặc vấn đề sức khỏe ngắn gọn..."
-                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150"></textarea>
+                        <label for="insurance-option" class="flex items-center space-x-2 text-sm font-medium text-text-dark">
+                            <input type="checkbox" id="insurance-option" name="insurance" class="rounded text-primary focus:ring-primary">
+                            <span>Đăng ký mua Bảo hiểm Y tế tự nguyện (Tùy chọn)</span>
+                        </label>
                     </div>
+                    
+                    <div class="text-xs text-red-500 pt-2">(*) Vui lòng điền đầy đủ các trường bắt buộc.</div>
 
-                    <div class="mt-6 p-4 bg-primary-light border-l-4 border-primary rounded-lg text-sm text-text-dark">
-                        <p class="font-bold mb-1">Lưu ý quan trọng:</p>
-                        <p>Vui lòng đến sớm **15 phút** so với giờ hẹn để hoàn tất thủ tục. MediBook sẽ gửi xác nhận chi tiết qua SMS/Email.</p>
-                    </div>
-
-                    <button type="submit" class="w-full py-3 bg-primary-dark text-white font-bold rounded-lg shadow-xl hover:bg-blue-700 transition duration-150 text-lg mt-6">
-                        HOÀN TẤT ĐẶT LỊCH
-                    </button>
                 </form>
-
+                
+                <button id="next-to-payment-btn" class="w-full py-3 bg-primary text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition duration-150">
+                    TIẾP TỤC ĐẾN THANH TOÁN
+                </button>
             </div>
-        </div>
-    </div>
-    
-    <footer class="bg-gray-800 text-white mt-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
-            <div>
-                <h5 class="font-extrabold text-2xl mb-3 text-primary-dark">Medi<span class="text-primary">Book</span></h5>
-                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
-                <div class="mt-4 flex space-x-3">
-                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
-                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+            
+            <!-- CỘT 2: TÓM TẮT ĐƠN HÀNG/THANH TOÁN -->
+            <div class="lg:col-span-1 space-y-6 sticky top-20 h-full">
+                
+                <!-- TÓM TẮT THÔNG TIN ĐẶT LỊCH -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-secondary">
+                    <h2 class="text-xl font-bold text-text-dark mb-4">Tóm tắt Lịch Khám</h2>
+                    
+                    <div class="space-y-3 text-sm">
+                        <p class="flex justify-between font-semibold">
+                            <span>Bác Sĩ/Chuyên khoa:</span>
+                            <span id="summary-doctor" class="text-primary-dark"></span>
+                        </p>
+                        <p class="flex justify-between font-semibold">
+                            <span>Thời gian:</span>
+                            <span id="summary-time" class="text-primary-dark"></span>
+                        </p>
+                        <p class="flex justify-between border-t pt-3">
+                            <span class="font-bold">Phí Khám (Cơ bản):</span>
+                            <span id="summary-fee" class="font-bold"></span>
+                        </p>
+                        <p class="flex justify-between text-red-500">
+                            <span class="font-bold">Phí Bảo hiểm (MOCK):</span>
+                            <span id="summary-insurance-fee" class="font-bold">0 VNĐ</span>
+                        </p>
+                    </div>
+                    
+                    <div class="border-t border-gray-300 mt-4 pt-4 flex justify-between items-center text-lg">
+                        <span class="font-bold">TỔNG CỘNG:</span>
+                        <span id="summary-total" class="text-red-600 font-extrabold"></span>
+                    </div>
                 </div>
-                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
-            </div>
-            <div>
-                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
-                <ul class="space-y-2">
-                    <li><a href="#" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
-                    <li><a href="#" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
-                    <li><a href="#" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
-                </ul>
-            </div>
-            <div>
-                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
-                <ul class="space-y-2">
-                    <li><a href="../Trang_Bac_Si/doctor_profile_edit.html" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a></li>
-                    <li><a href="#" class="hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
-                    <li><a href="#" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
-                </ul>
-            </div>
-            <div>
-                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
-                <p class="mb-2">Email: contact@medibook.vn</p>
-                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+
+                <!-- THANH TOÁN (Ẩn cho đến khi nhấn Tiếp tục) -->
+                <div id="payment-section" class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-primary-dark hidden space-y-4">
+                     <h2 class="text-xl font-bold text-text-dark mb-4">Bước 3: Chọn Phương thức</h2>
+                     
+                     <div class="space-y-3">
+                         <label class="payment-option border border-gray-300 p-4 rounded-lg flex items-center space-x-3 cursor-pointer payment-option-active" data-method="momo">
+                             <input type="radio" name="payment-method" value="momo" class="text-primary focus:ring-primary" checked>
+                             <span class="font-medium">Chuyển khoản MoMo / Ví điện tử</span>
+                         </label>
+                         <label class="payment-option border border-gray-300 p-4 rounded-lg flex items-center space-x-3 cursor-pointer" data-method="vnpay">
+                             <input type="radio" name="payment-method" value="vnpay" class="text-primary focus:ring-primary">
+                             <span class="font-medium">Thẻ ATM/Visa/Master (VNPay)</span>
+                         </label>
+                         <label class="payment-option border border-gray-300 p-4 rounded-lg flex items-center space-x-3 cursor-pointer" data-method="cash">
+                             <input type="radio" name="payment-method" value="cash" class="text-primary focus:ring-primary">
+                             <span class="font-medium">Thanh toán tại quầy (Áp dụng cho lịch khám sau 24h)</span>
+                         </label>
+                     </div>
+                     
+                     <button id="confirm-booking-btn" class="w-full py-3 bg-primary-dark text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition duration-150">
+                        XÁC NHẬN ĐẶT LỊCH
+                     </button>
+                </div>
+                
             </div>
         </div>
-    </footer>
+        
+    </div>
 
     <script>
-        // Data mẫu (sẽ được lấy từ URL trong thực tế)
-        const dummyData = {
-            'doctor_hung': {
-                name: 'GS.TS Trần Văn Hùng',
-                specialty: 'Cơ Xương Khớp',
-                location: 'Bệnh viện Chấn thương Chỉnh hình, TP.HCM',
-                price: '500.000 VNĐ'
-            }
-        };
+        const insurancePrice = 150000;
+        
+        // SỬA LỖI: Khai báo lại các biến toàn cục để lưu dữ liệu từ URL
+        let doctorFee = 0; // Sẽ được cập nhật từ URL
+        let isInsured = false;
+        let selectedDoctorName = '';
+        let selectedTimeSlot = '';
 
-        // Hàm lấy dữ liệu từ URL và hiển thị tóm tắt
-        function loadBookingSummary() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const doctorId = urlParams.get('doctor') || 'doctor_hung';
-            const date = urlParams.get('date');
-            const time = urlParams.get('time');
-
-            const doctorInfo = dummyData[doctorId] || dummyData['doctor_hung'];
-
-            // Định dạng ngày tháng
-            let formattedDate = 'Không xác định';
-            if (date) {
-                try {
-                    // Chú ý: Cần đảm bảo định dạng ngày (YYYY-MM-DD)
-                    const d = new Date(date + 'T00:00:00'); 
-                    formattedDate = d.toLocaleDateString('vi-VN', { 
-                        weekday: 'long', 
-                        day: '2-digit', 
-                        month: '2-digit', 
-                        year: 'numeric' 
-                    });
-                    // Xử lý chuyển đổi thứ sang tiếng Việt (nếu cần)
-                    formattedDate = formattedDate.replace('Thứ Hai', 'Thứ Hai,').replace('Thứ Ba', 'Thứ Ba,').replace('Thứ Tư', 'Thứ Tư,').replace('Thứ Năm', 'Thứ Năm,').replace('Thứ Sáu', 'Thứ Sáu,').replace('Thứ Bảy', 'Thứ Bảy,').replace('Chủ Nhật', 'Chủ Nhật,');
-                } catch (e) {
-                    console.error("Lỗi định dạng ngày:", e);
-                }
-            }
-
-            // Cập nhật DOM
-            document.getElementById('summary-doctor-name').textContent = doctorInfo.name;
-            document.querySelector('#summary-doctor-name').nextElementSibling.textContent = doctorInfo.specialty;
-            document.getElementById('summary-datetime').textContent = `${formattedDate} | ${time || 'Giờ không xác định'}`;
-            document.getElementById('summary-location').textContent = doctorInfo.location;
-            document.getElementById('summary-price').textContent = doctorInfo.price;
+        // Hàm định dạng tiền tệ Việt Nam
+        function formatVND(amount) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
         }
 
-        // Hàm xử lý khi submit form
-        document.getElementById('booking-form').addEventListener('submit', function(e) {
+        // Hàm cập nhật tổng tiền
+        function updateSummary() {
+            const insuranceCost = isInsured ? insurancePrice : 0;
+            const total = doctorFee + insuranceCost;
+            
+            document.getElementById('summary-insurance-fee').textContent = formatVND(insuranceCost);
+            document.getElementById('summary-total').textContent = formatVND(total);
+            document.getElementById('summary-fee').textContent = formatVND(doctorFee);
+        }
+        
+        // Hàm xử lý chuyển bước (Form -> Payment)
+        function nextToPayment(e) {
             e.preventDefault();
             
-            const fullName = document.getElementById('full-name').value;
-            showMessage(`Yêu cầu đặt lịch cho ${fullName} đã được gửi thành công!`, 'success');
+            const form = document.getElementById('booking-form');
+            if (!form.checkValidity()) {
+                 // Kích hoạt hiển thị lỗi của trình duyệt
+                form.reportValidity(); 
+                return;
+            }
+            
+            // 1. Chuyển sang Bước 3
+            document.getElementById('payment-section').classList.remove('hidden');
+            document.querySelector('.step-inactive').classList.remove('step-inactive', 'text-text-muted');
+            document.querySelector('.step-inactive').classList.add('step-active');
+            
+            // 2. Ẩn nút "Tiếp tục"
+            document.getElementById('next-to-payment-btn').style.display = 'none';
+            
+            // 3. Cuộn lên đầu phần thanh toán
+            document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth' });
+        }
 
-            // SỬA: Chuyển hướng đến trang lịch sử khám của tôi (my_appointments.html, cùng thư mục)
-            setTimeout(() => {
-                window.location.href = 'my_appointments.html?status=success';
-            }, 1500);
+        // Hàm xử lý ĐẶT LỊCH (Cuối cùng)
+        function confirmBooking() {
+             const selectedMethod = document.querySelector('input[name="payment-method"]:checked').value;
+
+             // Trong thực tế: Gọi API Đặt lịch/Thanh toán
+             console.log(`API Call: Xác nhận đặt lịch cho ${selectedDoctorName}. Giờ: ${selectedTimeSlot}. Phương thức: ${selectedMethod}`);
+             
+             // MOCK: Chuyển hướng đến trang xác nhận Lịch Khám Của Tôi
+             showMessage("Đang xử lý thanh toán...", 'status-completed');
+             
+             setTimeout(() => {
+                 // Chuyển hướng về Lịch Khám của tôi (có thông báo success)
+                 window.location.href = 'my_appointments.html?status=success&app_id=MB20251111002';
+             }, 2000);
+        }
+
+        // --- KHỞI TẠO VÀ GÁN SỰ KIỆN ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+             // Lấy tham số từ URL
+             const params = new URLSearchParams(window.location.search);
+             
+             const doctorUrl = params.get('doctor_id');
+             const timeUrl = params.get('slot_time');
+             const feeUrl = params.get('fee');
+             
+             if (doctorUrl && timeUrl && feeUrl) {
+                 // 1. Cập nhật các biến toàn cục
+                 selectedDoctorName = decodeURIComponent(doctorUrl);
+                 selectedTimeSlot = decodeURIComponent(timeUrl);
+                 doctorFee = parseInt(feeUrl);
+
+                 // 2. Cập nhật giao diện Tóm tắt
+                 document.getElementById('summary-doctor').textContent = selectedDoctorName;
+                 document.getElementById('summary-time').textContent = selectedTimeSlot;
+                 
+             } else {
+                 // Trường hợp lỗi hoặc truy cập trực tiếp
+                 document.getElementById('summary-doctor').textContent = 'Lỗi: Không tìm thấy thông tin Bác sĩ';
+                 document.getElementById('summary-time').textContent = 'Vui lòng quay lại trang chọn lịch';
+                 doctorFee = 0;
+                 showMessage("Lỗi: Không tìm thấy thông tin đặt lịch. Vui lòng quay lại trang chi tiết Bác sĩ.", 'error');
+             }
+             
+             // Gán sự kiện cho Checkbox bảo hiểm
+             document.getElementById('insurance-option').addEventListener('change', function() {
+                 isInsured = this.checked;
+                 updateSummary();
+             });
+             
+             // Gán sự kiện chuyển bước
+             document.getElementById('next-to-payment-btn').addEventListener('click', nextToPayment);
+             
+             // Gán sự kiện xác nhận đặt lịch
+             document.getElementById('confirm-booking-btn').addEventListener('click', confirmBooking);
+
+             // Gán sự kiện cho các lựa chọn thanh toán (Payment Options)
+             document.querySelectorAll('.payment-option').forEach(option => {
+                 option.addEventListener('click', function() {
+                     // Xóa style active khỏi tất cả
+                     document.querySelectorAll('.payment-option').forEach(opt => {
+                         opt.classList.remove('payment-option-active');
+                         opt.querySelector('input[type="radio"]').checked = false;
+                     });
+                     // Thêm style active cho lựa chọn hiện tại
+                     this.classList.add('payment-option-active');
+                     this.querySelector('input[type="radio"]').checked = true;
+                 });
+             });
+
+             // Chạy cập nhật lần đầu (sau khi cập nhật fee)
+             updateSummary();
         });
 
-        // Hàm hiển thị thông báo thay thế cho alert/confirm (Tái sử dụng)
+
+        // Hàm hiển thị thông báo
         function showMessage(message, type) {
             const container = document.body;
             let messageDiv = document.querySelector('.floating-message');
@@ -273,8 +306,8 @@
             }
             
             messageDiv.textContent = message;
-            messageDiv.style.backgroundColor = type === 'success' ? '#45C3A5' : (type === 'warning' ? '#f7d800' : '#007BFF');
-            messageDiv.style.color = type === 'warning' ? '#343a40' : 'white';
+            messageDiv.style.backgroundColor = type === 'success' ? '#45C3A5' : (type === 'status-completed' ? '#007BFF' : (type === 'error' ? '#dc3545' : '#dc3545'));
+            messageDiv.style.color = 'white';
             messageDiv.style.opacity = '1';
 
             setTimeout(() => {
@@ -283,8 +316,6 @@
             }, 3000);
         }
 
-        document.addEventListener('DOMContentLoaded', loadBookingSummary);
     </script>
-
 </body>
 </html>

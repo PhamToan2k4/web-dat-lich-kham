@@ -6,7 +6,6 @@
     <title>MediBook - Danh Sách Chuyên Khoa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Cấu hình Tailwind CSS (Giữ nguyên)
         tailwind.config = {
             theme: {
                 extend: {
@@ -31,37 +30,64 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         .logo-mb {
-             display: inline-flex;
-             align-items: center;
-             justify-content: center;
-             width: 38px;
-             height: 38px;
-             background-color: #007BFF;
-             border-radius: 6px;
-             font-size: 18px;
-             font-weight: 800;
-             color: white;
-             box-shadow: 0 4px 8px rgba(76, 150, 230, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            background-color: #007BFF;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 4px 8px rgba(76, 150, 230, 0.3);
         }
-        /* Style cho khối chuyên khoa (lấy cảm hứng từ ảnh bạn gửi) */
+
         .specialty-card {
-            background-color: #F8F8F8; /* Nền xám nhạt cho từng ô */
-            padding: 1rem;
-            border-radius: 8px;
+            background-color: #F8F8F8;
+            padding: 0;
+            border-radius: 12px;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            min-height: 220px;
         }
+
+        .specialty-card p {
+            padding: 0.75rem 0.5rem;
+            width: 100%;
+        }
+
+        @media (max-width: 640px) {
+            .specialty-card {
+                min-height: 180px;
+            }
+            .specialty-card p {
+                padding: 0.5rem 0.35rem;
+            }
+        }
+
         .specialty-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                        0 4px 6px -4px rgba(0, 0, 0, 0.05);
             border-color: #E0E0E0;
         }
-        .specialty-icon {
+
+        .specialty-icon-img {
             width: 100%;
-            height: 100px; /* Chiều cao cố định cho icon */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: contain;
+            height: 180px;
+            object-fit: cover;
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 640px) {
+            .specialty-icon-img {
+                height: 130px;
+            }
         }
     </style>
 </head>
@@ -69,7 +95,6 @@
 
     <header class="bg-white shadow-md sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-
             <div class="flex items-center space-x-2">
                 <a href="../index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
                     <div class="logo-mb">MB</div>
@@ -106,128 +131,22 @@
 
             <h1 class="text-3xl font-extrabold text-text-dark mb-8">Danh Sách Các Chuyên Khoa Phổ Biến</h1>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
-
-                <a href="doctor_list.html?specialty=co-xuong-khop" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/x0X3jFh.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Cơ Xương Khớp</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=than-kinh" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/vH90zGq.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Thần kinh</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=tieu-hoa" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/nN6T77J.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Tiêu hóa</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=tim-mach" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/0F95QdZ.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Tim mạch</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=tai-mui-hong" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/bKx2S3z.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Tai Mũi Họng</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=cot-song" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/yF0X2Xb.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Cột sống</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=y-hoc-co-truyen" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/Z4N1D6x.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Y Học Cổ truyền</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=cham-cuu" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/7XG0QkG.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Châm cứu</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=san-phu-khoa" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/L5B7D8d.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Sản Phụ khoa</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=nhi-khoa" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/sY912tX.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Nhi Khoa</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=da-lieu" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/G35Zg6K.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Da Liễu</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=nha-khoa" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/QpY1qU7.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Nha Khoa</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=noi-soi-tieu-hoa" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/f9sauif9sauif9sa.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Nội soi Tiêu hóa</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=ung-buou" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/T0b7O1c.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Ung bướu</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=phuc-hoi-chuc-nang" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/jM8cO6x.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Phục hồi chức năng</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=bac-si-gia-dinh" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Bác sĩ gia đình</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=phau-thuat-tao-hinh-tham-my" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Phẫu thuật tạo hình-Thẩm mỹ</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=tu-van-tri-lieu-tam-lyy" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Tư vấn, trị liệu Tâm lý</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=vo-sinh-hien-muon" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Vô sinh - Hiến muộn</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=chan-thuong-chinh-hinh" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Chấn thương chỉnh hình</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=nieng-rang" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Niềng răng</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=ngoai-khoa" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Ngoại khoa</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=tuyen-giap" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Tuyến giáp</p>
-                </a>
-
-                <a href="doctor_list.html?specialty=nha-khoa-tong-hop" class="specialty-card block text-center">
-                    <div class="specialty-icon" style="background-image: url('https://i.imgur.com/W2o7Jz8.png');"></div>
-                    <p class="text-sm font-semibold text-text-dark mt-2">Nha khoa tổng hợp</p>
-                </a>
+            <div class="mb-8">
+                <div class="relative max-w-2xl mx-auto">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Tìm kiếm chuyên khoa (VD: tim mạch, da liễu, nhi khoa...)" 
+                        class="w-full px-5 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary-dark transition duration-150"
+                    >
+                    <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <p id="searchResult" class="text-center text-sm text-text-muted mt-3"></p>
             </div>
+
+            <div id="specialtyGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"></div>
 
             <div class="text-center mt-8">
                 <a href="doctor_list.html" class="px-8 py-3 text-base font-bold bg-primary-dark text-white hover:bg-blue-700 transition duration-150 rounded-lg shadow-md hover:shadow-lg">
@@ -272,6 +191,193 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Dữ liệu chuyên khoa
+        const specialties = [
+            { 
+                name: 'Cơ Xương Khớp', 
+                url: 'doctor_list.html?specialty=co-xuong-khop', 
+                img: '../images/Gemini_Generated_Image_c4ubl7c4ubl7c4ub.png'
+            },
+            { 
+                name: 'Thần kinh', 
+                url: 'doctor_list.html?specialty=than-kinh', 
+                img: '../images/Gemini_Generated_Image_gledpvgledpvgled.png'
+            },
+            { 
+                name: 'Tiêu hóa', 
+                url: 'doctor_list.html?specialty=tieu-hoa', 
+                img: '../images/Gemini_Generated_Image_f9sauif9sauif9sa.png' 
+            },
+            { 
+                name: 'Tim mạch', 
+                url: 'doctor_list.html?specialty=tim-mach', 
+                img: '../images/Gemini_Generated_Image_7fqi787fqi787fqi.png' 
+            },
+            { 
+                name: 'Tai Mũi Họng', 
+                url: 'doctor_list.html?specialty=tai-mui-hong', 
+                img: '../images/Gemini_Generated_Image_qxu1czqxu1czqxu1.png' 
+            },
+            { 
+                name: 'Cột sống', 
+                url: 'doctor_list.html?specialty=cot-song', 
+                img: '../images/Gemini_Generated_Image_25rols25rols25ro.png' 
+            },
+            { 
+                name: 'Y Học Cổ truyền', 
+                url: 'doctor_list.html?specialty=y-hoc-co-truyen', 
+                img: '../images/Gemini_Generated_Image_v9h09ov9h09ov9h0.png' 
+            },
+            { 
+                name: 'Châm cứu', 
+                url: 'doctor_list.html?specialty=cham-cuu', 
+                img: '../images/Gemini_Generated_Image_8ba1y68ba1y68ba1.png' 
+            },
+            { 
+                name: 'Sản Phụ khoa', 
+                url: 'doctor_list.html?specialty=san-phu-khoa', 
+                img: '../images/Gemini_Generated_Image_7hm9my7hm9my7hm9.png' 
+            },
+            { 
+                name: 'Nhi Khoa', 
+                url: 'doctor_list.html?specialty=nhi-khoa', 
+                img: '../images/Gemini_Generated_Image_xof48fxof48fxof4.png' 
+            },
+            { 
+                name: 'Da Liễu', 
+                url: 'doctor_list.html?specialty=da-lieu', 
+                img: '../images/Gemini_Generated_Image_xof48fxof48fxof4.png' 
+            },
+            { 
+                name: 'Nha Khoa', 
+                url: 'doctor_list.html?specialty=nha-khoa', 
+                img: '../images/Gemini_Generated_Image_dpqk5odpqk5odpqk.png' 
+            },
+            { 
+                name: 'Nội soi Tiêu hóa', 
+                url: 'doctor_list.html?specialty=noi-soi-tieu-hoa', 
+                img: '../images/Gemini_Generated_Image_i3wyrmi3wyrmi3wy.png' 
+            },
+            { 
+                name: 'Ung bướu', 
+                url: 'doctor_list.html?specialty=ung-buou', 
+                img: '../images/Gemini_Generated_Image_xnbp8cxnbp8cxnbp.png' 
+            },
+            { 
+                name: 'Phục hồi chức năng', 
+                url: 'doctor_list.html?specialty=phuc-hoi-chuc-nang', 
+                img: '../images/Gemini_Generated_Image_e6we3oe6we3oe6we.png' 
+            },
+            { 
+                name: 'Bác sĩ gia đình', 
+                url: 'doctor_list.html?specialty=bac-si-gia-dinh', 
+                img: '../images/Gemini_Generated_Image_kvhvexkvhvexkvhv.png' 
+            },
+            { 
+                name: 'Phẫu thuật tạo hình-Thẩm mỹ', 
+                url: 'doctor_list.html?specialty=phau-thuat-tao-hinh-tham-my', 
+                img: '../images/Gemini_Generated_Image_hz54x2hz54x2hz54.png' 
+            },
+            { 
+                name: 'Tư vấn, trị liệu Tâm lý', 
+                url: 'doctor_list.html?specialty=tu-van-tri-lieu-tam-ly', 
+                img: '../images/Gemini_Generated_Image_tfnse1tfnse1tfns.png' 
+            },
+            { 
+                name: 'Vô sinh - Hiến muộn', 
+                url: 'doctor_list.html?specialty=vo-sinh-hien-muon', 
+                img: '../images/Gemini_Generated_Image_kpjzaakpjzaakpjz.png' 
+            },
+            { 
+                name: 'Chấn thương chỉnh hình', 
+                url: 'doctor_list.html?specialty=chan-thuong-chinh-hinh', 
+                img: '../images/Gemini_Generated_Image_f1vq7jf1vq7jf1vq.png' 
+            },
+            { 
+                name: 'Niềng răng', 
+                url: 'doctor_list.html?specialty=nieng-rang', 
+                img: '../images/Gemini_Generated_Image_crdwlrcrdwlrcrdw.png' 
+            },
+            { 
+                name: 'Ngoại khoa', 
+                url: 'doctor_list.html?specialty=ngoai-khoa', 
+                img: '../images/Gemini_Generated_Image_oerqlyoerqlyoerq.png' 
+            },
+            { 
+                name: 'Tuyến giáp', 
+                url: 'doctor_list.html?specialty=tuyen-giap', 
+                img: '../images/Gemini_Generated_Image_rcrybqrcrybqrcry.png' 
+            },
+            { 
+                name: 'Nha khoa tổng hợp', 
+                url: 'doctor_list.html?specialty=nha-khoa-tong-hop', 
+                img: '../images/Gemini_Generated_Image_9hyttn9hyttn9hyt.png' 
+            },
+            { 
+                name: 'Nội Khoa', 
+                url: 'doctor_list.html?specialty=nha-khoa-tong-hop', 
+                img: '../images/Gemini_Generated_Image_tw9yodtw9yodtw9y.png' 
+            }
+        ];
+
+        function displaySpecialties(filteredSpecialties) {
+            const grid = document.getElementById('specialtyGrid');
+            const resultText = document.getElementById('searchResult');
+            
+            if (filteredSpecialties.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center py-10"><p class="text-lg text-text-muted">Không tìm thấy chuyên khoa phù hợp</p></div>';
+                resultText.textContent = 'Không có kết quả';
+                return;
+            }
+
+            grid.innerHTML = filteredSpecialties.map(specialty => `
+                <a href="${specialty.url}" class="specialty-card block text-center">
+                    <img src="${specialty.img}" alt="Icon ${specialty.name}" class="specialty-icon-img">
+                    <p class="text-sm font-semibold text-text-dark">${specialty.name}</p>
+                </a>
+            `).join('');
+
+            if (filteredSpecialties.length < specialties.length) {
+                resultText.textContent = `Tìm thấy ${filteredSpecialties.length} chuyên khoa`;
+            } else {
+                resultText.textContent = '';
+            }
+        }
+
+        function removeVietnameseTones(str) {
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
+            str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+            str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+            str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+            str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+            str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+            str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+            str = str.replace(/Đ/g, "D");
+            return str;
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = removeVietnameseTones(e.target.value.toLowerCase());
+            
+            const filtered = specialties.filter(specialty => {
+                const specialtyName = removeVietnameseTones(specialty.name.toLowerCase());
+                return specialtyName.includes(searchTerm);
+            });
+            
+            displaySpecialties(filtered);
+        });
+
+        displaySpecialties(specialties);
+    </script>
 
 </body>
 </html>

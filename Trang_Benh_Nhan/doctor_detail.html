@@ -25,7 +25,7 @@
                     },
                 }
             }
-        }
+        };
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -51,6 +51,7 @@
         .time-slot {
             transition: all 0.2s;
             cursor: pointer;
+            @apply border border-gray-300 rounded-lg text-text-dark font-medium;
         }
         .time-slot.active {
             background-color: #007BFF; /* primary-dark */
@@ -111,7 +112,7 @@
                     <img src="https://placehold.co/150x150/007BFF/ffffff?text=GS+Hùng" alt="Ảnh bác sĩ Trần Văn Hùng" class="w-36 h-36 rounded-full object-cover border-4 border-primary-light shadow-md flex-shrink-0">
                     <div>
                         <p class="text-sm font-semibold text-primary-dark">Chuyên khoa Cơ Xương Khớp</p>
-                        <h1 class="text-3xl font-extrabold text-text-dark mt-1">GS.TS Trần Văn Hùng</h1>
+                        <h1 class="text-3xl font-extrabold text-text-dark mt-1" id="doctor-name-display">GS.TS Trần Văn Hùng</h1>
                         <p class="text-lg text-text-muted font-medium mb-2">Trưởng khoa Phẫu thuật Chỉnh hình - Bệnh viện Chấn thương Chỉnh hình TP.HCM</p>
                         <div class="flex items-center text-secondary text-sm">
                             <span>★★★★★</span>
@@ -121,7 +122,7 @@
                 </div>
 
                 <div class="bg-bg-light p-4 rounded-lg border border-gray-200">
-                    <p class="font-bold text-lg text-primary-dark mb-2">Giá khám: 500.000 VNĐ</p>
+                    <p class="font-bold text-lg text-primary-dark mb-2">Giá khám: <span id="doctor-fee-display">500.000 VNĐ</span></p>
                     <p class="text-sm text-text-dark flex items-center space-x-2">
                          <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.899a2 2 0 01-2.828 0L6.343 16.657m0 0a2 2 0 01-2.828-2.828m2.828 2.828a2 2 0 002.828 0m0 0a2 2 0 012.828 2.828"></path></svg>
                         <span>Địa điểm: **Bệnh viện Chấn thương Chỉnh hình** - 929 Trần Hưng Đạo, Quận 5, TP.HCM</span>
@@ -131,6 +132,8 @@
                     </a>
                 </div>
 
+                <!-- ... (Các phần Chi tiết và Đánh giá khác giữ nguyên) ... -->
+                
                 <div class="pt-4">
                     <h3 class="text-xl font-bold text-primary mb-3">Thông tin chi tiết</h3>
                     <div class="space-y-4 text-text-dark text-sm">
@@ -178,42 +181,27 @@
 
             </section>
 
+            <!-- ASIDE: KHU VỰC ĐẶT LỊCH -->
             <aside class="lg:col-span-1 pt-6 lg:pt-0">
                 <div class="sticky top-28 bg-primary-light p-5 rounded-xl shadow-lg border-2 border-primary">
                     <h3 class="text-xl font-bold text-primary-dark mb-4">Chọn Lịch Khám</h3>
                     
                     <div class="mb-4">
                         <label for="booking-date" class="block text-sm font-semibold text-text-dark mb-1">Chọn ngày</label>
-                        <input type="date" id="booking-date" value="2025-11-20" min="2025-11-13"
+                        <input type="date" id="booking-date" 
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 bg-white text-sm">
                     </div>
 
                     <div class="mb-6">
-                        <p class="text-sm font-semibold text-text-dark mb-2">Khung giờ còn trống (Ngày 20/11/2025):</p>
+                        <p class="text-sm font-semibold text-text-dark mb-2">Khung giờ còn trống (<span id="slot-date-display">20/11/2025</span>):</p>
                         <div id="time-slots-container" class="schedule-grid">
-                            <button data-time="08:00" class="time-slot px-2 py-2 text-sm border rounded-lg active">
-                                08:00 - 09:00
-                            </button>
-                            <button data-time="09:00" class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg text-text-dark">
-                                09:00 - 10:00
-                            </button>
-                            <button data-time="10:00" disabled class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg booked">
-                                10:00 - 11:00 (Hết)
-                            </button>
-                            <button data-time="14:00" class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg text-text-dark">
-                                14:00 - 15:00
-                            </button>
-                            <button data-time="15:00" class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg text-text-dark">
-                                15:00 - 16:00
-                            </button>
-                            <button data-time="16:00" disabled class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg booked">
-                                16:00 - 17:00 (Hết)
-                            </button>
+                            <!-- Slots sẽ được load bởi JS -->
+                            <p class="col-span-full text-center text-text-muted text-sm">Đang tải slot...</p>
                         </div>
                         <p class="text-xs text-red-500 mt-3 hidden" id="no-slot-warning">Không có lịch trống trong ngày này.</p>
                     </div>
 
-                    <button id="book-button" class="w-full py-3 bg-primary text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition duration-150">
+                    <button id="book-button" class="w-full py-3 bg-primary text-white font-bold rounded-lg shadow-md hover:bg-teal-600 transition duration-150" disabled>
                         XÁC NHẬN ĐẶT LỊCH
                     </button>
                     <p class="text-center text-xs text-text-muted mt-2">Vui lòng chọn ngày và khung giờ trước khi đặt.</p>
@@ -258,97 +246,29 @@
     </footer>
 
     <script>
-        let selectedTime = '08:00';
-        let selectedDate = '2025-11-20';
-        const doctorId = 'doctor_hung'; // Lấy từ URL trong thực tế
+        const MOCK_DOCTOR_FEE = 500000;
+        const MOCK_DOCTOR_NAME = "GS.TS Trần Văn Hùng (Cơ Xương Khớp)";
+        
+        let selectedTimeSlot = null; 
+        let selectedDate = new Date().toISOString().split('T')[0];
+        const doctorId = 'doctor_hung'; // Dùng ID này để truy vấn trong Back-end
 
-        // Hàm xử lý khi chọn slot giờ
-        document.getElementById('time-slots-container').addEventListener('click', function(e) {
-            const button = e.target.closest('.time-slot:not(.booked)');
-            if (button) {
-                // Xóa trạng thái active của tất cả các slot
-                document.querySelectorAll('.time-slot').forEach(slot => {
-                    slot.classList.remove('active');
-                });
-                
-                // Đặt trạng thái active cho slot được chọn
-                button.classList.add('active');
-                selectedTime = button.dataset.time;
-            }
-        });
+        // Dữ liệu giả lập slot trống theo ngày (Mock API Response)
+        const MOCK_SLOTS = {
+            [new Date().toISOString().split('T')[0]]: [ // Hôm nay
+                 { time: '14:00', duration: '15:00', available: true },
+                 { time: '15:00', duration: '16:00', available: false }, // Đã đặt
+            ],
+            '2025-11-20': [ // Ngày mai
+                 { time: '08:00', duration: '09:00', available: true },
+                 { time: '09:00', duration: '10:00', available: true },
+                 { time: '14:00', duration: '15:00', available: true },
+                 { time: '15:00', duration: '16:00', available: true },
+            ],
+            '2025-11-21': [], // Không có slot
+        };
 
-        // Hàm xử lý khi chọn ngày
-        document.getElementById('booking-date').addEventListener('change', function(e) {
-            selectedDate = e.target.value;
-            // Trong thực tế, bạn sẽ gọi API để tải lại các slot trống cho ngày này
-            
-            // Mô phỏng tải lại slot: Giữ slot như cũ, nhưng cảnh báo cho người dùng
-            const warning = document.getElementById('no-slot-warning');
-            const slotsContainer = document.getElementById('time-slots-container');
-
-            if (selectedDate === '2025-11-15') {
-                 // Mô phỏng ngày không có slot
-                 slotsContainer.innerHTML = '';
-                 warning.classList.remove('hidden');
-            } else {
-                 // Mô phỏng ngày có slot (Tạm thời không thay đổi DOM)
-                 if (slotsContainer.innerHTML === '') {
-                     // Nếu đã xóa, load lại nội dung mặc định (chỉ phục vụ demo)
-                     slotsContainer.innerHTML = `
-                         <button data-time="08:00" class="time-slot px-2 py-2 text-sm border rounded-lg active">
-                             08:00 - 09:00
-                         </button>
-                         <button data-time="09:00" class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg text-text-dark">
-                             09:00 - 10:00
-                         </button>
-                         <button data-time="10:00" disabled class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg booked">
-                             10:00 - 11:00 (Hết)
-                         </button>
-                         <button data-time="14:00" class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg text-text-dark">
-                             14:00 - 15:00
-                         </button>
-                          <button data-time="15:00" class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg text-text-dark">
-                             15:00 - 16:00
-                         </button>
-                         <button data-time="16:00" disabled class="time-slot px-2 py-2 text-sm border border-gray-300 rounded-lg booked">
-                             16:00 - 17:00 (Hết)
-                         </button>
-                     `;
-                 }
-                 warning.classList.add('hidden');
-                 // Sau khi load lại, chọn slot đầu tiên là active
-                 const firstSlot = document.querySelector('.time-slot:not(.booked)');
-                 if(firstSlot) {
-                     firstSlot.classList.add('active');
-                     selectedTime = firstSlot.dataset.time;
-                 } else {
-                      selectedTime = null;
-                 }
-            }
-
-            // Cập nhật thông tin ngày trên tiêu đề slot
-            const dateDisplay = document.querySelector('#time-slots-container').previousElementSibling;
-            dateDisplay.textContent = `Khung giờ còn trống (Ngày ${new Date(selectedDate).toLocaleDateString('vi-VN')}):`;
-            
-            showSimpleMessage(`Đã tải lịch trống cho ngày ${new Date(selectedDate).toLocaleDateString('vi-VN')}`, 'info');
-        });
-
-        // Hàm xử lý nút Đặt lịch (Chuyển sang trang booking.html)
-        document.getElementById('book-button').addEventListener('click', function() {
-            if (selectedTime && document.querySelector('.time-slot.active')) {
-                // SỬA: Chuyển hướng đến trang booking.html với các tham số
-                const bookingURL = `booking.html?doctor=${doctorId}&date=${selectedDate}&time=${selectedTime}`;
-                showSimpleMessage("Đang chuyển đến trang xác nhận đặt lịch...", 'success');
-                setTimeout(() => {
-                    window.location.href = bookingURL;
-                }, 800);
-            } else {
-                showSimpleMessage("Vui lòng chọn một khung giờ trống trước khi xác nhận.", 'warning');
-            }
-        });
-
-
-        // Hàm hiển thị thông báo thay thế cho alert/confirm (Tái sử dụng)
+        // --- HÀM CƠ BẢN ---
         function showSimpleMessage(message, type) {
             const container = document.body;
             let messageDiv = document.querySelector('.floating-message');
@@ -357,7 +277,6 @@
                 messageDiv.className = "floating-message fixed bottom-5 right-5 p-3 rounded-lg shadow-xl z-50 text-sm font-semibold transition-opacity duration-300";
                 container.appendChild(messageDiv);
             }
-            
             messageDiv.textContent = message;
             messageDiv.style.backgroundColor = type === 'success' ? '#45C3A5' : (type === 'warning' ? '#f7d800' : '#007BFF');
             messageDiv.style.color = type === 'warning' ? '#343a40' : 'white';
@@ -369,7 +288,121 @@
             }, 3000);
         }
 
-    </script>
+        function formatDateForDisplay(dateStr) {
+            const date = new Date(dateStr);
+            // Định dạng theo chuẩn YYYY-MM-DD
+            if (isNaN(date)) return dateStr; 
+            return date.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
 
+
+        // --- HÀM XỬ LÝ LỊCH ---
+        
+        function updateSlotDisplay(dateStr) {
+            const slots = MOCK_SLOTS[dateStr] || [];
+            const slotsContainer = document.getElementById('time-slots-container');
+            const warning = document.getElementById('no-slot-warning');
+            const dateDisplay = document.getElementById('slot-date-display');
+            const bookButton = document.getElementById('book-button');
+            
+            selectedTimeSlot = null; // Reset slot được chọn khi đổi ngày
+            
+            dateDisplay.textContent = formatDateForDisplay(dateStr);
+            slotsContainer.innerHTML = '';
+
+            if (slots.length === 0 || slots.every(s => !s.available)) {
+                slotsContainer.innerHTML = `<p class="col-span-full text-center text-text-muted text-sm py-4">Không có lịch trống trong ngày này.</p>`;
+                warning.classList.remove('hidden');
+                bookButton.disabled = true;
+                return;
+            }
+
+            warning.classList.add('hidden');
+            
+            slots.forEach(slot => {
+                const isBooked = !slot.available;
+                const button = document.createElement('button');
+                button.dataset.time = slot.time;
+                button.dataset.fullTime = `${slot.time} - ${slot.duration}`;
+                button.disabled = isBooked;
+                button.className = `time-slot px-2 py-2 text-sm border rounded-lg ${isBooked ? 'booked' : ''}`;
+                button.textContent = slot.time + (slot.duration ? ` - ${slot.duration}` : '');
+                
+                slotsContainer.appendChild(button);
+            });
+
+             // Sau khi render, tìm slot đầu tiên không bị booked và chọn nó
+             const firstAvailableSlot = document.querySelector('.time-slot:not(.booked)');
+             if (firstAvailableSlot) {
+                 firstAvailableSlot.classList.add('active');
+                 selectedTimeSlot = firstAvailableSlot.dataset.fullTime;
+                 bookButton.disabled = false;
+             } else {
+                 bookButton.disabled = true;
+             }
+        }
+
+
+        // --- GÁN SỰ KIỆN ---
+
+        document.getElementById('time-slots-container').addEventListener('click', function(e) {
+            const button = e.target.closest('.time-slot:not(.booked)');
+            if (button) {
+                // Xóa trạng thái active của tất cả các slot
+                document.querySelectorAll('.time-slot').forEach(slot => {
+                    slot.classList.remove('active');
+                });
+                
+                // Đặt trạng thái active cho slot được chọn
+                button.classList.add('active');
+                selectedTimeSlot = button.dataset.fullTime;
+
+                // Kích hoạt nút đặt lịch
+                document.getElementById('book-button').disabled = false;
+            }
+        });
+
+        document.getElementById('booking-date').addEventListener('change', function(e) {
+            selectedDate = e.target.value;
+            // Gọi hàm tải và render slot mới
+            updateSlotDisplay(selectedDate);
+        });
+
+        // Hàm xử lý nút Đặt lịch (Chuyển sang trang booking.html)
+        document.getElementById('book-button').addEventListener('click', function() {
+             const selectedSlotElement = document.querySelector('.time-slot.active');
+
+            if (selectedSlotElement) {
+                const fullTimeSlot = selectedSlotElement.dataset.fullTime;
+
+                // Xây dựng chuỗi thời gian đầy đủ
+                const fullDateTime = formatDateForDisplay(selectedDate) + ' | ' + fullTimeSlot;
+
+                // Sửa lỗi: Truyền Tên Bác sĩ và Phí khám chính xác
+                const bookingURL = `booking.html?doctor_id=${encodeURIComponent(MOCK_DOCTOR_NAME)}&slot_time=${encodeURIComponent(fullDateTime)}&fee=${MOCK_DOCTOR_FEE}`;
+                
+                showSimpleMessage("Đang chuyển đến trang xác nhận đặt lịch...", 'success');
+                setTimeout(() => {
+                    window.location.href = bookingURL;
+                }, 800);
+            } else {
+                showSimpleMessage("Vui lòng chọn một khung giờ trống trước khi xác nhận.", 'warning');
+            }
+        });
+
+
+        // Khởi tạo trang
+        document.addEventListener('DOMContentLoaded', () => {
+             const todayISO = new Date().toISOString().split('T')[0];
+             
+             // 1. Đặt ngày mặc định trên input
+             document.getElementById('booking-date').value = todayISO;
+             document.getElementById('booking-date').min = todayISO;
+             selectedDate = todayISO;
+             
+             // 2. Load slot cho ngày hôm nay
+             updateSlotDisplay(todayISO);
+        });
+    </script>
 </body>
 </html>

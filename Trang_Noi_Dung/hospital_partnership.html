@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên Kết Bệnh Viện | MediBook</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind và Font Inter
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Màu sắc thương hiệu
+                        'primary': '#45C3A5', // Xanh lục chủ đạo (Teal/Mint)
+                        'primary-dark': '#007BFF', // Xanh dương (Branding, Buttons)
+                        'primary-light': '#E6FFF8', // Màu nền nhẹ của primary
+                        'secondary': '#f7d800', // Màu vàng nổi bật (Search CTA)
+                        
+                        // Màu sắc chung
+                        'text-dark': '#343a40', 
+                        'text-muted': '#6c757d', 
+                        'bg-light': '#f8f9fa',
+                        'sidebar-bg': '#EBF5FF', 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .logo-mb {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 38px;
+             height: 38px;
+             background-color: #007BFF; 
+             border-radius: 6px;
+             font-size: 18px;
+             font-weight: 800;
+             color: white;
+             box-shadow: 0 4px 8px rgba(76, 150, 230, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-bg-light text-text-dark">
+
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            
+            <div class="flex items-center space-x-2">
+                <a href="../index.html" class="flex items-center space-x-1.5 text-2xl font-extrabold text-primary-dark transition duration-150 hover:opacity-80">
+                    <div class="logo-mb">MB</div>
+                    <span class="text-primary-dark text-xl font-bold">Medi<span class="text-primary">Book</span></span>
+                </a>
+            </div>
+
+            <nav class="hidden lg:flex space-x-8 text-base font-semibold">
+                <a href="../Trang_Benh_Nhan/hospital_list.html" class="text-text-dark hover:text-primary transition duration-150">Cơ sở y tế</a>
+                <a href="../Trang_Benh_Nhan/specialties.html" class="text-text-dark hover:text-primary transition duration-150">Chuyên khoa</a>
+                <a href="health_packages.html" class="text-text-dark hover:text-primary transition duration-150">Gói khám</a> 
+                <a href="blog.html" class="text-text-dark hover:text-primary transition duration-150">Tin tức</a>
+                <a href="../Trang_Benh_Nhan/my_appointments.html" class="text-text-dark hover:text-primary transition duration-150">Lịch Khám Của Tôi</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="tel:19006008" class="text-sm font-bold text-primary-dark hover:text-primary transition duration-150 hidden sm:block">
+                    HOTLINE: 1900 6008
+                </a>
+                <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" class="px-5 py-2 text-sm font-bold bg-primary-dark text-white hover:bg-blue-700 transition duration-150 rounded-lg shadow-md hover:shadow-lg">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 bg-white shadow-xl my-8 rounded-lg">
+        <nav class="text-sm mb-6" aria-label="Breadcrumb">
+            <ol class="list-none p-0 inline-flex">
+                <li class="flex items-center">
+                    <a href="../index.html" class="text-text-muted hover:text-primary transition duration-150">Trang chủ</a>
+                    <svg class="flex-shrink-0 w-5 h-5 text-gray-400 mx-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                    </svg>
+                </li>
+                <li class="flex items-center">
+                    <span class="text-text-dark font-medium">Liên kết Bệnh viện</span>
+                </li>
+            </ol>
+        </nav>
+
+        <h1 class="text-4xl font-extrabold text-text-dark mb-8 border-b-2 border-primary pb-4">Cơ Hội Hợp Tác Bền Vững Cùng MediBook</h1>
+        
+        <p class="text-lg text-text-dark mb-6">MediBook luôn tìm kiếm các đối tác Bệnh viện, Phòng khám uy tín để mở rộng mạng lưới chăm sóc sức khỏe chất lượng cao đến cộng đồng.</p>
+
+        <section class="space-y-8 text-text-dark">
+            
+            <div class="p-5 border-l-4 border-primary bg-primary-light rounded-lg">
+                <h2 class="text-2xl font-bold text-primary-dark mb-3 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14-2h-18M5 19h14M8 11h2m-2 4h2m4-4h2m-2 4h2"></path></svg>
+                    Lợi Ích Khi Hợp Tác Cùng Chúng Tôi
+                </h2>
+                <ul class="list-disc list-inside space-y-2 pl-4 text-text-muted">
+                    <li>**Tăng trưởng Lượng bệnh nhân:** Tiếp cận hàng ngàn người dùng đặt lịch trực tuyến mỗi ngày.</li>
+                    <li>**Quản lý hiệu quả:** Tối ưu hóa quy trình đặt lịch và giảm thiểu tình trạng trống lịch/quá tải.</li>
+                    <li>**Nâng cao Thương hiệu:** Tăng cường sự hiện diện và uy tín của Bệnh viện trên nền tảng số.</li>
+                </ul>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold text-primary-dark mb-4">Các Hình Thức Hợp Tác Chủ Yếu</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-4 border rounded-lg shadow-sm">
+                        <h3 class="font-bold text-lg text-primary mb-2">1. Đặt Lịch Khám Cơ Bản</h3>
+                        <p class="text-sm text-text-muted">Tích hợp lịch làm việc của đội ngũ bác sĩ vào hệ thống MediBook, cho phép người dùng đặt lịch và nhận thông báo tự động.</p>
+                    </div>
+                    <div class="p-4 border rounded-lg shadow-sm">
+                        <h3 class="font-bold text-lg text-primary mb-2">2. Quản lý Gói Khám Sức Khỏe</h3>
+                        <p class="text-sm text-text-muted">Quảng bá các gói khám định kỳ, khám chuyên sâu của Bệnh viện đến đúng đối tượng khách hàng mục tiêu.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <h2 class="text-2xl font-bold text-primary-dark mb-4">Liên Hệ Hợp Tác</h2>
+                <p class="text-text-muted mb-4">Để bắt đầu thảo luận về cơ hội hợp tác, vui lòng gửi thông tin chi tiết qua form dưới đây. Đội ngũ MediBook sẽ liên hệ với bạn trong vòng 48 giờ làm việc.</p>
+                
+                <form id="partnership-form" class="bg-gray-50 p-6 rounded-lg space-y-4 border border-gray-200">
+                    <div>
+                        <label for="contact-name" class="block text-sm font-medium text-text-dark mb-1">Tên Người Liên Hệ:</label>
+                        <input type="text" id="contact-name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                    </div>
+                    <div>
+                        <label for="hospital-name" class="block text-sm font-medium text-text-dark mb-1">Tên Bệnh Viện/Phòng Khám:</label>
+                        <input type="text" id="hospital-name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                    </div>
+                    <div>
+                        <label for="contact-email" class="block text-sm font-medium text-text-dark mb-1">Email:</label>
+                        <input type="email" id="contact-email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-text-dark mb-1">Tin Nhắn/Yêu Cầu Hợp Tác:</label>
+                        <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-primary text-white font-bold rounded-lg shadow-lg hover:bg-primary-dark transition duration-150">
+                        GỬI YÊU CẦU HỢP TÁC
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+            <div>
+                <h5 class="font-extrabold text-2xl mb-3 text-primary-dark">Medi<span class="text-primary">Book</span></h5>
+                <p class="text-xs text-gray-400">Đặt lịch khám bệnh và chăm sóc sức khỏe uy tín tại các thành phố lớn.</p>
+                <div class="mt-4 flex space-x-3">
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Facebook</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition duration-150">Zalo</a>
+                </div>
+                <p class="mt-6 text-xs text-gray-500">© 2025 Đồ án Thực tập. All rights reserved.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hỗ trợ Người dùng</h5>
+                <ul class="space-y-2">
+                    <li><a href="policy_booking.html" class="hover:text-primary transition duration-150">Quy trình đặt lịch</a></li>
+                    <li><a href="policy_terms.html" class="hover:text-primary transition duration-150">Điều khoản dịch vụ</a></li>
+                    <li><a href="policy_privacy.html" class="hover:text-primary transition duration-150">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Hợp tác & Phát triển</h5>
+                <ul class="space-y-2">
+                    <li><a href="../Trang_Bac_Si/doctor_register.html" class="hover:text-primary transition duration-150">Đăng ký làm Bác sĩ</a></li>
+                    <li class="font-bold"><a href="hospital_partnership.html" class="text-primary hover:text-primary transition duration-150">Liên kết Bệnh viện</a></li>
+                    <li><a href="recruitment.html" class="hover:text-primary transition duration-150">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Thông tin Liên hệ</h5>
+                <p class="mb-2">Email: contact@medibook.vn</p>
+                <p>Địa chỉ: 123 Đường Công nghệ, TP.HCM</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.getElementById('partnership-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const hospitalName = document.getElementById('hospital-name').value;
+            alert(`Yêu cầu hợp tác từ ${hospitalName} đã được gửi thành công! Đội ngũ MediBook sẽ sớm liên hệ với bạn.`);
+            // Sau khi gửi form, có thể reset form hoặc chuyển hướng
+            this.reset();
+        });
+        
+        // Cập nhật link 'Liên kết Bệnh viện' trong footer của index.html
+        // Đảm bảo link 'Tuyển dụng' (recruitment.html) cũng được cập nhật trong footer của tất cả các file
+    </script>
+</body>
+</html>

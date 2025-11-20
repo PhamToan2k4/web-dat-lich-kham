@@ -52,6 +52,17 @@
             border-radius: 8px;
             font-size: 0.8rem;
         }
+        /* Style cho Modal */
+        .modal {
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body class="bg-bg-light text-text-dark">
@@ -89,14 +100,14 @@
         <h1 class="text-3xl font-bold text-text-dark mb-6">Lịch Khám Của Tôi</h1>
 
         <div class="flex space-x-4 border-b border-gray-300 mb-6 overflow-x-auto">
-            <button data-status="upcoming" class="tab-button py-3 px-4 font-semibold text-text-dark border-b-2 border-primary-dark active-tab transition duration-150 hover:text-primary">Lịch Sắp tới (3)</button>
-            <button data-status="completed" class="tab-button py-3 px-4 font-semibold text-text-muted border-b-2 border-transparent transition duration-150 hover:text-primary">Đã hoàn thành (5)</button>
-            <button data-status="cancelled" class="tab-button py-3 px-4 font-semibold text-text-muted border-b-2 border-transparent transition duration-150 hover:text-primary">Đã hủy (1)</button>
+            <button data-status="upcoming" class="tab-button py-3 px-4 font-semibold text-text-dark border-b-2 border-primary-dark active-tab transition duration-150 hover:text-primary">Lịch Sắp tới (<span id="count-upcoming">3</span>)</button>
+            <button data-status="completed" class="tab-button py-3 px-4 font-semibold text-text-muted border-b-2 border-transparent transition duration-150 hover:text-primary">Đã hoàn thành (<span id="count-completed">5</span>)</button>
+            <button data-status="cancelled" class="tab-button py-3 px-4 font-semibold text-text-muted border-b-2 border-transparent transition duration-150 hover:text-primary">Đã hủy (<span id="count-cancelled">1</span>)</button>
         </div>
 
         <div id="appointments-list" class="space-y-6">
             
-            <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-pending flex flex-col md:flex-row justify-between items-start md:items-center" data-status="upcoming">
+            <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-pending flex flex-col md:flex-row justify-between items-start md:items-center" data-status="upcoming" data-date="2025-11-20" data-doctor-name="GS.TS Trần Văn Hùng" data-app-id="MB20251112003">
                 <div class="flex-1 space-y-1 mb-4 md:mb-0">
                     <p class="text-sm font-medium text-text-muted">Mã hẹn: MB20251112003</p>
                     <h2 class="text-xl font-bold text-text-dark">GS.TS Trần Văn Hùng <span class="text-base font-normal text-primary">(Cơ Xương Khớp)</span></h2>
@@ -107,14 +118,14 @@
                     </p>
                 </div>
                 
-                <div class="flex flex-col items-start md:items-end space-y-2">
+                <div class="flex flex-col items-start md:items-end space-y-2" id="actions-MB20251112003-upcoming">
                     <span class="status-badge text-text-dark bg-status-pending">Chờ xác nhận</span>
                     <button class="btn-detail py-2 px-4 text-sm font-bold bg-primary-dark text-white rounded-lg hover:bg-blue-700 transition duration-150">Xem chi tiết</button>
                     <button class="btn-cancel py-2 px-4 text-sm font-bold bg-status-cancelled text-white rounded-lg hover:opacity-90 transition duration-150">Hủy lịch</button>
                 </div>
             </div>
 
-             <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-success flex flex-col md:flex-row justify-between items-start md:items-center" data-status="upcoming">
+            <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-success flex flex-col md:flex-row justify-between items-start md:items-center" data-status="upcoming" data-date="2025-11-25" data-doctor-name="BS.CKII Nguyễn Thị Thanh" data-app-id="MB20251111002"> 
                 <div class="flex-1 space-y-1 mb-4 md:mb-0">
                     <p class="text-sm font-medium text-text-muted">Mã hẹn: MB20251111002</p>
                     <h2 class="text-xl font-bold text-text-dark">BS.CKII Nguyễn Thị Thanh <span class="text-base font-normal text-primary">(Da Liễu)</span></h2>
@@ -125,32 +136,51 @@
                     </p>
                 </div>
                 
-                <div class="flex flex-col items-start md:items-end space-y-2">
+                <div class="flex flex-col items-start md:items-end space-y-2" id="actions-MB20251111002-upcoming">
                     <span class="status-badge text-white bg-status-success">Đã xác nhận</span>
                     <button class="btn-detail py-2 px-4 text-sm font-bold bg-primary-dark text-white rounded-lg hover:bg-blue-700 transition duration-150">Xem chi tiết</button>
                     <button class="btn-cancel py-2 px-4 text-sm font-bold bg-status-cancelled text-white rounded-lg hover:opacity-90 transition duration-150">Hủy lịch</button>
-                </div>
+                    </div>
             </div>
-
-            <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-completed flex flex-col md:flex-row justify-between items-start md:items-center" data-status="completed" style="display: none;">
+            
+            <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-completed flex flex-col md:flex-row justify-between items-start md:items-center" data-status="completed" data-date="2025-11-04" data-doctor-name="PGS.TS Nguyễn Xuân Trường" data-completion-date="2025-11-19" data-app-id="MB20251104001">
                 <div class="flex-1 space-y-1 mb-4 md:mb-0">
-                    <p class="text-sm font-medium text-text-muted">Mã hẹn: MB20251001001</p>
+                    <p class="text-sm font-medium text-text-muted">Mã hẹn: MB20251104001</p>
                     <h2 class="text-xl font-bold text-text-dark">PGS.TS Nguyễn Xuân Trường <span class="text-base font-normal text-primary">(Nhi Khoa)</span></h2>
-                    <p class="text-lg font-semibold text-status-completed">Thứ Tư, 01/10/2025 | 10:00 - 11:00</p>
+                    <p class="text-lg font-semibold text-status-completed">Thứ Hai, 04/11/2025 | 10:00 - 11:00</p>
                     <p class="text-sm text-text-muted flex items-center space-x-1">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.899a2 2 0 01-2.828 0L6.343 16.657m0 0a2 2 0 01-2.828-2.828m2.828 2.828a2 2 0 002.828 0m0 0a2 2 0 012.828 2.828"></path></svg>
                         <span>Bệnh viện Đa khoa Hồng Ngọc, Hà Nội</span>
                     </p>
                 </div>
                 
-                <div class="flex flex-col items-start md:items-end space-y-2">
+                <div class="flex flex-col items-start md:items-end space-y-2" id="actions-MB20251104001">
+                    <span class="status-badge text-white bg-status-completed">Đã khám xong</span>
+                    <button class="btn-detail py-2 px-4 text-sm font-bold bg-primary-dark text-white rounded-lg hover:bg-blue-700 transition duration-150">Xem hồ sơ khám</button>
+                    <a href="review_doctor.html?app_id=MB20251104001" class="py-2 px-4 text-sm font-bold bg-secondary text-text-dark rounded-lg hover:bg-yellow-500 transition duration-150">Gửi Đánh Giá</a>
+                    </div>
+            </div>
+
+            <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-completed flex flex-col md:flex-row justify-between items-start md:items-center" data-status="completed" data-date="2025-10-01" data-doctor-name="TS.BS Phan Văn Quý" data-completion-date="2025-10-25" data-app-id="MB20251001001">
+                <div class="flex-1 space-y-1 mb-4 md:mb-0">
+                    <p class="text-sm font-medium text-text-muted">Mã hẹn: MB20251001001</p>
+                    <h2 class="text-xl font-bold text-text-dark">TS.BS Phan Văn Quý <span class="text-base font-normal text-primary">(Tiêu Hóa)</span></h2>
+                    <p class="text-lg font-semibold text-status-completed">Thứ Tư, 01/10/2025 | 14:00 - 15:00</p>
+                    <p class="text-sm text-text-muted flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.899a2 2 0 01-2.828 0L6.343 16.657m0 0a2 2 0 01-2.828-2.828m2.828 2.828a2 2 0 002.828 0m0 0a2 2 0 012.828 2.828"></path></svg>
+                        <span>Phòng khám Đa khoa Tiêu Hóa Phương Đông, Hà Nội</span>
+                    </p>
+                </div>
+                
+                <div class="flex flex-col items-start md:items-end space-y-2" id="actions-MB20251001001">
                     <span class="status-badge text-white bg-status-completed">Đã khám xong</span>
                     <button class="btn-detail py-2 px-4 text-sm font-bold bg-primary-dark text-white rounded-lg hover:bg-blue-700 transition duration-150">Xem hồ sơ khám</button>
                     <a href="review_doctor.html?app_id=MB20251001001" class="py-2 px-4 text-sm font-bold bg-secondary text-text-dark rounded-lg hover:bg-yellow-500 transition duration-150">Gửi Đánh Giá</a>
+                    <button disabled class="py-2 px-4 text-sm font-bold bg-gray-300 text-text-muted rounded-lg cursor-not-allowed">Hết hạn Chat (15 ngày)</button>
                 </div>
             </div>
 
-             <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-cancelled flex flex-col md:flex-row justify-between items-start md:items-center" data-status="cancelled" style="display: none;">
+            <div class="appointment-card bg-white p-5 rounded-xl shadow-lg border-l-4 border-status-cancelled flex flex-col md:flex-row justify-between items-start md:items-center" data-status="cancelled" data-date="2025-09-15" data-doctor-name="TS.BS Phan Văn Quý" data-app-id="MB20250915001">
                 <div class="flex-1 space-y-1 mb-4 md:mb-0">
                     <p class="text-sm font-medium text-text-muted">Mã hẹn: MB20250915001</p>
                     <h2 class="text-xl font-bold text-text-dark">TS.BS Phan Văn Quý <span class="text-base font-normal text-primary">(Tiêu Hóa)</span></h2>
@@ -179,6 +209,17 @@
         
     </div>
     
+    <div id="cancel-modal" class="modal fixed inset-0 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-sm w-full">
+            <h3 class="text-xl font-bold text-status-cancelled mb-4">Xác nhận Hủy Lịch Hẹn</h3>
+            <p class="text-text-dark mb-4" id="modal-message">Bạn có chắc chắn muốn hủy lịch hẹn này không? Hành động này không thể hoàn tác.</p>
+            <div class="flex justify-end space-x-3">
+                <button id="modal-cancel-btn" class="py-2 px-4 bg-gray-200 text-text-dark rounded-lg hover:bg-gray-300 transition duration-150">Đóng</button>
+                <button id="modal-confirm-btn" class="py-2 px-4 bg-status-cancelled text-white rounded-lg hover:bg-red-600 transition duration-150">Xác nhận Hủy</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="bg-gray-800 text-white mt-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
             <div>
@@ -215,21 +256,131 @@
     </footer>
 
     <script>
-        // Hàm xử lý chuyển Tab lọc trạng thái
+        // --- CHAT LOGIC VÀ CÁC BIẾN CHUNG ---
+        const DAY_LIMIT = 15;
+        // Dùng ngày cố định '2025-11-19' để mô phỏng, thay bằng new Date() khi chạy thực tế
+        const today = new Date('2025-11-19'); 
+        const appointmentsContainer = document.getElementById('appointments-list');
+
+
+        function isChatActive(completionDateString) {
+            // Kiểm tra xem ngày khám xong có nằm trong 15 ngày không
+            const completedDate = new Date(completionDateString);
+            const diffTime = today.getTime() - completedDate.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            // Logic: diffDays phải nhỏ hơn hoặc bằng 15 VÀ không âm (tức là đã hoàn thành)
+            return diffDays <= DAY_LIMIT && diffDays >= 0;
+        }
+
+        function renderChatButton(card, appointmentId, doctorName, status) {
+            // Xóa nút chat cũ nếu có để tránh trùng lặp khi lọc lại
+            const existingChatButton = card.querySelector('.btn-chat-action');
+            if (existingChatButton) {
+                existingChatButton.remove();
+            }
+
+            const actionContainer = card.querySelector('.flex.flex-col.items-start.md\\:items-end.space-y-2');
+
+            if (!actionContainer) return;
+            
+            let buttonText = '';
+            let isDisabled = false;
+
+            if (status === 'upcoming') {
+                // CHỈ CHO PHÉP CHAT khi lịch đã được xác nhận (upcoming)
+                const isConfirmed = card.querySelector('.status-badge').textContent.includes('Đã xác nhận');
+                if (isConfirmed) {
+                    buttonText = 'Chat trước khám';
+                } else {
+                    return; // Không hiển thị nút nếu Chờ xác nhận
+                }
+            } else if (status === 'completed' && card.dataset.completionDate) {
+                // CHAT sau khám (15 ngày)
+                const isActive = isChatActive(card.dataset.completionDate);
+                if (isActive) {
+                    const completedDate = new Date(card.dataset.completionDate);
+                    const expiryDate = new Date(completedDate);
+                    expiryDate.setDate(completedDate.getDate() + DAY_LIMIT);
+                    const daysRemaining = Math.ceil((expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+                    buttonText = `Chat Sau Khám (${daysRemaining} ngày)`;
+                } else {
+                    isDisabled = true;
+                    buttonText = `Hết hạn Chat (${DAY_LIMIT} ngày)`;
+                }
+            } else {
+                return;
+            }
+
+
+            const chatButton = document.createElement(isDisabled ? 'button' : 'a');
+            chatButton.classList.add('btn-chat-action', 'py-2', 'px-4', 'text-sm', 'font-bold', 'rounded-lg', 'transition', 'duration-150', 'text-center');
+            chatButton.textContent = buttonText;
+            
+            if (isDisabled) {
+                chatButton.disabled = true;
+                chatButton.classList.add('bg-gray-300', 'text-text-muted', 'cursor-not-allowed');
+            } else {
+                // Đảm bảo partner name không có dấu cách để truyền qua URL
+                chatButton.href = `../Trang_Chung_Va_Tiep_Can/chat_room.html?app_id=${appointmentId}&partner=${doctorName.replace(/ /g, '_')}`; 
+                chatButton.classList.add('bg-primary', 'text-white', 'hover:bg-teal-600');
+            }
+            
+            // Tìm vị trí chèn (chèn sau Gửi Đánh Giá hoặc Hủy lịch)
+            const reviewButton = actionContainer.querySelector('a[href^="review_doctor.html"]');
+            
+            if (reviewButton) {
+                 // Chèn sau nút Đánh giá (cho completed)
+                 actionContainer.insertBefore(chatButton, reviewButton.nextSibling); 
+            } else if (card.dataset.status === 'upcoming') {
+                 // Chèn sau nút Hủy lịch (cho upcoming)
+                 const cancelButton = actionContainer.querySelector('.btn-cancel');
+                 if(cancelButton) {
+                    actionContainer.insertBefore(chatButton, cancelButton.nextSibling);
+                 }
+            } else {
+                 actionContainer.appendChild(chatButton);
+            }
+        }
+
+        // --- APPOINTMENT LOGIC ---
         const tabButtons = document.querySelectorAll('.tab-button');
-        const appointmentCards = document.querySelectorAll('.appointment-card');
         const noAppointments = document.getElementById('no-appointments');
+        const modal = document.getElementById('cancel-modal');
+        let currentCardToCancel = null;
 
         function filterAppointments(status) {
             let found = 0;
-            appointmentCards.forEach(card => {
-                if (status === 'all' || card.dataset.status === status) {
+            let counts = { upcoming: 0, completed: 0, cancelled: 0 };
+            const allCards = document.querySelectorAll('.appointment-card');
+
+            allCards.forEach(card => {
+                const cardStatus = card.dataset.status;
+                const appointmentId = card.dataset.appId;
+                const doctorName = card.dataset.doctorName;
+                
+                // 1. Render/Cập nhật nút Chat cho tất cả các thẻ
+                renderChatButton(card, appointmentId, doctorName, cardStatus);
+                
+                // 2. Tính toán lại số lượng (cần làm trước khi lọc)
+                if (cardStatus in counts) {
+                    counts[cardStatus]++;
+                }
+
+                // 3. Logic lọc tab
+                if (status === 'all' || cardStatus === status) {
                     card.style.display = 'flex';
                     found++;
                 } else {
                     card.style.display = 'none';
                 }
             });
+
+            // 4. Cập nhật số lượng trên Tab (Dùng giá trị Mock ở đây vì không có DB thực)
+            // Nếu bạn có dữ liệu DB thật, bạn sẽ dùng 'counts' ở đây.
+            // document.getElementById('count-upcoming').textContent = counts.upcoming;
+            // document.getElementById('count-completed').textContent = counts.completed;
+            // document.getElementById('count-cancelled').textContent = counts.cancelled;
 
             if (found === 0) {
                 noAppointments.classList.remove('hidden');
@@ -238,51 +389,66 @@
             }
         }
 
-        tabButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Đổi trạng thái active của tab
-                tabButtons.forEach(btn => {
-                    btn.classList.remove('active-tab', 'border-primary-dark', 'text-text-dark');
-                    btn.classList.add('border-transparent', 'text-text-muted');
-                });
-                this.classList.add('active-tab', 'border-primary-dark', 'text-text-dark');
-                this.classList.remove('border-transparent', 'text-text-muted');
-
-                // Thực hiện lọc
-                filterAppointments(this.dataset.status);
-            });
-        });
-
-        // Hàm xử lý nút Hủy lịch
+        // Gắn sự kiện cho nút Hủy lịch
         document.querySelectorAll('.btn-cancel').forEach(button => {
             button.addEventListener('click', function() {
-                // Thay thế alert/confirm
-                if (confirmAction("Bạn có chắc chắn muốn hủy lịch hẹn này? Hành động này không thể hoàn tác.")) {
-                    const appointmentId = this.closest('.appointment-card').querySelector('.text-sm.font-medium.text-text-muted').textContent.replace('Mã hẹn: ', '');
-                    // Mô phỏng gọi API Hủy lịch
-                    showSimpleMessage(`Đã gửi yêu cầu hủy lịch hẹn ${appointmentId}. Đang chờ xử lý...`, 'warning');
-                    
-                    // Mô phỏng cập nhật trạng thái (sau 1.5s)
-                    setTimeout(() => {
-                        this.closest('.appointment-card').dataset.status = 'cancelled';
-                        filterAppointments(document.querySelector('.active-tab').dataset.status);
-                        showSimpleMessage(`Lịch hẹn ${appointmentId} đã được hủy thành công.`, 'status-cancelled');
-                    }, 1500);
-                }
-            });
-        });
-        
-        // Hàm xử lý nút Xem chi tiết
-        document.querySelectorAll('.btn-detail').forEach(button => {
-            button.addEventListener('click', function() {
-                const appointmentId = this.closest('.appointment-card').querySelector('.text-sm.font-medium.text-text-muted').textContent.replace('Mã hẹn: ', '');
-                // Tạm thời mô phỏng bằng thông báo, trong thực tế sẽ là chuyển đến trang detail/modal
-                showSimpleMessage(`Xem chi tiết hồ sơ khám cho lịch hẹn ${appointmentId}...`, 'info');
-                // Trong thực tế: window.location.href = 'appointment_detail.html?id=' + appointmentId;
+                currentCardToCancel = this.closest('.appointment-card');
+                modal.classList.add('active');
             });
         });
 
-        // Hàm hiển thị thông báo thay thế cho alert/confirm (Tái sử dụng)
+        // Xử lý xác nhận hủy trong Modal
+        document.getElementById('modal-cancel-btn').addEventListener('click', () => {
+             modal.classList.remove('active');
+             currentCardToCancel = null;
+        });
+
+        document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+             if (currentCardToCancel) {
+                 const appointmentId = currentCardToCancel.dataset.appId;
+                 
+                 // Mô phỏng API Hủy lịch
+                 showSimpleMessage(`Đã gửi yêu cầu hủy lịch hẹn ${appointmentId}. Đang chờ xử lý...`, 'warning');
+                 
+                 // Mô phỏng cập nhật trạng thái
+                 setTimeout(() => {
+                     currentCardToCancel.dataset.status = 'cancelled';
+                     currentCardToCancel.classList.remove('border-status-pending', 'border-status-success');
+                     currentCardToCancel.classList.add('border-status-cancelled');
+
+                     // Cập nhật nội dung Action Div
+                     const actionDiv = currentCardToCancel.querySelector('.flex.flex-col.items-start.md\\:items-end.space-y-2');
+                     actionDiv.innerHTML = `<span class="status-badge text-white bg-status-cancelled">Đã hủy</span>
+                         <button disabled class="btn-detail py-2 px-4 text-sm font-bold bg-gray-300 text-text-muted rounded-lg cursor-not-allowed">Đã hủy lịch</button>
+                         <button disabled class="btn-chat-action py-2 px-4 text-sm font-bold bg-gray-300 text-text-muted rounded-lg cursor-not-allowed">Chat bị khóa</button>`;
+
+
+                     filterAppointments(document.querySelector('.active-tab').dataset.status);
+                     showSimpleMessage(`Lịch hẹn ${appointmentId} đã được hủy thành công.`, 'status-cancelled');
+                 }, 1500);
+
+                 modal.classList.remove('active');
+                 currentCardToCancel = null;
+             }
+        });
+
+
+        // Gắn sự kiện chuyển Tab
+        tabButtons.forEach(button => {
+             button.addEventListener('click', function() {
+                 tabButtons.forEach(btn => {
+                     btn.classList.remove('active-tab', 'border-primary-dark', 'text-text-dark');
+                     btn.classList.add('border-transparent', 'text-text-muted');
+                 });
+                 this.classList.add('active-tab', 'border-primary-dark', 'text-text-dark');
+                 this.classList.remove('border-transparent', 'text-text-muted');
+
+                 filterAppointments(this.dataset.status);
+             });
+        });
+
+
+        // Hàm hiển thị thông báo thay thế cho alert/confirm
         function showSimpleMessage(message, type) {
             const container = document.body;
             let messageDiv = document.querySelector('.floating-message');
@@ -303,21 +469,13 @@
             }, 3000);
         }
 
-        // Tái tạo hàm confirm bằng Modal/Prompt cơ bản (do không được dùng window.confirm)
-        function confirmAction(message) {
-            return prompt(message + " (Nhập 'OK' để xác nhận hủy)") === 'OK';
-        }
-
-
         // Khởi tạo: Lọc mặc định hiển thị Lịch Sắp tới
         document.addEventListener('DOMContentLoaded', () => {
-            filterAppointments('upcoming');
-            
-            // Kiểm tra nếu mới đặt lịch thành công từ booking.html
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('status') === 'success') {
-                showSimpleMessage("Đặt lịch thành công! Lịch hẹn của bạn đang chờ Bác sĩ xác nhận.", 'success');
-            }
+             filterAppointments('upcoming');
+             
+             // Cập nhật tên hồ sơ (MOCK)
+             const userName = sessionStorage.getItem('userName') || 'Nguyễn Văn A';
+             document.querySelector('a[href="profile.html"]').textContent = `Hồ sơ (${userName})`;
         });
     </script>
 
