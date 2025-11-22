@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Người Dùng - Admin</title>
+    <style>
+        /* CSS Bố cục (Đã nhúng để đồng bộ với các file Admin khác) */
+        body { font-family: Arial, sans-serif; background-color: #e9ecef; margin: 0; display: flex; }
+        .sidebar { width: 250px; background-color: #343a40; color: white; padding: 20px; height: 100vh; position: fixed; }
+        .sidebar h2 { margin: 0; padding-bottom: 5px; font-size: 1.5em; }
+        .sidebar a { display: block; padding: 10px; color: #adb5bd; text-decoration: none; border-radius: 4px; margin-bottom: 5px; }
+        .sidebar a:hover, .sidebar a.active { background-color: #007bff; color: white; }
+        .main-content { margin-left: 250px; flex-grow: 1; padding: 30px; }
+        
+        /* CSS cho Bảng & Công cụ */
+        .management-panel { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .filter-area { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; align-items: center; }
+        .filter-area input, .filter-area select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .user-table th, .user-table td { padding: 12px; border-bottom: 1px solid #dee2e6; text-align: left; font-size: 0.9em; }
+        .user-table { width: 100%; border-collapse: collapse; }
+
+        /* Trạng thái màu sắc */
+        .status-active { color: green; font-weight: bold; }
+        .status-locked { color: red; font-weight: bold; }
+        .action-btns button { margin-right: 5px; padding: 6px 10px; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>👨‍💻 Admin Panel</h2>
+        <p style="color: #6c757d; border-bottom: 1px solid #495057; padding-bottom: 15px; margin-bottom: 15px;">Menu Chính</p>
+        <a href="admin_dashboard.html">Dashboard & Tổng quan</a>
+        <a href="admin_manage_doctors.html">Quản lý Bác sĩ</a>
+        <a href="admin_manage_appointments.html">Quản lý Lịch hẹn</a>
+        <a href="admin_manage_users.html" class="active">Quản lý Người dùng</a>
+        <a href="admin_reports.html">Thống kê - Báo cáo</a>
+        <div style="margin-top: 50px;">
+            <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" onclick="logout()" style="background-color: #dc3545; color: white;">Đăng Xuất</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>👥 Quản Lý Người Dùng (Bệnh nhân)</h1>
+        <p>Giám sát, tìm kiếm và quản lý trạng thái tài khoản của người dùng thông thường.</p>
+        
+        <div class="management-panel">
+            
+            <div class="filter-area">
+                <input type="text" id="search-input" placeholder="Tìm theo Tên, Email hoặc SĐT...">
+                
+                <select id="filter-status">
+                    <option value="all">Tất cả Trạng thái</option>
+                    <option value="active">Hoạt động (Active)</option>
+                    <option value="locked">Bị khóa (Locked)</option>
+                </select>
+                
+                <button onclick="applyFilters()" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px;">Áp Dụng Lọc</button>
+            </div>
+
+            <p style="margin-bottom: 15px; font-weight: bold;">Tổng số người dùng: <span id="total-users-count">4</span></p>
+
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Họ Tên</th>
+                        <th>Email</th>
+                        <th>Số ĐT</th>
+                        <th>Lần Đặt Gần Nhất</th>
+                        <th>Trạng Thái</th>
+                        <th>Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody id="user-list">
+                    </tbody>
+            </table>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <button disabled style="padding: 8px 15px;">&laquo; Trước</button>
+                <span style="margin: 0 10px;">Trang 1 / <span id="total-pages">1</span></span>
+                <button disabled style="padding: 8px 15px;">Sau &raquo;</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Dữ liệu giả lập (mock data)
+        let usersData = [
+            // Đã cập nhật để dùng email/pass giả lập trong login_register.html
+            { id: 3001, name: 'Nguyễn Văn A', email: 'patient@medibook.vn', phone: '0901xxxxxx', last_appointment: '10/11/2025', status: 'active' },
+            { id: 3002, name: 'Trần Thị B', email: 'user@medibook.vn', phone: '0902xxxxxx', last_appointment: '25/10/2025', status: 'active' },
+            { id: 3003, name: 'Phạm Văn C', email: 'vanc@yahoo.com', phone: '0903xxxxxx', last_appointment: '01/09/2025', status: 'locked' },
+            { id: 3004, name: 'Lê Hải Yến', email: 'haiyen@test.com', phone: '0904xxxxxx', last_appointment: '12/11/2025', status: 'active' },
+        ];
+        
+        // --- Hàm Tải và Hiển thị Người dùng ---
+        function renderUserList(data) {
+            const tbody = document.getElementById('user-list');
+            tbody.innerHTML = ''; 
+
+            data.forEach(user => {
+                const isLocked = user.status === 'locked';
+                const statusClass = isLocked ? 'status-locked' : 'status-active';
+                const statusLabel = isLocked ? 'Bị khóa' : 'Hoạt động';
+
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone}</td>
+                    <td>${user.last_appointment}</td>
+                    <td class="${statusClass}">${statusLabel}</td>
+                    <td class="action-btns">
+                        <button onclick="viewDetails(${user.id})" style="background-color: #17a2b8; color: white;">Chi Tiết</button>
+                        <button onclick="toggleStatus(${user.id}, '${user.status}')" style="background-color: ${isLocked ? '#28a745' : '#dc3545'}; color: white;">
+                            ${isLocked ? 'Mở khóa' : 'Khóa TK'}
+                        </button>
+                    </td>
+                `;
+            });
+
+            document.getElementById('total-users-count').textContent = data.length;
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">Không tìm thấy người dùng nào phù hợp.</td></tr>';
+            }
+        }
+
+        // --- Hàm Lọc & Tìm kiếm ---
+        function applyFilters() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const filterStatus = document.getElementById('filter-status').value;
+
+            // API Call: GET /api/admin/users?search=...&status=...
+            console.log(`API Call: Lọc người dùng: Tìm kiếm: ${searchTerm}, TT: ${filterStatus}`);
+            
+            // Logic lọc mock data (Sẽ được thay thế bằng Fetch API)
+            const filteredList = usersData.filter(user => {
+                const searchMatch = user.name.toLowerCase().includes(searchTerm) || 
+                                     user.email.toLowerCase().includes(searchTerm) ||
+                                     user.phone.includes(searchTerm);
+                
+                const statusMatch = filterStatus === 'all' || user.status === filterStatus;
+                
+                return searchMatch && statusMatch;
+            });
+
+            renderUserList(filteredList);
+            // Sau khi fetch API thành công, bạn sẽ gọi renderUserList(API_Response_Data)
+        }
+
+        // --- Hàm Quản lý (Admin Actions) ---
+        function toggleStatus(id, currentStatus) {
+            const newStatus = currentStatus === 'active' ? 'locked' : 'active';
+            const actionText = newStatus === 'locked' ? 'KHÓA' : 'MỞ KHÓA';
+
+            if (confirm(`Bạn có chắc chắn muốn ${actionText} tài khoản người dùng ID ${id} không?`)) {
+                // API Call: PATCH /api/admin/users/{id}/status
+                console.log(`API Call: Admin thay đổi trạng thái User ID ${id} thành ${newStatus}`);
+
+                // Cập nhật mock data (giả lập)
+                const userIndex = usersData.findIndex(u => u.id === id);
+                if (userIndex !== -1) {
+                    usersData[userIndex].status = newStatus;
+                }
+                
+                applyFilters(); 
+                alert(`Đã ${actionText} tài khoản người dùng #${id} thành công!`);
+            }
+        }
+
+        function viewDetails(id) {
+            const user = usersData.find(u => u.id === id);
+            alert(`Chi tiết Người dùng #${id}:\nHọ tên: ${user.name}\nEmail: ${user.email}\nSĐT: ${user.phone}\nTrạng thái: ${user.status}\n\n(Trong thực tế, trang này sẽ hiển thị hồ sơ chi tiết và lịch sử đặt lịch.)`);
+        }
+
+        // Hàm Logout (Đã điều chỉnh để đồng bộ với Trang Đăng nhập)
+        function logout() {
+            console.log('Đang đăng xuất Admin...');
+            sessionStorage.clear(); // Xóa phiên đăng nhập giả lập
+            window.location.href = '../Trang_Chung_Va_Tiep_Can/login_register.html';
+        }
+
+        // Khởi chạy khi tài liệu tải xong
+        document.addEventListener('DOMContentLoaded', () => {
+            renderUserList(usersData);
+            // Yêu cầu Backend check quyền Admin ở đây (khi có API)
+        });
+    </script>
+</body>
+</html>

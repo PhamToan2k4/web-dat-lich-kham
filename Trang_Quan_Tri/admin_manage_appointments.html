@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Lịch Hẹn - Admin</title>
-    <link rel="stylesheet" href="admin_style.css"> 
     <style>
-        /* CSS Bố cục (Kế thừa từ Dashboard) */
+        /* CSS Bố cục (Đã nhúng) */
         body { font-family: Arial, sans-serif; background-color: #e9ecef; margin: 0; display: flex; }
         .sidebar { width: 250px; background-color: #343a40; color: white; padding: 20px; height: 100vh; position: fixed; }
+        .sidebar h2 { margin: 0; padding-bottom: 5px; font-size: 1.5em; }
         .sidebar a { display: block; padding: 10px; color: #adb5bd; text-decoration: none; border-radius: 4px; margin-bottom: 5px; }
         .sidebar a:hover, .sidebar a.active { background-color: #007bff; color: white; }
         .main-content { margin-left: 250px; flex-grow: 1; padding: 30px; }
@@ -37,9 +37,10 @@
         <a href="admin_dashboard.html">Dashboard & Tổng quan</a>
         <a href="admin_manage_doctors.html">Quản lý Bác sĩ</a>
         <a href="admin_manage_appointments.html" class="active">Quản lý Lịch hẹn</a>
+        <a href="admin_manage_users.html">Quản lý Người dùng</a>
         <a href="admin_reports.html">Thống kê - Báo cáo</a>
         <div style="margin-top: 50px;">
-            <a href="login_register.html" onclick="logout()" style="background-color: #dc3545; color: white;">Đăng Xuất</a>
+            <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" onclick="logout()" style="background-color: #dc3545; color: white;">Đăng Xuất</a>
         </div>
     </div>
 
@@ -122,13 +123,12 @@
 
 
     <script>
-        // Dữ liệu giả lập (mock data)
+        // JS Logic (giữ nguyên logic mock data)
         let appointmentsData = [
             { id: 2001, patient: 'Nguyễn Văn A', doctor: 'BS. Khỏe', specialty: 'da_lieu', datetime: '12/11/2025 09:00', status: 'confirmed', reason: 'Nổi mẩn đỏ' },
             { id: 2002, patient: 'Trần Thị B', doctor: 'BS. Linh', specialty: 'nhi', datetime: '12/11/2025 10:30', status: 'pending', reason: 'Sốt cao' },
             { id: 2003, patient: 'Phạm Văn C', doctor: 'BS. An', specialty: 'tim_mach', datetime: '11/11/2025 14:00', status: 'completed', reason: 'Tái khám tim' },
             { id: 2004, patient: 'Lê Hải D', doctor: 'BS. Khỏe', specialty: 'da_lieu', datetime: '11/11/2025 16:00', status: 'cancelled', reason: 'Bận đột xuất' },
-            // ... thêm dữ liệu giả lập khác ...
         ];
         
         let currentAppointmentId = null;
@@ -164,12 +164,12 @@
             document.getElementById('total-cancelled').textContent = totalCancelled;
 
             if (data.length === 0) {
-                 tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">Không tìm thấy lịch hẹn nào phù hợp.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">Không tìm thấy lịch hẹn nào phù hợp.</td></tr>';
             }
         }
 
         function getStatusInfo(status) {
-             switch (status) {
+            switch (status) {
                 case 'pending': return { label: 'Chờ xác nhận', class: 'status-pending' };
                 case 'confirmed': return { label: 'Đã xác nhận', class: 'status-confirmed' };
                 case 'completed': return { label: 'Đã hoàn thành', class: 'status-completed' };
@@ -179,8 +179,8 @@
         }
 
         function getSpecialtyLabel(key) {
-             const specialties = { 'da_lieu': 'Da Liễu', 'tim_mach': 'Tim Mạch', 'nhi': 'Nhi', 'nha_khoa': 'Nha Khoa' };
-             return specialties[key] || key;
+            const specialties = { 'da_lieu': 'Da Liễu', 'tim_mach': 'Tim Mạch', 'nhi': 'Nhi', 'nha_khoa': 'Nha Khoa' };
+            return specialties[key] || key;
         }
 
         // --- Hàm Lọc & Tìm kiếm ---
@@ -196,16 +196,14 @@
             
             // Giả lập lọc
             const filteredList = appointmentsData.filter(app => {
-                 const statusMatch = filterStatus === 'all' || app.status === filterStatus;
-                 // Giả lập logic lọc phức tạp hơn
-                 return statusMatch; 
+                const statusMatch = filterStatus === 'all' || app.status === filterStatus;
+                return statusMatch; 
             });
 
             renderAppointmentList(filteredList);
         }
 
         // --- Hàm Quản lý Trạng thái (Admin Actions) ---
-
         function openStatusModal(id, currentStatus) {
             currentAppointmentId = id;
             document.getElementById('modal-appointment-id').textContent = id;
@@ -214,8 +212,8 @@
         }
 
         function closeStatusModal() {
-             document.getElementById('status-modal').style.display = 'none';
-             currentAppointmentId = null;
+            document.getElementById('status-modal').style.display = 'none';
+            currentAppointmentId = null;
         }
 
         function saveNewStatus() {
@@ -239,17 +237,15 @@
         }
 
         function logout() {
-            console.log('Đăng xuất Admin');
-            // window.location.href = 'login_register.html';
+            console.log('Đang đăng xuất Admin...');
+            sessionStorage.clear();
+            window.location.href = '../Trang_Chung_Va_Tiep_Can/login_register.html';
         }
 
-        // Khởi chạy khi tài liệu tải xong
         document.addEventListener('DOMContentLoaded', () => {
-             // Đặt ngày mặc định cho bộ lọc (mô phỏng)
-             const today = new Date().toISOString().split('T')[0];
-             document.getElementById('filter-date-to').value = today;
-             // Tải dữ liệu ban đầu
-             renderAppointmentList(appointmentsData);
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('filter-date-to').value = today;
+            renderAppointmentList(appointmentsData);
         });
     </script>
 </body>

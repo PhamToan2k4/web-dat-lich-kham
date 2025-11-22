@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thống Kê & Báo Cáo - Admin</title>
-    <link rel="stylesheet" href="admin_style.css"> 
     <style>
-        /* CSS Bố cục (Kế thừa từ Dashboard) */
+        /* CSS Bố cục (Đã nhúng) */
         body { font-family: Arial, sans-serif; background-color: #e9ecef; margin: 0; display: flex; }
         .sidebar { width: 250px; background-color: #343a40; color: white; padding: 20px; height: 100vh; position: fixed; }
+        .sidebar h2 { margin: 0; padding-bottom: 5px; font-size: 1.5em; }
         .sidebar a { display: block; padding: 10px; color: #adb5bd; text-decoration: none; border-radius: 4px; margin-bottom: 5px; }
         .sidebar a:hover, .sidebar a.active { background-color: #007bff; color: white; }
         .main-content { margin-left: 250px; flex-grow: 1; padding: 30px; }
@@ -16,8 +16,6 @@
         /* CSS cho Báo cáo */
         .report-panel { background-color: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px; }
         .chart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
-        
-        /* CSS cho Bảng xếp hạng */
         .top-doctors th, .top-doctors td { padding: 10px; border-bottom: 1px solid #dee2e6; text-align: left; }
         .top-doctors { width: 100%; border-collapse: collapse; }
     </style>
@@ -31,9 +29,10 @@
         <a href="admin_dashboard.html">Dashboard & Tổng quan</a>
         <a href="admin_manage_doctors.html">Quản lý Bác sĩ</a>
         <a href="admin_manage_appointments.html">Quản lý Lịch hẹn</a>
+        <a href="admin_manage_users.html">Quản lý Người dùng</a>
         <a href="admin_reports.html" class="active">Thống kê - Báo cáo</a>
         <div style="margin-top: 50px;">
-            <a href="login_register.html" onclick="logout()" style="background-color: #dc3545; color: white;">Đăng Xuất</a>
+            <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" onclick="logout()" style="background-color: #dc3545; color: white;">Đăng Xuất</a>
         </div>
     </div>
 
@@ -88,7 +87,7 @@
     </div>
 
     <script>
-        // Dữ liệu giả lập cho Báo cáo (Tùy thuộc vào bộ lọc thời gian)
+        // JS Logic (giữ nguyên logic mock data)
         const mockReportData = {
             trend: {
                 labels: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
@@ -119,21 +118,15 @@
             const dateRange = document.getElementById('date-range').value;
             console.log(`API Call: Lấy dữ liệu báo cáo cho kỳ: ${dateRange}`);
             
-            // 1. Render Biểu đồ Xu hướng
             renderAppointmentTrendChart(mockReportData.trend);
-
-            // 2. Render Biểu đồ Chuyên khoa
             renderSpecialtyPieChart(mockReportData.specialty);
-
-            // 3. Render Bảng Top Bác sĩ
             renderTopDoctors(mockReportData.topDoctors);
         }
 
         // --- Hàm Vẽ Biểu đồ Xu hướng (Line Chart) ---
         function renderAppointmentTrendChart(data) {
             const ctx = document.getElementById('appointment-trend-chart').getContext('2d');
-            
-            if (trendChart) trendChart.destroy(); // Xóa biểu đồ cũ nếu có
+            if (trendChart) trendChart.destroy();
 
             trendChart = new Chart(ctx, {
                 type: 'line',
@@ -167,8 +160,7 @@
         // --- Hàm Vẽ Biểu đồ Chuyên khoa (Pie Chart) ---
         function renderSpecialtyPieChart(data) {
             const ctx = document.getElementById('specialty-pie-chart').getContext('2d');
-
-            if (pieChart) pieChart.destroy(); // Xóa biểu đồ cũ nếu có
+            if (pieChart) pieChart.destroy();
 
             pieChart = new Chart(ctx, {
                 type: 'pie',
@@ -214,11 +206,11 @@
         }
         
         function logout() {
-            console.log('Đăng xuất Admin');
-            // window.location.href = 'login_register.html';
+            console.log('Đang đăng xuất Admin...');
+            sessionStorage.clear();
+            window.location.href = '../Trang_Chung_Va_Tiep_Can/login_register.html';
         }
 
-        // Khởi chạy khi tài liệu tải xong
         document.addEventListener('DOMContentLoaded', loadReportData);
     </script>
 </body>

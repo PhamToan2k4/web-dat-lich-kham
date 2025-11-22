@@ -4,22 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Quản Trị Hệ Thống</title>
-    <link rel="stylesheet" href="admin_style.css"> 
     <style>
-        /* Thiết lập bố cục Grid cho Admin */
+        /* CSS Cơ bản */
         body { font-family: Arial, sans-serif; background-color: #e9ecef; margin: 0; display: flex; }
         .sidebar { width: 250px; background-color: #343a40; color: white; padding: 20px; height: 100vh; position: fixed; }
+        .sidebar h2 { margin: 0; padding-bottom: 5px; font-size: 1.5em; }
         .sidebar a { display: block; padding: 10px; color: #adb5bd; text-decoration: none; border-radius: 4px; margin-bottom: 5px; }
         .sidebar a:hover, .sidebar a.active { background-color: #007bff; color: white; }
         .main-content { margin-left: 250px; flex-grow: 1; padding: 30px; }
-        
-        /* Metrics Cards */
         .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
         .metric-card { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #007bff; cursor: pointer; }
         .metric-card h3 { margin-top: 0; color: #6c757d; font-size: 0.9em; }
         .metric-card .number { font-size: 2.5em; font-weight: bold; color: #343a40; }
-
-        /* Chart & Tables */
         .dashboard-panel { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px; }
         .recent-table th, .recent-table td { padding: 12px; border-bottom: 1px solid #dee2e6; text-align: left; }
         .recent-table { width: 100%; border-collapse: collapse; }
@@ -34,9 +30,10 @@
         <a href="admin_dashboard.html" class="active">Dashboard & Tổng quan</a>
         <a href="admin_manage_doctors.html">Quản lý Bác sĩ</a>
         <a href="admin_manage_appointments.html">Quản lý Lịch hẹn</a>
+        <a href="admin_manage_users.html">Quản lý Người dùng</a>
         <a href="admin_reports.html">Thống kê - Báo cáo</a>
         <div style="margin-top: 50px;">
-            <a href="login_register.html" onclick="logout()" style="background-color: #dc3545; color: white;">Đăng Xuất</a>
+            <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" onclick="logout()" style="background-color: #dc3545; color: white;">Đăng Xuất</a>
         </div>
     </div>
 
@@ -87,7 +84,7 @@
     </div>
 
     <script>
-        // Dữ liệu giả lập
+        // ... (JS logic giữ nguyên, chỉ thay đổi đường dẫn trong HTML)
         const mockMetrics = {
             totalDoctors: 85,
             appointmentsToday: 142,
@@ -173,16 +170,15 @@
         // --- Hàm Điều hướng ---
         function goToReports(metricType) {
             console.log(`Điều hướng đến trang báo cáo với tham số lọc: ${metricType}`);
-            // Ví dụ: window.location.href = `admin_reports.html?filter=${metricType}`;
-            alert(`Mô phỏng: Điều hướng đến trang Báo cáo để xem chi tiết ${metricType}.`);
+            window.location.href = `admin_reports.html?filter=${metricType}`;
         }
 
         function logout() {
-            console.log('Đăng xuất Admin');
-            // window.location.href = 'login_register.html';
+            console.log('Đang đăng xuất Admin...');
+            sessionStorage.clear();
+            window.location.href = '../Trang_Chung_Va_Tiep_Can/login_register.html';
         }
 
-        // Khởi chạy khi tài liệu tải xong
         document.addEventListener('DOMContentLoaded', loadDashboardData);
     </script>
 </body>

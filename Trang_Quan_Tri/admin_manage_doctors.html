@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Bác Sĩ - Admin</title>
-    <link rel="stylesheet" href="admin_style.css"> 
     <style>
-        /* CSS Bố cục (Kế thừa từ Dashboard) */
+        /* CSS Bố cục (Đã nhúng) */
         body { font-family: Arial, sans-serif; background-color: #e9ecef; margin: 0; display: flex; }
         .sidebar { width: 250px; background-color: #343a40; color: white; padding: 20px; height: 100vh; position: fixed; }
+        .sidebar h2 { margin: 0; padding-bottom: 5px; font-size: 1.5em; }
         .sidebar a { display: block; padding: 10px; color: #adb5bd; text-decoration: none; border-radius: 4px; margin-bottom: 5px; }
         .sidebar a:hover, .sidebar a.active { background-color: #007bff; color: white; }
         .main-content { margin-left: 250px; flex-grow: 1; padding: 30px; }
@@ -32,9 +32,10 @@
         <a href="admin_dashboard.html">Dashboard & Tổng quan</a>
         <a href="admin_manage_doctors.html" class="active">Quản lý Bác sĩ</a>
         <a href="admin_manage_appointments.html">Quản lý Lịch hẹn</a>
+        <a href="admin_manage_users.html">Quản lý Người dùng</a>
         <a href="admin_reports.html">Thống kê - Báo cáo</a>
         <div style="margin-top: 50px;">
-            <a href="login_register.html" onclick="logout()" style="background-color: #dc3545; color: white;">Đăng Xuất</a>
+            <a href="../Trang_Chung_Va_Tiep_Can/login_register.html" onclick="logout()" style="background-color: #dc3545; color: white;">Đăng Xuất</a>
         </div>
     </div>
 
@@ -102,6 +103,7 @@
                     <option value="da_lieu">Da Liễu</option>
                     <option value="tim_mach">Tim Mạch</option>
                     <option value="nhi">Nhi</option>
+                    <option value="nha_khoa">Nha Khoa</option>
                 </select>
             </div>
             <div class="form-group"><label>Mật khẩu tạm:</label><input type="password" id="modal-password"></div>
@@ -115,16 +117,15 @@
 
 
     <script>
-        // Dữ liệu giả lập (mock data)
+        // JS Logic (giữ nguyên logic mock data)
         let doctorsData = [
-            { id: 101, name: 'BS. Nguyễn Văn Khỏe', email: 'khỏe@hospital.com', specialty: 'Da Liễu', rating: 4.8, status: 'active' },
-            { id: 102, name: 'BS. Trần Thị Linh', email: 'linh@clinic.com', specialty: 'Nhi', rating: 4.9, status: 'active' },
-            { id: 103, name: 'BS. Phạm Văn An', email: 'an@vietduc.com', specialty: 'Tim Mạch', rating: 4.5, status: 'inactive' },
-            { id: 104, name: 'BS. Lê Hải Vân', email: 'van@medical.com', specialty: 'Nha Khoa', rating: 4.7, status: 'active' },
-            // ... thêm dữ liệu giả lập khác ...
+            { id: 101, name: 'BS. Nguyễn Văn Khỏe', email: 'doctor1@medibook.vn', specialty: 'da_lieu', rating: 4.8, status: 'active' }, // Đã đổi email
+            { id: 102, name: 'BS. Trần Thị Linh', email: 'doctor2@medibook.vn', specialty: 'nhi', rating: 4.9, status: 'active' }, // Đã đổi email
+            { id: 103, name: 'BS. Phạm Văn An', email: 'an@vietduc.com', specialty: 'tim_mach', rating: 4.5, status: 'inactive' },
+            { id: 104, name: 'BS. Lê Hải Vân', email: 'van@medical.com', specialty: 'nha_khoa', rating: 4.7, status: 'active' },
         ];
         
-        let editingDoctorId = null; // Dùng để xác định chế độ Thêm hay Sửa
+        let editingDoctorId = null;
 
         // --- Hàm Tải và Hiển thị Bác sĩ ---
         function renderDoctorList(data) {
@@ -153,13 +154,13 @@
             });
 
             if (data.length === 0) {
-                 tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">Không tìm thấy Bác sĩ nào phù hợp.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">Không tìm thấy Bác sĩ nào phù hợp.</td></tr>';
             }
         }
 
         function getSpecialtyLabel(key) {
-             const specialties = { 'da_lieu': 'Da Liễu', 'tim_mach': 'Tim Mạch', 'nhi': 'Nhi', 'nha_khoa': 'Nha Khoa' };
-             return specialties[key] || key;
+            const specialties = { 'da_lieu': 'Da Liễu', 'tim_mach': 'Tim Mạch', 'nhi': 'Nhi', 'nha_khoa': 'Nha Khoa' };
+            return specialties[key] || key;
         }
 
         // --- Hàm Lọc & Tìm kiếm ---
@@ -183,7 +184,6 @@
         function openAddDoctorModal() {
             editingDoctorId = null;
             document.getElementById('modal-title').textContent = 'Thêm Bác Sĩ Mới';
-            // Reset fields
             document.getElementById('modal-name').value = '';
             document.getElementById('modal-email').value = '';
             document.getElementById('modal-password').value = '';
@@ -199,20 +199,20 @@
                 document.getElementById('modal-name').value = doctor.name;
                 document.getElementById('modal-email').value = doctor.email;
                 document.getElementById('modal-specialty').value = doctor.specialty;
-                document.getElementById('modal-password').value = ''; // Không điền mật khẩu cũ
+                document.getElementById('modal-password').value = ''; 
                 document.getElementById('doctor-modal').style.display = 'flex';
             }
         }
         
         function closeDoctorModal() {
-             document.getElementById('doctor-modal').style.display = 'none';
+            document.getElementById('doctor-modal').style.display = 'none';
         }
 
         function saveDoctor() {
             const name = document.getElementById('modal-name').value;
             const email = document.getElementById('modal-email').value;
             const specialty = document.getElementById('modal-specialty').value;
-            const password = document.getElementById('modal-password').value; // Chỉ cần cho Thêm mới/Đổi mật khẩu
+            const password = document.getElementById('modal-password').value;
 
             if (!name || !email || !specialty) {
                 alert('Vui lòng điền đủ thông tin bắt buộc.');
@@ -220,15 +220,12 @@
             }
 
             if (editingDoctorId) {
-                // Logic Sửa
                 console.log(`API Call: Cập nhật BS ID ${editingDoctorId}`);
                 alert(`Đã cập nhật thông tin cho BS ${name}.`);
-                // Cập nhật mock data (giả lập)
                 const docIndex = doctorsData.findIndex(d => d.id === editingDoctorId);
                 doctorsData[docIndex] = { ...doctorsData[docIndex], name, email, specialty };
             } else {
-                // Logic Thêm mới
-                 if (!password) { alert('Vui lòng đặt mật khẩu tạm cho Bác sĩ mới.'); return; }
+                if (!password) { alert('Vui lòng đặt mật khẩu tạm cho Bác sĩ mới.'); return; }
                 const newId = Math.max(...doctorsData.map(d => d.id)) + 1;
                 doctorsData.push({ id: newId, name, email, specialty, rating: 0, status: 'active' });
                 console.log(`API Call: Thêm BS mới ID ${newId}`);
@@ -236,38 +233,36 @@
             }
 
             closeDoctorModal();
-            applyFilters(); // Hiển thị lại danh sách
+            applyFilters();
         }
 
         function toggleStatus(id, currentStatus) {
             const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
             if (confirm(`Bạn có chắc chắn muốn ${newStatus === 'inactive' ? 'VÔ HIỆU HÓA' : 'KÍCH HOẠT'} tài khoản BS ID ${id} không?`)) {
-                 console.log(`API Call: Cập nhật trạng thái BS ID ${id} thành ${newStatus}`);
-                 // Cập nhật mock data
-                 const doctor = doctorsData.find(d => d.id === id);
-                 if (doctor) doctor.status = newStatus;
-                 applyFilters();
+                console.log(`API Call: Cập nhật trạng thái BS ID ${id} thành ${newStatus}`);
+                const doctor = doctorsData.find(d => d.id === id);
+                if (doctor) doctor.status = newStatus;
+                applyFilters();
             }
         }
         
         function deleteDoctor(id) {
-             if (confirm(`Bạn có chắc chắn muốn XÓA VĨNH VIỄN BS ID ${id} không? (Nên dùng Vô hiệu hóa)`)) {
-                 console.log(`API Call: Xóa BS ID ${id}`);
-                 // Cập nhật mock data
-                 doctorsData = doctorsData.filter(d => d.id !== id);
-                 applyFilters();
-                 alert(`Đã xóa BS ID ${id}.`);
+            if (confirm(`Bạn có chắc chắn muốn XÓA VĨNH VIỄN BS ID ${id} không? (Nên dùng Vô hiệu hóa)`)) {
+                console.log(`API Call: Xóa BS ID ${id}`);
+                doctorsData = doctorsData.filter(d => d.id !== id);
+                applyFilters();
+                alert(`Đã xóa BS ID ${id}.`);
             }
         }
 
         function logout() {
-            console.log('Đăng xuất Admin');
-            // window.location.href = 'login_register.html';
+            console.log('Đang đăng xuất Admin...');
+            sessionStorage.clear();
+            window.location.href = '../Trang_Chung_Va_Tiep_Can/login_register.html';
         }
 
-        // Khởi chạy khi tài liệu tải xong
         document.addEventListener('DOMContentLoaded', () => {
-             renderDoctorList(doctorsData);
+            renderDoctorList(doctorsData);
         });
     </script>
 </body>
