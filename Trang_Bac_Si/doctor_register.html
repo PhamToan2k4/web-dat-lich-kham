@@ -7,18 +7,15 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Cấu hình Tailwind và Font Inter
+        // Cấu hình Tailwind giữ nguyên
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        // Màu sắc thương hiệu
                         'primary': '#45C3A5', // Xanh lục chủ đạo (Teal/Mint)
                         'primary-dark': '#007BFF', // Xanh dương (Branding, Buttons)
                         'primary-light': '#E6FFF8', // Màu nền nhẹ của primary
                         'secondary': '#f7d800', // Màu vàng nổi bật (Search CTA)
-                        
-                        // Màu sắc chung
                         'text-dark': '#343a40', 
                         'text-muted': '#6c757d', 
                         'bg-light': '#f8f9fa',
@@ -86,7 +83,7 @@
     <main class="flex items-center justify-center min-h-[80vh]">
         <div class="w-full max-w-lg mx-auto p-6 sm:p-8 bg-white rounded-xl shadow-2xl border-t-4 border-primary">
             <h1 class="text-3xl font-bold text-center text-text-dark mb-2">Đăng Ký Tài Khoản Bác Sĩ</h1>
-            <p class="text-center text-sm text-text-muted mb-8">Vui lòng cung cấp thông tin để bắt đầu quá trình xác minh.</p>
+            <p class="text-center text-sm text-text-muted mb-8">Vui lòng cung cấp thông tin để bắt đầu quá trình xác minh hồ sơ.</p>
 
             <form id="doctor-register-form" class="space-y-5">
                 
@@ -116,11 +113,23 @@
                 </div>
                 
                 <div class="form-group">
+                    <label for="experience-years" class="block text-sm font-medium text-text-dark mb-1 required-field">Số Năm Kinh Nghiệm (Sau tốt nghiệp)</label>
+                    <input type="number" id="experience-years" name="experienceYears" required min="1" max="50" placeholder="Số năm kinh nghiệm"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
+                </div>
+                
+                <div class="form-group">
                     <label for="hospital" class="block text-sm font-medium text-text-dark mb-1 required-field">Nơi Công Tác Chính</label>
                     <input type="text" id="hospital" name="hospital" required placeholder="Ví dụ: Bệnh viện Bạch Mai"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150">
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="document-upload" class="block text-sm font-medium text-text-dark mb-1 required-field">Giấy Tờ Xác Minh (Bằng cấp, Chứng chỉ)</label>
+                    <input type="file" id="document-upload" name="documentUpload" required multiple
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 bg-white">
+                    <p class="text-xs text-text-muted mt-1">Chấp nhận PDF, JPG, PNG. Tải lên bằng cấp/chứng chỉ hành nghề của bạn.</p>
+                </div>
                 <div class="form-group">
                     <label for="password" class="block text-sm font-medium text-text-dark mb-1 required-field">Mật khẩu</label>
                     <input type="password" id="password" name="password" required
@@ -134,8 +143,8 @@
                 </div>
 
                 <div class="mt-6 p-4 bg-primary-light border-l-4 border-primary rounded-lg text-sm text-text-dark">
-                    <p class="font-bold mb-1">Quá trình Xác minh:</p>
-                    <p>Sau khi đăng ký, chúng tôi sẽ gửi email yêu cầu tài liệu xác minh (bằng cấp, chứng chỉ hành nghề) để kích hoạt tài khoản.</p>
+                    <p class="font-bold mb-1">Quá trình Xác minh & Duyệt:</p>
+                    <p>Yêu cầu đăng ký sẽ được gắn trạng thái **Chờ Duyệt** (Pending) và Admin sẽ kiểm tra tài liệu của bạn trước khi kích hoạt tài khoản.</p>
                 </div>
 
                 <button type="submit" class="w-full py-3 bg-primary-dark text-white font-bold rounded-lg shadow-xl hover:bg-blue-700 transition duration-150 text-lg mt-6">
@@ -194,10 +203,30 @@
                 alert('Mật khẩu xác nhận không khớp!');
                 return;
             }
+
+            // 1. Thu thập dữ liệu (Bao gồm các trường mới)
+            const formData = {
+                fullName: document.getElementById('full-name').value,
+                email: document.getElementById('email').value,
+                specialty: document.getElementById('specialty').value,
+                experienceYears: document.getElementById('experience-years').value,
+                hospital: document.getElementById('hospital').value,
+                password: password,
+                // Giả định: File upload sẽ được xử lý riêng qua FormData API trong môi trường Backend thực tế
+                // Hiện tại, chúng ta chỉ gửi metadata:
+                documentCount: document.getElementById('document-upload').files.length, 
+                // TRẠNG THÁI MỚI: Bắt buộc Admin duyệt
+                status: 'pending_verification' 
+            };
             
-            alert('Yêu cầu đăng ký đã được gửi! Vui lòng kiểm tra email để tiếp tục xác minh hồ sơ.');
+            // 2. GIẢ LẬP GỬI DỮ LIỆU ĐẾN API
+            console.log("Dữ liệu đăng ký gửi đi (Pending):", formData);
+            
+            // 3. Thông báo cho người dùng
+            alert('✅ Gửi yêu cầu đăng ký thành công! Tài khoản của bạn đang ở trạng thái "Chờ Duyệt". Chúng tôi sẽ thông báo qua email sau khi Admin xác minh tài liệu của bạn.');
+            
             // Chuyển hướng về trang Đăng nhập sau khi gửi thành công
-            window.location.href = '../Trang_Chung_Va_Tiep_Can/login_register.html?status=registered';
+            window.location.href = '../Trang_Chung_Va_Tiep_Can/login_register.html?status=verification_pending';
         });
     </script>
 </body>
